@@ -36,3 +36,12 @@ logs/
 # Geçici
 *.tmp
 *.bak
+
+# Draft dökümanlar ve türetilmiş HTML
+bulgular_bolumu*.docx
+elestiri_yanit_mektubu*.docx
+R/04_results/bulgular.html
+R/04_results/archive/*.html
+diagram_r_pipeline.html
+
+**/Yeni klasör/
