@@ -1,0 +1,6 @@
+trait,form,c,T0,Tm,unit,notes,source
+a_biting,briere,,,,1/day,"Biting rate a(T); fill c,T0,Tm from your selected source","Trait table source (e.g., fitted thermal curves)"
+eip_dev_rate,briere,,,,1/day,"EIP development rate; mean EIP=1/rate; fill c,T0,Tm from your selected source","Trait table source (e.g., fitted thermal curves)"
+mu_temp,quadratic,,,,1/day,"Temperature-dependent adult mortality baseline; fill c,T0,Tm from your selected source","Trait table source (e.g., fitted thermal curves / hazard model)"
+vpd_ref,scalar,,,,kPa,Reference VPD for humidity multiplier (kPa),Calibration target / literature
+k_vpd,scalar,,,,per_kPa,Sensitivity of mortality to VPD difference,Calibration target / literature

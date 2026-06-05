@@ -1,0 +1,264 @@
+---
+title: "Ek A. Spark-phase Doğum–Ölüm Sürecinde Sönme Olasılığı (Extinction Probability)"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+# Ek A. Spark-phase Doğum–Ölüm Sürecinde Sönme Olasılığının Kapalı Form Çözümü
+
+Bu ek, tezde kullanılan *spark-phase* lokal yayılım bileşeninin matematiksel temelini oluşturan **doğum–ölüm tipi sürekli zaman Markov zinciri (Birth–Death CTMC)** için **sönme olasılığının (extinction probability)** kapalı form çözümünü sunmaktadır.
+
+Bu çözüm, hem deterministik CTMC modelinde (`ctmc_spark.R`), hem de dış döngülü Monte Carlo sürümünde (`ctmc_spark_monte_carlo.R`) birlikte ve tamamen tutarlı biçimde kullanılmaktadır.
+
+------------------------------------------------------------------------
+
+# A.1. Model Tanımı
+
+Yerel bulaşma süreci, enfekte birey sayısının zamanla değişimi üzerinden
+
+$$
+I(t) \in \{0, 1, 2, \dots, \tau\}
+$$
+
+durum uzayında tanımlanan bir doğum–ölüm süreci olarak modellenmiştir.
+
+-   $0$: **sönme (extinction)** — yerel bulaş tamamen ortadan kalkmış,
+-   $\tau$: **üst sınır (absorbing cutoff)** — spark-phase yaklaşımının geçerli olmadığı aşırı büyüme eşiği.
+
+Ara durumlarda ($n = 1, \dots, \tau-1$) süreç:
+
+$$
+n \rightarrow n+1 \quad \text{hızı } \lambda_n,
+$$ $$
+n \rightarrow n-1 \quad \text{hızı } \mu_n,
+$$
+
+ile evrilir.
+
+Tez modelinde:
+
+$$
+\lambda_n = n \cdot \lambda_{\text{local}},
+\qquad
+\mu_n = n \cdot \gamma,
+$$
+
+olup burada:
+
+-   $\lambda_{\text{local}}$: tek bir enfekte bireyin ürettiği **yerel ikincil vaka hızıdır**,\
+    (model kodunda `lambda_local_i1`),\
+-   $\gamma = 1/D_I$: enfeksiyöz periyodun tersidir.
+
+------------------------------------------------------------------------
+
+# A.2. Amaç
+
+Başlangıç durumu $I(0)=i_0$ olmak üzere:
+
+$$
+q_{i_0}
+= \mathbb{P}\big( I(t) \text{ süreci } 0\text’a ulaşsın, }
+  \tau\text’ya ulaşmadan önce } \mid I(0)=i_0 \big)
+$$
+
+sönme olasılığını bulmak istiyoruz.
+
+-   $q_0 = 1$ (zaten sönmüştür)
+-   $q_{\tau} = 0$ (üst sınıra ulaştığında spark-phase modeli bırakılır)
+
+------------------------------------------------------------------------
+
+# A.3. İlk Adım (First-Step) Analizi
+
+Küçük bir zaman aralığı $\Delta t$ için:
+
+-   doğum olasılığı: $\lambda_n \Delta t + o(\Delta t)$,
+-   ölüm olasılığı: $\mu_n \Delta t + o(\Delta t)$,
+-   değişmemesi: $1 - (\lambda_n+\mu_n)\Delta t + o(\Delta t)$.
+
+İlk-adım denklemi:
+
+$$
+q_n = (1 - (\lambda_n + \mu_n)\Delta t)\, q_n
++ \lambda_n \Delta t\, q_{n+1}
++ \mu_n \Delta t\, q_{n-1}
++ o(\Delta t).
+$$
+
+$\Delta t \to 0$ limitinde:
+
+$$
+\boxed{
+\lambda_n (q_{n+1}-q_n) + \mu_n (q_{n-1}-q_n) = 0
+}
+\tag{A.1}
+$$
+
+Bu denklemler **klasik doğum–ölüm fark denklemleridir**.
+
+------------------------------------------------------------------------
+
+# A.4. Fark Denkleminin Çözümü
+
+Aşağıdaki oranları tanımlayalım:
+
+$$
+r_n = \frac{\mu_n}{\lambda_n}.
+$$
+
+(A.1) denklemi düzenlenince:
+
+$$
+q_{n+1} - (1+r_n) q_n + r_n q_{n-1} = 0.
+\tag{A.2}
+$$
+
+İlk fark değişkeni tanımı yapalım:
+
+$$
+\Delta_n = q_n - q_{n-1}.
+$$
+
+Bu durumda (A.2):
+
+$$
+\Delta_{n+1} = r_n\, \Delta_n.
+\tag{A.3}
+$$
+
+Dolayısıyla:
+
+$$
+\Delta_n = \Delta_1 \prod_{j=1}^{n-1} r_j.
+$$
+
+Şimdi:
+
+$$
+q_n = q_0 + \sum_{k=1}^{n} \Delta_k = 1 + \sum_{k=1}^{n} \Delta_k
+\tag{A.4}
+$$
+
+çünkü $q_0 = 1$.
+
+Şu tanımları yapalım:
+
+$$
+B_0 = 1,
+\qquad
+B_m = \prod_{j=1}^{m} r_j.
+$$
+
+(A.4)’te yerine koyarsak:
+
+$$
+q_n = 1 + (q_1 - 1) \sum_{m=0}^{n-1} B_m.
+\tag{A.5}
+$$
+
+------------------------------------------------------------------------
+
+# A.5. Üst Absorpsiyon Koşulu ve Kapalı Form Çözüm
+
+Üst sınır durumunda:
+
+$$
+q_{\tau} = 0
+$$
+
+olmalıdır. (Spark-phase modelinin sınırı.)
+
+(A.5)’te $n=\tau$ yazarak:
+
+$$
+0 = 1 + (q_1 - 1)\sum_{m=0}^{\tau-1} B_m.
+$$
+
+Buradan:
+
+$$
+q_1 - 1 = - \frac{1}{\sum_{m=0}^{\tau-1} B_m}.
+$$
+
+Bu ifadeyi tekrar (A.5)’e koyunca:
+
+$$
+\boxed{
+q_n
+= 1 - 
+\frac{\displaystyle\sum_{m=0}^{\,n-1} B_m}
+     {\displaystyle\sum_{m=0}^{\,\tau-1} B_m}
+}
+\tag{A.6}
+$$
+
+Bu tezde kullanılan **tam kapalı form çözüm**dür.
+
+Başlangıç durumu $i_0$ için ise:
+
+$$
+\boxed{
+q_{i_0}
+= 1 -
+\frac{\displaystyle \sum_{m=0}^{\,i_0-1} B_m}
+     {\displaystyle \sum_{m=0}^{\,\tau-1} B_m},
+\qquad
+B_0 =1,\;
+B_m=\prod_{j=1}^{m} \frac{\mu_j}{\lambda_j}.
+}
+\tag{A.7}
+$$
+
+------------------------------------------------------------------------
+
+# A.6. Yerleşme (Establishment) Olasılığı
+
+Tezde sık kullanılan yerel yerleşme olasılığı (major spark-phase outbreak olasılığı):
+
+$$
+p_{\text{est}}(i_0) = 1 - q_{i_0}.
+$$
+
+R kodunda bu:
+
+```{r}
+p_establishment <- 1 - q_extinction
+
+```
+
+------------------------------------------------------------------------
+
+# A.7. R Kodunda Sayısal Olarak Kararlı Uygulama
+
+Formülleri doğrudan hesaplamak çok büyük/small ∏rj\prod r_j∏rj​ değerleriyle taşma yaratabilir. Bu nedenle aşağıdaki log-ölçekli uygulama kullanılır:
+
+```{r}
+log_r  <- log(mu_n) - log(lambda_n)
+log_B  <- cumsum(log_r)
+
+logsumexp <- function(v) {
+  m <- max(v)
+  m + log(sum(exp(v - m)))
+}
+
+log_sum_all    <- logsumexp(c(0, log_B[1:(tau - 1)]))
+log_sum_prefix <- logsumexp(c(0, log_B[1:(i0 - 1)]))
+
+q_i0 <- 1 - exp(log_sum_prefix - log_sum_all)
+
+```
+
+------------------------------------------------------------------------
+
+# A.8. Sonuç
+
+Bu ek, spark-phase CTMC bileşeninin sönme olasılığı için hem teorik kapalı form çözümünü, hem de R kodunda kullanılan nümerik olarak stabil uygulamasını sağlamaktadır.
+Bu formülasyon:
+
+tezin deterministik CTMC modülü (ctmc_spark.R),
+Monte Carlo belirsizlik modülü (ctmc_spark_monte_carlo.R),
+
+tarafından birebir aynı biçimde kullanılmaktadır.
+Bu uyum, sonuçların hem teorik tutarlılığını hem de hesaplama güvenilirliğini artırmaktadır.
+

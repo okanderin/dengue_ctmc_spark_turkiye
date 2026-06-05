@@ -1,0 +1,38 @@
+# R session files
+.Rhistory
+.RData
+.RDataTmp*
+.Rproj.user/
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Ham veri ve ara veri
+data_raw/
+data_interim/
+
+# SSP alt klasörleri (büyük klimat/importasyon RDS)
+data_processed/ssp126/
+data_processed/ssp245/
+data_processed/ssp585/
+
+# Outputs ve loglar
+outputs/
+logs/
+
+# Büyük binary/bilimsel format
+*.nc
+*.rds
+*.Rds
+*.RData
+
+# Ofis dosyaları
+*.xlsx
+*.xls
+*.zip
+
+# Geçici
+*.tmp
+*.bak

@@ -1,0 +1,6 @@
+trait,form,c,T0,Tm,unit,notes,source
+a_biting,briere,,,,1/day,"Biting rate a(T); c unit: 1/(day*degC^3.5); fill c,T0,Tm from your selected source","Trait table source (e.g., fitted thermal curves)"
+eip_dev_rate,briere,,,,1/day,"EIP development rate; mean EIP=1/rate; fill c,T0,Tm from your selected source","Trait table source (e.g., fitted thermal curves)"
+lifespan_temp,quadratic,,,,day,"Adult lifespan lf(T) in DAYS (quadratic/briere); mu_v = 1/lf computed in mu_v_of_TRH(); fill c,T0,Tm from Mordecai 2017","Trait table source (e.g., fitted thermal curves / hazard model)"
+vpd_ref,scalar,,,,kPa,Reference VPD for humidity multiplier (kPa),Calibration target / literature
+k_vpd,scalar,,,,per_kPa,Sensitivity of mortality to VPD difference,Calibration target / literature

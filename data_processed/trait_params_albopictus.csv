@@ -1,0 +1,6 @@
+trait,form,c,T0,Tm,unit,notes,source
+a_biting,briere,1.93e-4,10.25,38.32,1/day,"Biting rate a(T); c unit: 1/(day*degC^3.5); fill c,T0,Tm from your selected source | Species override: Ae. albopictus","Mordecai et al. 2017, PLOS NTD (Ae. albopictus thermal response)"
+eip_dev_rate,briere,1.09e-4,10.39,43.05,1/day,"EIP development rate; mean EIP=1/rate; fill c,T0,Tm from your selected source | Species override: Ae. albopictus","Mordecai et al. 2017, PLOS NTD (Ae. albopictus thermal response)"
+lifespan_temp,quadratic,0.143,6.24,38.25,days,Adult lifespan lf(T) days; mu_v=1/lf in mu_v_of_TRH(); Ae. albopictus override,"Mordecai et al. 2017, PLOS NTD (Ae. albopictus thermal response)"
+vpd_ref,scalar,1,,,kPa,Reference VPD (kPa); Schmidt et al. 2018 / Brady et al. 2013,Schmidt et al. 2018 Parasites & Vectors; Brady et al. 2013 Parasites & Vectors
+k_vpd,scalar,0.5,,,per_kPa,VPD sensitivity of mortality (/kPa); Schmidt et al. 2018 / Brady et al. 2013,Schmidt et al. 2018 Parasites & Vectors; Brady et al. 2013 Parasites & Vectors

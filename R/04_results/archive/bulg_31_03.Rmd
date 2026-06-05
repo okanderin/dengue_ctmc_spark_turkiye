@@ -1,0 +1,474 @@
+---
+title: "Türkiye'de Dengue Yerleşme Riski: CTMC Spark Model Sonuçları"
+subtitle: "Bulgular — Çok-Senaryo Karşılaştırması (SSP1-2.6 / SSP2-4.5 / SSP5-8.5)"
+author: "Okan Derin"
+date: "`r format(Sys.Date(), '%d %B %Y')`"
+output:
+  bookdown::html_document2:
+    toc: true
+    toc_float:
+      collapsed: false
+    toc_depth: 3
+    number_sections: true
+    theme: flatly
+    fig_caption: true
+    df_print: kable
+    code_folding: hide
+    self_contained: true
+lang: tr
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  warning = FALSE,
+  message = FALSE,
+  fig.align = "center",
+  dpi = 300,
+  out.width = "100%"
+)
+
+
+# Proje başlatıcısı
+source(here::here("R", "01_setup", "init.R"))
+
+# Sonuç kurulum dosyası
+source(here::here("R", "04_results", "00_results_setup.R"))
+
+```
+
+
+
+
+```{r load-all-ssp, include=FALSE}
+# ---- Tüm SSP verilerini yükle ve birleştir ----
+SSP_LIST <- c("ssp126", "ssp245", "ssp585")
+
+all_monthly <- list()
+all_yearly  <- list()
+all_horizon <- list()
+all_sens_imp <- list()
+all_country  <- list()
+
+for (s in SSP_LIST) {
+  tryCatch({
+    dat <- load_ssp_data(s)
+    all_monthly[[s]] <- dat$monthly
+    all_yearly[[s]]  <- dat$yearly
+    all_horizon[[s]] <- dat$horizon
+  }, error = function(e) {
+    message("⚠ ", s, " verileri yüklenemedi: ", e$message)
+  })
+
+  si <- load_sens_imp(s)
+  if (!is.null(si)) all_sens_imp[[s]] <- si
+
+  cc <- load_country_contrib(s)
+  if (!is.null(cc)) all_country[[s]] <- cc
+}
+
+monthly_all <- bind_rows(all_monthly)
+yearly_all  <- bind_rows(all_yearly)
+horizon_all <- bind_rows(all_horizon)
+sens_imp_all <- bind_rows(all_sens_imp)
+country_all  <- bind_rows(all_country)
+
+n_ssp_loaded <- length(all_monthly)
+cat("Yüklenen SSP sayısı:", n_ssp_loaded, "\n")
+```
+
+---
+
+# Çalışma Özeti {#sec-ozet}
+
+Bu rapor, Türkiye'nin beş sentinel ilçesinde (Kartal, Fethiye, Zonguldak,
+Hopa, Eğirdir) 2025–2075 döneminde dang yerleşme riskini üç IPCC iklim
+senaryosu altında değerlendirmektedir:
+
+- **SSP1-2.6** (düşük emisyon): ~+1.0°C ısınma (2075'e kadar)
+- **SSP2-4.5** (orta yol): ~+2.4°C ısınma
+- **SSP5-8.5** (yüksek emisyon): ~+5.4°C ısınma
+
+Model: Stokastik CTMC kıvılcım fazı, `r format(nrow(monthly_all), big.mark = ".")`
+ilçe–ay–yıl kombinasyonu, 1000 dış MC tekrarı.
+
+---
+
+# Senaryolar Arası Karşılaştırma {#sec-cross-ssp}
+
+## Yıllık Risk Trendleri (Tüm SSP'ler) {#sec-cross-yearly}
+
+```{r fig-cross-yearly, fig.cap="Yıllık salgın riski — üç SSP senaryosu karşılaştırması. Şeritler ilçeleri, renkler SSP senaryolarını temsil etmektedir.", fig.height=8, fig.width=10}
+yearly_all %>%
+  mutate(ssp_label = SSP_LABELS[ssp]) %>%
+  ggplot(aes(x = year, y = p_ge1_major_year_mean,
+             colour = ssp_label)) +
+  geom_line(linewidth = 0.5, alpha = 0.8) +
+  geom_ribbon(aes(ymin = p_ge1_major_year_p2_5,
+                  ymax = p_ge1_major_year_p97_5,
+                  fill = ssp_label),
+              alpha = 0.1, colour = NA) +
+  facet_wrap(~district_label, scales = "free_y", ncol = 1) +
+  scale_y_log10(labels = label_scientific()) +
+  scale_colour_manual(values = COL_SSP, name = "Senaryo") +
+  scale_fill_manual(values = COL_SSP, guide = "none") +
+  labs(x = "Yıl", y = expression(P["≥1 majör/yıl"]~"(log)"),
+       title = "Yıllık salgın riski — SSP senaryoları karşılaştırması") +
+  theme_thesis() +
+  theme(strip.text = element_text(size = 9))
+```
+
+## 50 Yıllık Kümülatif Risk (Ufuk) {#sec-cross-horizon}
+
+```{r tbl-cross-horizon}
+horizon_tbl <- horizon_all %>%
+  mutate(ssp_label = SSP_LABELS[ssp]) %>%
+  select(district_label, ssp_label,
+         p_mean = p_ge1_major_mean,
+         p_lo = p_ge1_major_p2_5,
+         p_hi = p_ge1_major_p97_5,
+         Lambda = Lambda_import) %>%
+  arrange(district_label, ssp_label) %>%
+  mutate(
+    `P_ufuk (ortalama)` = formatC(p_mean, format = "e", digits = 2),
+    `%95 GA` = paste0("[", formatC(p_lo, format = "e", digits = 1),
+                      " – ", formatC(p_hi, format = "e", digits = 1), "]"),
+    `Λ_ithalat` = round(Lambda, 1)
+  ) %>%
+  select(İlçe = district_label, Senaryo = ssp_label,
+         `P_ufuk (ortalama)`, `%95 GA`, `Λ_ithalat`)
+
+kable(horizon_tbl,
+      caption = "50 yıllık kümülatif salgın riski — SSP senaryoları karşılaştırması",
+      booktabs = TRUE) %>%
+  kable_styling(font_size = 11) %>%
+  collapse_rows(columns = 1, valign = "top")
+```
+
+## Isınma Etkisi: Erken vs Geç Dönem {#sec-cross-warming}
+
+```{r tbl-cross-warming}
+period_comp <- yearly_all %>%
+  mutate(
+    donem = case_when(
+      year >= 2025 & year <= 2035 ~ "Erken (2025-35)",
+      year >= 2065 & year <= 2075 ~ "Geç (2065-75)",
+      TRUE ~ NA_character_
+    ),
+    ssp_label = SSP_LABELS[ssp]
+  ) %>%
+  filter(!is.na(donem)) %>%
+  group_by(district_label, ssp_label, donem) %>%
+  summarise(
+    p_mean = mean(p_ge1_major_year_mean, na.rm = TRUE),
+    T_mean = mean(mean_temp_c_year, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  pivot_wider(names_from = donem,
+              values_from = c(p_mean, T_mean)) %>%
+  mutate(
+    delta_T = `T_mean_Geç (2065-75)` - `T_mean_Erken (2025-35)`,
+    fold_change = `p_mean_Geç (2065-75)` / pmax(`p_mean_Erken (2025-35)`, 1e-20)
+  ) %>%
+  select(İlçe = district_label, Senaryo = ssp_label,
+         `ΔT (°C)` = delta_T,
+         `Kat değişim` = fold_change) %>%
+  mutate(`Kat değişim` = round(`Kat değişim`, 1),
+         `ΔT (°C)` = round(`ΔT (°C)`, 2))
+
+kable(period_comp,
+      caption = "Erken (2025-35) ile geç (2065-75) dönem risk karşılaştırması",
+      booktabs = TRUE) %>%
+  kable_styling(font_size = 11) %>%
+  collapse_rows(columns = 1, valign = "top")
+```
+
+---
+
+# Kaynak Ülke Analizi {#sec-country}
+
+```{r fig-country, fig.cap="İlk 10 kaynak ülke — GBD 2023 insidans × turist ağırlığı. SSP2-4.5 senaryosu gösterilmektedir.", fig.height=5, fig.width=7, eval=nrow(country_all)>0}
+country_all %>%
+  filter(ssp == "ssp245") %>%
+  slice_max(contribution_pct, n = 10) %>%
+  ggplot(aes(x = reorder(country, contribution_pct),
+             y = contribution_pct)) +
+  geom_col(fill = "#E63946", alpha = 0.85) +
+  coord_flip() +
+  labs(x = NULL, y = "İthalat riskine katkı (%)",
+       title = "Kaynak ülke bazlı dang ithalat riski",
+       subtitle = "GBD 2023 insidans × turist ağırlığı") +
+  theme_thesis()
+```
+
+---
+
+# İthalat Duyarlılık Analizi {#sec-sens-imp}
+
+```{r tbl-sens-imp, eval=nrow(sens_imp_all)>0}
+sens_imp_wide <- sens_imp_all %>%
+  filter(ssp == "ssp245") %>%
+  mutate(label = paste0(parameter, " = ", value)) %>%
+  select(Parametre = parameter, Düzey = level, Değer = value,
+         Yıl = year, `λ toplam` = lambda_total,
+         M_climate) %>%
+  arrange(Parametre, Değer, Yıl)
+
+kable(sens_imp_wide,
+      caption = "İthalat parametre duyarlılığı (k, η) — SSP2-4.5",
+      booktabs = TRUE, digits = 2) %>%
+  kable_styling(font_size = 11) %>%
+  collapse_rows(columns = 1:3, valign = "top")
+```
+
+---
+
+# Tek-SSP Detaylı Bulgular {#sec-ssp-detail}
+
+Aşağıdaki bölümler her SSP için `01_generate_ssp_outputs.R` tarafından
+üretilen grafik ve tabloları içermektedir. Tam detay için ilgili SSP
+klasöründeki dosyalara bakınız.
+
+## SSP1-2.6  {#sec-ssp126}
+
+```{r ssp126-figs, results='asis'}
+ssp126_figs <- list.files(here("outputs", "ssp126", "figures"),
+                          pattern = "\\.png$", full.names = TRUE)
+for (f in sort(ssp126_figs)) {
+  cat(paste0("\n### ", tools::file_path_sans_ext(basename(f)), "\n\n"))
+  cat(paste0("![](", f, ")\n\n"))
+}
+```
+
+
+
+## SSP2-4.5 (Ana Senaryo) {#sec-ssp245}
+
+```{r ssp245-figs, results='asis'}
+ssp245_figs <- list.files(here("outputs", "ssp245", "figures"),
+                          pattern = "\\.png$", full.names = TRUE)
+for (f in sort(ssp245_figs)) {
+  cat(paste0("\n### ", tools::file_path_sans_ext(basename(f)), "\n\n"))
+  cat(paste0("![](", f, ")\n\n"))
+}
+```
+
+
+
+## SSP5-8.5  {#sec-ssp585}
+
+```{r ssp585-figs, results='asis'}
+ssp585_figs <- list.files(here("outputs", "ssp585", "figures"),
+                          pattern = "\\.png$", full.names = TRUE)
+for (f in sort(ssp585_figs)) {
+  cat(paste0("\n### ", tools::file_path_sans_ext(basename(f)), "\n\n"))
+  cat(paste0("![](", f, ")\n\n"))
+}
+```
+---
+
+# LHS–PRCC Duyarlılık Analizi {#sec-lhs}
+
+Latin Hiperküp Örneklemesi ile altı model parametresinin ($m$, $\beta_{vh}$, $\beta_{hv}$, $T$, $RH$, IP) $R_0$ üzerindeki bağımsız etkileri değerlendirilmiştir.
+
+
+```{r fig-prcc-126, fig.cap="SSP1-2.6 LHS–PRCC duyarlılık analizi (n=2000). Çubuklar PRCC katsayılarını, hata çubukları %95 güven aralığını göstermektedir.", fig.height=4.5, fig.width=7}
+prcc_path_126 <- here("outputs", "ssp126", "tables", "tbl_prcc.csv")
+if (file.exists(prcc_path_126)) {
+  prcc_126 <- read_csv(prcc_path_126, show_col_types = FALSE)
+  ggplot(prcc_126, aes(x = reorder(parameter, abs(PRCC)), y = PRCC)) +
+    geom_col(aes(fill = PRCC > 0), show.legend = FALSE, width = 0.7) +
+    geom_errorbar(aes(ymin = ci_lo, ymax = ci_hi), width = 0.2) +
+    coord_flip() +
+    scale_fill_manual(values = c("TRUE" = "#E63946", "FALSE" = "#457B9D")) +
+    labs(x = NULL, y = "PRCC", title = "SSP1-2.6 LHS–PRCC Duyarlılık Analizi") +
+    theme_thesis()
+} else { cat("*PRCC verileri henüz üretilmedi.*\n") }
+```
+
+```{r fig-prcc-245, fig.cap="SSP2-4.5 LHS–PRCC duyarlılık analizi (n=2000). Çubuklar PRCC katsayılarını, hata çubukları %95 güven aralığını göstermektedir.", fig.height=4.5, fig.width=7}
+prcc_path_245 <- here("outputs", "ssp245", "tables", "tbl_prcc.csv")
+if (file.exists(prcc_path_245)) {
+  prcc_245 <- read_csv(prcc_path_245, show_col_types = FALSE)
+  ggplot(prcc_245, aes(x = reorder(parameter, abs(PRCC)), y = PRCC)) +
+    geom_col(aes(fill = PRCC > 0), show.legend = FALSE, width = 0.7) +
+    geom_errorbar(aes(ymin = ci_lo, ymax = ci_hi), width = 0.2) +
+    coord_flip() +
+    scale_fill_manual(values = c("TRUE" = "#E63946", "FALSE" = "#457B9D")) +
+    labs(x = NULL, y = "PRCC", title = "SSP2-4.5 LHS–PRCC Duyarlılık Analizi") +
+    theme_thesis()
+} else { cat("*PRCC verileri henüz üretilmedi.*\n") }
+```
+
+
+```{r fig-prcc-585, fig.cap="SSP5-8.5 LHS–PRCC duyarlılık analizi (n=2000). Çubuklar PRCC katsayılarını, hata çubukları %95 güven aralığını göstermektedir.", fig.height=4.5, fig.width=7}
+prcc_path_585 <- here("outputs", "ssp585", "tables", "tbl_prcc.csv")
+if (file.exists(prcc_path_585)) {
+  prcc_585 <- read_csv(prcc_path_585, show_col_types = FALSE)
+  ggplot(prcc_585, aes(x = reorder(parameter, abs(PRCC)), y = PRCC)) +
+    geom_col(aes(fill = PRCC > 0), show.legend = FALSE, width = 0.7) +
+    geom_errorbar(aes(ymin = ci_lo, ymax = ci_hi), width = 0.2) +
+    coord_flip() +
+    scale_fill_manual(values = c("TRUE" = "#E63946", "FALSE" = "#457B9D")) +
+    labs(x = NULL, y = "PRCC", title = "SSP5-8.5 LHS–PRCC Duyarlılık Analizi") +
+    theme_thesis()
+} else { cat("*PRCC verileri henüz üretilmedi.*\n") }
+```
+
+---
+
+# İklim Uygunluk İndeksi (CSI) {#sec-csi}
+
+## CSI Isı Haritası
+
+```{r fig-csi-cross-126, fig.cap="CSI ısı haritası — SSP1-2.6. CSI = [a(T)/a_max + lf(T)/lf_max + dev(T)/dev_max] / 3.", fig.height=4.5}
+csi_fig <- here("outputs", "ssp126", "figures", "fig_csi_heat.png")
+if (file.exists(csi_fig)) knitr::include_graphics(csi_fig) else cat("*CSI grafiği henüz üretilmedi.*\n")
+```
+
+
+```{r fig-csi-cross-245, fig.cap="CSI ısı haritası — SSP2-4.5. CSI = [a(T)/a_max + lf(T)/lf_max + dev(T)/dev_max] / 3.", fig.height=4.5}
+csi_fig <- here("outputs", "ssp245", "figures", "fig_csi_heat.png")
+if (file.exists(csi_fig)) knitr::include_graphics(csi_fig) else cat("*CSI grafiği henüz üretilmedi.*\n")
+```
+
+
+```{r fig-csi-cross-585, fig.cap="CSI ısı haritası — SSP5-8.5. CSI = [a(T)/a_max + lf(T)/lf_max + dev(T)/dev_max] / 3.", fig.height=4.5}
+csi_fig <- here("outputs", "ssp585", "figures", "fig_csi_heat.png")
+if (file.exists(csi_fig)) knitr::include_graphics(csi_fig) else cat("*CSI grafiği henüz üretilmedi.*\n")
+```
+
+
+
+
+## CSI Yıllık Trend — Senaryolar Arası
+
+```{r fig-csi-trend-cross, fig.cap="CSI yıllık trendi — üç SSP senaryosu.", fig.height=7, fig.width=9, eval=n_ssp_loaded>=2}
+csi_figs <- paste0(here("outputs"), "/", SSP_LIST, "/figures/fig_csi_trend.png")
+existing <- csi_figs[file.exists(csi_figs)]
+if (length(existing) > 0) {
+  knitr::include_graphics(existing)
+} else { cat("*CSI trend grafikleri henüz üretilmedi.*\n") }
+```
+
+---
+
+# Mekânsal Otokorelasyon: Moran's I {#sec-moran}
+
+```{r tbl-moran-cross, include=FALSE}
+moran_path <- here("outputs", "ssp245", "tables", "tbl_moran.csv")
+if (file.exists(moran_path)) {
+  moran_tbl <- read_csv(moran_path, show_col_types = FALSE)
+  kable(moran_tbl,
+        caption = "Moran's I mekânsal otokorelasyon testi (k=2 en yakın komşu, n=5).",
+        booktabs = TRUE) %>%
+    kable_styling(font_size = 12)
+} else { cat("*Moran's I verileri henüz üretilmedi.*\n") }
+```
+
+```{r include=F, fig-moran-cross, fig.cap="Moran saçılım grafiği — SSP2-4.5.", fig.height=5}
+moran_fig <- here("outputs", "ssp245", "figures", "fig_moran.png")
+if (file.exists(moran_fig)) knitr::include_graphics(moran_fig) else cat("*Moran grafiği henüz üretilmedi.*\n")
+```
+
+---
+
+# Dekadal Risk Progresyonu {#sec-dekad}
+
+```{r fig-decade-cross, fig.cap="On yıllık risk progresyonu — SSP senaryoları karşılaştırması.", fig.height=6, fig.width=10, eval=n_ssp_loaded>=2}
+decade_plots <- paste0(here("outputs"), "/", SSP_LIST, "/figures/fig_decade.png")
+existing_d <- decade_plots[file.exists(decade_plots)]
+if (length(existing_d) > 0) {
+  knitr::include_graphics(existing_d)
+} else { cat("*Dekadal grafikleri henüz üretilmedi.*\n") }
+```
+
+```{r tbl-decade-cross}
+decade_path <- here("outputs", "ssp245", "tables", "tbl_decade.csv")
+if (file.exists(decade_path)) {
+  decade_tbl <- read_csv(decade_path, show_col_types = FALSE)
+  kable(decade_tbl, caption = "On yıllık risk progresyonu — SSP2-4.5",
+        booktabs = TRUE) %>%
+    kable_styling(font_size = 11)
+} else { cat("*Dekadal tablo henüz üretilmedi.*\n") }
+```
+
+---
+
+# Bulaş Sezonu Uzunluğu Değişimi {#sec-season}
+
+```{r fig-season-cross, fig.cap="Bulaş sezonu uzunluğu (λ_local > 0 ay sayısı) — SSP senaryoları.", fig.height=6, eval=n_ssp_loaded>=2}
+season_plots <- paste0(here("outputs"), "/", SSP_LIST, "/figures/fig_season.png")
+existing_s <- season_plots[file.exists(season_plots)]
+if (length(existing_s) > 0) {
+  knitr::include_graphics(existing_s)
+} else { cat("*Sezon grafikleri henüz üretilmedi.*\n") }
+```
+
+```{r tbl-season-cross}
+season_path <- here("outputs", "ssp245", "tables", "tbl_season.csv")
+if (file.exists(season_path)) {
+  season_tbl <- read_csv(season_path, show_col_types = FALSE)
+  kable(season_tbl,
+        caption = "Bulaş sezonu: erken (2025-35) vs geç (2065-75) dönem karşılaştırması — SSP2-4.5",
+        booktabs = TRUE) %>%
+    kable_styling(font_size = 12)
+} else { cat("*Sezon tablosu henüz üretilmedi.*\n") }
+```
+
+---
+
+# Çoklu Regresyon Analizi {#sec-regression}
+
+```{r tbl-reg-cross}
+reg_path <- here("outputs", "ssp245", "tables", "tbl_regression.csv")
+if (file.exists(reg_path)) {
+  reg_tbl <- read_csv(reg_path, show_col_types = FALSE)
+  kable(reg_tbl,
+        caption = "Hiyerarşik çoklu regresyon: log₁₀(p_ge1_major) ~ T + T² + RH + log₁₀(Λ+1) — SSP2-4.5",
+        booktabs = TRUE) %>%
+    kable_styling(font_size = 12)
+} else { cat("*Regresyon tablosu henüz üretilmedi.*\n") }
+
+coef_path <- here("outputs", "ssp245", "tables", "tbl_regression_coef.csv")
+if (file.exists(coef_path)) {
+  coef_tbl <- read_csv(coef_path, show_col_types = FALSE)
+  kable(coef_tbl,
+        caption = "M3 (tam model) katsayıları",
+        booktabs = TRUE) %>%
+    kable_styling(font_size = 12)
+}
+```
+
+---
+
+# Model Doğrulaması {#sec-validation}
+
+```{r validation, results='asis'}
+val_path <- here("outputs", "ssp245", "tables", "tbl_validation.csv")
+if (file.exists(val_path)) {
+  val_tbl <- read_csv(val_path, show_col_types = FALSE)
+  kable(val_tbl,
+        caption = "Analitik P_est vs Monte Carlo karşılaştırması (SSP2-4.5)",
+        booktabs = TRUE) %>%
+    kable_styling(font_size = 12)
+} else {
+  cat("*Doğrulama verileri henüz üretilmedi.*\n")
+}
+
+val_fig <- here("outputs", "ssp245", "figures", "fig_validation.png")
+if (file.exists(val_fig)) {
+  knitr::include_graphics(val_fig)
+}
+```
+
+---
+
+# Oturum Bilgisi {#sec-session}
+
+```{r session}
+cat("Oluşturulma:", format(Sys.time(), "%Y-%m-%d %H:%M"), "\n")
+cat("R:", R.version.string, "\n")
+cat("SSP senaryoları:", paste(names(all_monthly), collapse = ", "), "\n")
+sessionInfo()
+```

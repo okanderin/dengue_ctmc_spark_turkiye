@@ -1,0 +1,6 @@
+district_id,province_name,district_name,pop_2024,gelis_yabanci,gelis_toplam,travel_weight
+TUR.10.4_1,Artvin,Hopa,27806,13069,91273,0.05967879665188663
+TUR.39.3_1,Isparta,Eğirdir,30053,193,7696,8.813228061683463e-4
+TUR.40.25_1,İstanbul,Kartal,475859,33823,72441,0.15445068017115016
+TUR.59.4_1,Muğla,Fethiye,182280,171775,274927,0.7844001296868792
+TUR.81.6_1,Zonguldak,Merkez,116325,129,33924,5.890706839156304e-4

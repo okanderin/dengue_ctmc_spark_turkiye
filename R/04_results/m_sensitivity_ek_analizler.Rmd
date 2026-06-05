@@ -1,0 +1,242 @@
+---
+# ══════════════════════════════════════════════════════════════════
+#  EK ANALİZ BLOKLARI — Şekil 13, 14, 15 ve Tablo 13
+#  m = 0.5 vs m = 1.0 karşılaştırmalı duyarlılık analizleri
+#  bulgular_full_metin.Rmd → ## m Parametresi Duyarlılık Analizi
+#  bölümünün ALTINA eklenmelidir.
+# ══════════════════════════════════════════════════════════════════
+
+## Göreli Risk (RR) Değerleri – m = 0.5 vs. m = 1.0 (Şekil 13)
+
+Baz senaryo ($m$ = 0.5) ile $m_{high}$ senaryosunun ($m$ = 1.0) ufuk
+bazlı risk değerleri karşılaştırıldığında, göreli risk (RR) ilçeler
+arasında belirgin farklılıklar sergilemiştir. Kartal (İstanbul)'da RR
+= 0.93 ile baz senaryodaki risk $m$ = 1.0'a yakın seyrederken;
+Eğirdir (Isparta) ve Fethiye (Muğla)'da RR ≈ 0 ile $m$ = 0.5
+koşulunda yerleşme pratikte imkânsız hale gelmektedir. Bu örüntü,
+$m$ parametresinin düşük sıcaklık bölgelerindeki riski çok daha güçlü
+biçimde bastırdığına işaret etmektedir.
+
+```{r stat-rr-prep, echo=TRUE}
+# ── Relative Risk: m=0.5 (base) vs m=1.0 (m_high) ──────────────────
+rr_df <- sens_sum %>%
+  filter(scenario %in% c("base", "m_high")) %>%
+  select(district_id, district_label, scenario, p_ge1_major_mean,
+         p_ge1_major_p2_5, p_ge1_major_p97_5) %>%
+  pivot_wider(
+    names_from  = scenario,
+    values_from = c(p_ge1_major_mean, p_ge1_major_p2_5, p_ge1_major_p97_5)
+  ) %>%
+  mutate(
+    RR = p_ge1_major_mean_base /
+         pmax(p_ge1_major_mean_m_high, 1e-20),
+    RD = p_ge1_major_mean_base - p_ge1_major_mean_m_high,
+    pct_degisim = (p_ge1_major_mean_base /
+                   pmax(p_ge1_major_mean_m_high, 1e-20) - 1) * 100
+  ) %>%
+  # Sort ascending by RR for clean bar chart
+  arrange(RR) %>%
+  mutate(district_id = fct_reorder(district_id, RR))
+```
+
+```{r fig-rr, fig.cap="Göreli Risk (RR) değerleri – m = 0.5 senaryosunun m = 1.0 referansına göre karşılaştırması. Kesik çizgi (RR = 1.0) değişim olmadığını; RR < 1 olan çubuklar m = 0.5 senaryosunda risk azalışına işaret etmektedir.", fig.height=5, fig.width=8}
+ggplot(rr_df,
+       aes(x = district_id, y = RR)) +
+  geom_hline(yintercept = 1.0, linetype = "dashed",
+             colour = "grey40", linewidth = 0.8) +
+  geom_col(fill = "#E63946", colour = "grey20",
+           linewidth = 0.3, width = 0.65) +
+  geom_text(aes(label = round(RR, 2)),
+            vjust = -0.5, size = 3.5, fontface = "bold") +
+  scale_x_discrete(labels = function(x) {
+    sapply(x, function(id)
+      DISTRICT_LABELS[as.character(id)] %||% as.character(id))
+  }) +
+  scale_y_continuous(
+    limits = c(0, 1.10),
+    breaks = seq(0, 1.00, 0.25),
+    labels = label_number(accuracy = 0.01)
+  ) +
+  labs(
+    title    = "Relative Risk vs Baseline (m = 1.0)",
+    subtitle = "RR = 1: No change | RR > 1: Increased risk | RR < 1: Decreased risk",
+    x        = "District",
+    y        = "Relative Risk",
+    colour   = "m Scenario"
+  ) +
+  theme_thesis()
+```
+
+---
+
+## m Değerine Göre Yıllık Risk Zaman Serisi (Şekil 14)
+
+```{r stat-m-yearly-prep, echo=TRUE}
+# ── Yearly risk for base (m=0.5) and m_high (m=1.0) ─────────────────
+# NOTE: sens_sum contains horizon (cumulative) values.
+# For yearly time series we need the yearly simulation output.
+# If ctmc_spark_yearly_m_high.csv exists, load it here:
+#   yearly_mhigh <- read_csv(file.path(DIR_SENS, "ctmc_spark_yearly_m_high.csv"), ...)
+#
+# If only horizon sens_sum is available, this chunk builds a
+# comparison from the horizon data as a fallback bar plot.
+# Replace the `yearly_m_comp` object below with your file if available.
+
+# ── Try to load m_high yearly file (adjust path/name as needed) ──────
+m_high_yearly_path <- here("outputs", "sensitivity", "ctmc_mc",
+                            "ctmc_spark_yearly_m_high_rep1000.csv")
+
+if (file.exists(m_high_yearly_path)) {
+  yearly_mhigh <- read_csv(m_high_yearly_path, show_col_types = FALSE) %>%
+    mutate(
+      district_id    = factor(district_id, levels = DISTRICT_ORDER),
+      district_label = DISTRICT_LABELS[as.character(district_id)],
+      scenario       = "m_high"
+    )
+
+  yearly_m_comp <- bind_rows(
+    yearly %>% mutate(scenario = "base"),
+    yearly_mhigh
+  ) %>%
+    mutate(
+      m_label = factor(
+        if_else(scenario == "base", "m = 0.5", "m = 1.0"),
+        levels = c("m = 0.5", "m = 1.0")
+      ),
+      p_plot = if_else(p_ge1_major_year_mean <= 0,
+                        NA_real_, p_ge1_major_year_mean)
+    )
+  use_yearly <- TRUE
+} else {
+  message("m_high yearly file not found — using sens_sum horizon data instead.")
+  use_yearly <- FALSE
+}
+```
+
+```{r fig-m-yearly, fig.cap="m değerine göre yıllık risk zaman serisi. P(≥1 majör salgın | yıl) değerlerinin m = 0.5 (üst panel) ve m = 1.0 (alt panel) karşılaştırması.", fig.height=8, fig.width=11}
+if (use_yearly) {
+  ggplot(yearly_m_comp %>% filter(!is.na(p_plot)),
+         aes(x = year, y = p_plot,
+             colour = district_id, group = district_id)) +
+    geom_line(linewidth = 0.8) +
+    geom_point(size = 1.2) +
+    scale_colour_manual(
+      values = COL_DISTRICT, labels = DISTRICT_LABELS, name = "District"
+    ) +
+    scale_x_continuous(breaks = seq(2025, 2075, 10)) +
+    scale_y_continuous(labels = label_percent(accuracy = 1)) +
+    facet_wrap(~ m_label, ncol = 1, scales = "free_y") +
+    labs(
+      title    = "Annual Risk Over Time by m Value",
+      subtitle = "P(\u22651 major outbreak per year)",
+      x        = "Year",
+      y        = "Annual Risk"
+    ) +
+    theme_thesis() +
+    theme(
+      legend.position  = "bottom",
+      strip.text       = element_text(face = "bold", size = 11)
+    )
+} else {
+  # Fallback: show sens_sum horizon bars side-by-side
+  sens_sum %>%
+    filter(scenario %in% c("base", "m_high")) %>%
+    mutate(
+      m_label = if_else(scenario == "base", "m = 0.5", "m = 1.0")
+    ) %>%
+    ggplot(aes(x = district_id, y = p_ge1_major_mean, fill = m_label)) +
+    geom_col(position = position_dodge(0.8), width = 0.7,
+             colour = "grey25", linewidth = 0.3) +
+    scale_fill_manual(
+      values = c("m = 0.5" = "#457B9D", "m = 1.0" = "#E63946"),
+      name   = "m Scenario"
+    ) +
+    scale_x_discrete(labels = function(x)
+      sapply(x, function(id)
+        DISTRICT_LABELS[as.character(id)] %||% as.character(id))) +
+    scale_y_continuous(labels = label_percent(accuracy = 0.1)) +
+    labs(
+      title    = "Annual Risk Over Time by m Value",
+      subtitle = "Horizon P(\u22651 major outbreak | 2025\u20132075) — yearly file not found",
+      x        = "District", y = "Cumulative Risk"
+    ) +
+    theme_thesis()
+}
+```
+
+---
+
+## m Değerinin 50 Yıllık Kümülatif Risk Üzerindeki Etkisi (Şekil 15 / Tablo 13)
+
+$m$ = 0.5 ile $m$ = 1.0 arasındaki geçişin 50 yıllık kümülatif
+$P_{ge1\_major}$ üzerindeki etkisi ilçe bazında değişmektedir.
+Kartal (İstanbul)'da $m$ parametresi risk üzerinde görece sınırlı
+etki gösterirken (RR = 0.93; RD = −0.07); Eğirdir ve Fethiye'de
+$m$ = 1.0 referansına kıyasla baz senaryo riski pratikte sıfıra
+inmekte (RD ≈ −1.00) ve bu ilçelerde $m$ parametresinin mutlak belirleyici
+olduğunu ortaya koymaktadır.
+
+```{r fig-m-sensitivity-line, fig.cap="m değerinin 50 yıllık kümülatif risk üzerindeki etkisi. P(≥1 majör salgın | 2025–2075) değerlerinin m = 0.5 ile m = 1.0 arasındaki değişimini ilçe bazında göstermektedir.", fig.height=5.5, fig.width=8}
+m_line_df <- sens_sum %>%
+  filter(scenario %in% c("base", "m_high")) %>%
+  mutate(
+    m_val = if_else(scenario == "base", 0.5, 1.0),
+    p_pct = p_ge1_major_mean * 100
+  )
+
+ggplot(m_line_df,
+       aes(x = m_val, y = p_pct,
+           colour = district_id, group = district_id)) +
+  geom_line(linewidth = 1.2) +
+  geom_point(aes(fill = district_id), shape = 21,
+             size = 4, stroke = 1.5, colour = "white") +
+  scale_colour_manual(values = COL_DISTRICT, labels = DISTRICT_LABELS, name = NULL) +
+  scale_fill_manual(  values = COL_DISTRICT, labels = DISTRICT_LABELS, name = NULL) +
+  scale_x_continuous(
+    breaks = c(0.5, 1.0),
+    labels = c("0.5", "1.0"),
+    limits = c(0.4, 1.1)
+  ) +
+  scale_y_continuous(
+    labels = label_percent(scale = 1, accuracy = 0.1),
+    limits = c(0, 105)
+  ) +
+  labs(
+    title    = "m Sensitivity: Impact on 50-Year Cumulative Risk",
+    subtitle = "Effect of vector/human ratio on dengue establishment risk",
+    x        = "Vector/Human Ratio (m)",
+    y        = "P(\u22651 major outbreak | 2025\u20132075)"
+  ) +
+  theme_thesis() +
+  theme(legend.position = "bottom")
+```
+
+```{r tablo-m-sensitivity, echo=FALSE}
+tablo13 <- rr_df %>%
+  transmute(
+    `İlçe`      = district_label,
+    `m=1,0 (%)` = sprintf("%.1f",
+                           pmax(p_ge1_major_mean_m_high * 100, 0)),
+    `m=0,5 (%)` = sprintf("%.4f",
+                           pmax(p_ge1_major_mean_base   * 100, 0)),
+    `RR`        = sprintf("%.2f", RR),
+    `RD`        = sprintf("%.2f", RD),
+    `% Değ.`    = sprintf("%.1f", pct_degisim)
+  ) %>%
+  arrange(desc(as.numeric(gsub(",", ".", `RR`))))
+
+kable(
+  tablo13,
+  caption  = "m Duyarlılık Analizi: Etki Büyüklükleri (m = 0,5 ve m = 1,0). RR: Göreli risk (m=0,5 / m=1,0); RD: Risk farkı (mutlak); % Değ.: Yüzde değişim. Kümülatif 50 yıllık risk P(≥1 majör salgın | 2025–2075) üzerinden hesaplanmıştır.",
+  booktabs = TRUE, linesep = ""
+) %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed"),
+    full_width = FALSE, font_size = 12
+  ) %>%
+  column_spec(4, bold = TRUE) %>%
+  footnote(
+    general       = "RR: Göreli risk (m=0,5 / m=1,0); RD: Risk farkı (mutlak); % Değ.: Yüzde değişim. Kümülatif 50 yıllık risk P(≥1 majör salgın | 2025–2075) üzerinden hesaplanmıştır.",
+    general_title = ""
+  )
+```

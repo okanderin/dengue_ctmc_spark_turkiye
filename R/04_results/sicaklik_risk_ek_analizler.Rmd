@@ -1,0 +1,512 @@
+---
+# ══════════════════════════════════════════════════════════════════
+#  EK ANALİZ BLOKLARI — bulgular_full_metin.Rmd'ye eklenecek
+#  Bu bloklar mevcut dosyanın ## Sıcaklık–Risk Korelasyonu bölümüne
+#  ve ardından gelen yeni alt bölümlere yerleştirilmelidir.
+#
+#  NOT (Images 5–10): Bu şekillerdeki olasılık değerleri (%20–100
+#  mertebesinde) baz senaryonun (p_ge1_major ~ 10⁻⁵) çok üzerindedir.
+#  Bu kodlar:
+#  (a) m_high senaryosunu (sens_sum) veya
+#  (b) farklı bir simülasyon çıktı dosyasını (örn. ctmc_spark_yearly_m1.csv)
+#  kullandığınızda beklenen görünümü üretir.
+#  Baz senaryo ile çalıştırıldığında grafikler aynı YAPIDA,
+#  farklı ÖLÇEKTE çıkar — bu beklenen bir durumdur.
+# ══════════════════════════════════════════════════════════════════
+
+## Sıcaklık–Yerleşme Olasılığı Regresyon Modelleri (Şekil 7 / Tablo 9)
+
+Aylık $P_{est}$ değerleri ile sıcaklık arasındaki fonksiyonel ilişkiyi
+belirlemek amacıyla lineer, kuadratik ve LOESS regresyon modelleri
+uygulanmıştır. Kuadratik model $\beta_1 < 0$, $\beta_2 > 0$ katsayılarıyla
+U-şeklinde bir ilişki ortaya koymuş; Brière termal yanıt eğrisiyle
+tutarlı biçimde yaklaşık 20°C üzerinde hızlanan bir risk artışına
+işaret etmiştir. Lineer model (R² = ~0.27) ile kıyaslandığında kuadratik
+modelin (R² = ~0.315) daha iyi uyum sağladığı, ANOVA ile
+doğrulanmıştır.
+
+```{r stat-reg-monthly-prep, echo=TRUE}
+
+# ── Regression data: raw (non-log) monthly establishment probability ─
+monthly_reg <- monthly %>%
+  filter(p_establishment_mean > 0) %>%
+  mutate(p_est = p_establishment_mean,
+         T_c   = temp_c)
+
+# ── Parametric models ────────────────────────────────────────────────
+lm_lin_m  <- lm(p_est ~ T_c,                  data = monthly_reg)
+lm_quad_m <- lm(p_est ~ T_c + I(T_c^2),       data = monthly_reg)
+
+# ── Model fit & ANOVA ────────────────────────────────────────────────
+fit_lin_m  <- broom::glance(lm_lin_m)
+fit_quad_m <- broom::glance(lm_quad_m)
+anova_lq_m <- anova(lm_lin_m, lm_quad_m)
+
+message(sprintf(
+  "Linear R²=%.3f | Quadratic R²=%.3f | ANOVA p=%s | n=%d",
+  fit_lin_m$r.squared, fit_quad_m$r.squared,
+  format.pval(anova_lq_m$`Pr(>F)`[2], digits = 3),
+  nrow(monthly_reg)
+))
+
+```
+
+```{r fig-reg-monthly, fig.cap="Aylık P_establishment değerleri ile sıcaklık (°C) ilişkisi: lineer (kırmızı kesik), kuadratik (mavi noktalı-çizgi) ve LOESS (yeşil düz) regresyon modelleri. Şeritler %95 güven aralığını; noktalar ilçe bazlı aylık gözlemleri temsil etmektedir.", fig.height=6, fig.width=9}
+# Prediction grid
+t_seq_m <- seq(min(monthly_reg$T_c), max(monthly_reg$T_c), length.out = 300)
+grid_m  <- tibble(T_c = t_seq_m)
+
+pred_lin_m  <- as_tibble(predict(lm_lin_m,  newdata = grid_m, interval = "confidence")) %>%
+  rename(fit = fit, lo = lwr, hi = upr) %>%
+  mutate(Model = "Lineer")
+pred_quad_m <- as_tibble(predict(lm_quad_m, newdata = grid_m, interval = "confidence")) %>%
+  rename(fit = fit, lo = lwr, hi = upr) %>%
+  mutate(Model = "Kuadratik")
+
+pred_all_m <- bind_rows(
+  bind_cols(grid_m, pred_lin_m),
+  bind_cols(grid_m, pred_quad_m)
+)
+
+r2_lin_lbl  <- sprintf("Lineer (R²=%.3f)",     fit_lin_m$r.squared)
+r2_quad_lbl <- sprintf("Kuadratik (R²=%.3f)",  fit_quad_m$r.squared)
+
+ggplot(monthly_reg, aes(x = T_c, y = p_est)) +
+  # Raw scatter
+  geom_point(alpha = 0.20, size = 0.9, colour = "grey40") +
+  # LOESS
+  geom_smooth(
+    method = "loess", formula = y ~ x,
+    span   = 0.75, se = TRUE,
+    colour = "#2A9D8F", fill = "#2A9D8F",
+    alpha  = 0.18, linewidth = 1.1
+  ) +
+  # Linear CI ribbon + line
+  geom_ribbon(
+    data = pred_all_m %>% filter(Model == "Lineer"),
+    aes(x = T_c, ymin = lo, ymax = hi),
+    inherit.aes = FALSE, fill = "#E63946", alpha = 0.12
+  ) +
+  geom_line(
+    data = pred_all_m %>% filter(Model == "Lineer"),
+    aes(x = T_c, y = fit),
+    inherit.aes = FALSE, colour = "#E63946",
+    linewidth = 1.2, linetype = "dashed"
+  ) +
+  # Quadratic CI ribbon + line
+  geom_ribbon(
+    data = pred_all_m %>% filter(Model == "Kuadratik"),
+    aes(x = T_c, ymin = lo, ymax = hi),
+    inherit.aes = FALSE, fill = "#457B9D", alpha = 0.12
+  ) +
+  geom_line(
+    data = pred_all_m %>% filter(Model == "Kuadratik"),
+    aes(x = T_c, y = fit),
+    inherit.aes = FALSE, colour = "#457B9D",
+    linewidth = 1.2, linetype = "dotdash"
+  ) +
+  scale_y_continuous(labels = label_scientific(digits = 2)) +
+  labs(
+    title    = "Temperature–Risk Relationship",
+    subtitle = "Monthly establishment probability vs temperature (all districts, 2025–2075)",
+    x        = "Temperature (°C)",
+    y        = "P(establishment | single introduction)",
+    caption  = paste0(
+      "Kırmızı kesik = ", r2_lin_lbl, "  |  ",
+      "Mavi noktalı-çizgi = ", r2_quad_lbl, "  |  ",
+      "Yeşil düz = LOESS (span=0.75)  |  ",
+      "n = ", nrow(monthly_reg), " ilçe-ay gözlemi"
+    )
+  ) +
+  theme_thesis()
+```
+
+```{r tablo-reg-monthly-coef, echo=FALSE}
+coef_lin_m  <- broom::tidy(lm_lin_m,  conf.int = TRUE)
+coef_quad_m <- broom::tidy(lm_quad_m, conf.int = TRUE)
+
+coef_tbl_m <- bind_rows(
+  coef_lin_m  %>% mutate(Model = "Lineer"),
+  coef_quad_m %>% mutate(Model = "Kuadratik")
+) %>%
+  transmute(
+    Parametre = case_when(
+      Model == "Lineer"     & term == "(Intercept)"      ~ "Lineer: Sabit",
+      Model == "Lineer"     & term == "T_c"              ~ "Lineer: Sıcaklık (β)",
+      Model == "Kuadratik"  & term == "(Intercept)"      ~ "Kuadratik: Sabit",
+      Model == "Kuadratik"  & term == "T_c"              ~ "Kuadratik: Sıcaklık (β₁)",
+      Model == "Kuadratik"  & term == "I(T_c^2)"         ~ "Kuadratik: Sıcaklık² (β₂)"
+    ),
+    Katsayı     = sprintf("%.4f",  estimate),
+    SE          = sprintf("%.4f",  std.error),
+    `t değeri`  = sprintf("%.2f",  statistic),
+    `p değeri`  = format.pval(p.value, digits = 3)
+  )
+
+# Add R² summary row
+r2_row <- tibble(
+  Parametre   = "**Model R² (Lineer / Kuadratik)**",
+  Katsayı     = sprintf("%.3f / %.3f",
+                         fit_lin_m$r.squared, fit_quad_m$r.squared),
+  SE          = "", `t değeri` = "", `p değeri` = ""
+)
+
+bind_rows(coef_tbl_m, r2_row) %>%
+  kable(
+    caption  = "Sıcaklık–Yerleşme Olasılığı Regresyon Modeli Sonuçları. Bağımlı değişken: aylık P_establishment; bağımsız değişken: aylık ortalama sıcaklık (°C).",
+    booktabs = TRUE, linesep = ""
+  ) %>%
+  kable_styling(
+    bootstrap_options = c("striped","hover","condensed"),
+    full_width = FALSE, font_size = 12
+  ) %>%
+  column_spec(1, bold = FALSE, width = "6cm") %>%
+  footnote(
+    general       = sprintf("SE: Standart hata; n = %d ilçe–ay gözlemi.", nrow(monthly_reg)),
+    general_title = ""
+  )
+```
+
+---
+
+## İklim Değişikliğinin Dengue Riskine Etkisi (Şekil 8 / Tablo 10)
+
+2025–2035 (erken) ve 2065–2075 (geç) dönemleri arasındaki sıcaklık
+değişimi (ΔT, °C) ile yıllık risk değişimi (ΔRisk) karşılaştırılmıştır.
+
+```{r stat-iklim-degisim, echo=TRUE}
+# ── Early and late period means per district ─────────────────────────
+period_risk <- yearly %>%
+  mutate(donem = case_when(
+    year >= 2025 & year <= 2035 ~ "Erken",
+    year >= 2065 & year <= 2075 ~ "Gec",
+    TRUE ~ NA_character_
+  )) %>%
+  filter(!is.na(donem)) %>%
+  group_by(district_id, district_label, donem) %>%
+  summarise(
+    p_ort  = mean(p_ge1_major_year_mean, na.rm = TRUE),
+    T_ort  = mean(mean_temp_c_year,      na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  pivot_wider(
+    names_from  = donem,
+    values_from = c(p_ort, T_ort)
+  ) %>%
+  mutate(
+    delta_T    = T_ort_Gec   - T_ort_Erken,
+    delta_risk = p_ort_Gec   - p_ort_Erken,
+    pct_artis  = round((p_ort_Gec / pmax(p_ort_Erken, 1e-20) - 1) * 100, 0),
+    risk_per_C = delta_risk / pmax(delta_T, 1e-6)
+  )
+```
+
+```{r fig-iklim-degisim, fig.cap="İklim değişikliğinin dengue riskine etkisi. 2025–2035 ile 2065–2075 dönemleri arasındaki sıcaklık değişimi (ΔT, °C) ile yıllık risk değişimi (Δ olasılık) ilişkisi. Noktalı eğri doğrusal trendi, gri bant ±95 GA'yi göstermektedir.", fig.height=5.5, fig.width=7}
+ggplot(period_risk,
+       aes(x = delta_T, y = delta_risk,
+           colour = district_id, size = delta_risk)) +
+  geom_smooth(
+    method = "lm", formula = y ~ x,
+    se = TRUE, colour = "grey40", fill = "grey85",
+    linetype = "dashed", linewidth = 1.0,
+    inherit.aes = FALSE,
+    data = period_risk,
+    aes(x = delta_T, y = delta_risk)
+  ) +
+  geom_point(shape = 16) +
+  ggrepel::geom_text_repel(
+    aes(label = as.character(district_id)),
+    size = 3.2, show.legend = FALSE
+  ) +
+  scale_colour_manual(values = COL_DISTRICT, labels = DISTRICT_LABELS, name = NULL) +
+  scale_size_continuous(range = c(4, 10), guide = "none") +
+  labs(
+    title    = "Climate Change Impact on Dengue Risk",
+    subtitle = "Temperature vs Risk Change (2025–2035 to 2065–2075)",
+    x        = "Temperature Change (°C)",
+    y        = "Annual Risk Change (\u0394 probability)"
+  ) +
+  theme_thesis() +
+  theme(legend.position = "bottom")
+```
+
+```{r tablo-iklim-degisim, echo=FALSE}
+period_risk %>%
+  arrange(district_id) %>%
+  transmute(
+    `İlçe`           = district_label,
+    `Erken Risk`      = round(p_ort_Erken,  4),
+    `Geç Risk`        = round(p_ort_Gec,    4),
+    `ΔT (°C)`         = round(delta_T,      2),
+    `ΔRisk`           = round(delta_risk,   4),
+    `% Artış`         = pct_artis,
+    `Risk/°C`         = round(risk_per_C,   4)
+  ) %>%
+  bind_rows(
+    tibble(
+      `İlçe`    = "**Ortalama**",
+      `Erken Risk` = NA_real_, `Geç Risk` = NA_real_,
+      `ΔT (°C)` = round(mean(period_risk$delta_T),    2),
+      `ΔRisk`   = round(mean(period_risk$delta_risk), 4),
+      `% Artış` = round(mean(period_risk$pct_artis),  0),
+      `Risk/°C` = round(mean(period_risk$risk_per_C), 4)
+    )
+  ) %>%
+  kable(
+    caption  = "İlçe bazında iklim değişikliğinin dengue riskine etkisi. Erken risk: 2025–2035 dönemi ortalaması; Geç risk: 2065–2075 dönemi ortalaması. ΔT: sıcaklık farkı; ΔRisk: olasılık farkı; % Artış: orantısal risk artışı; Risk/°C: derece başına risk değişimi.",
+    booktabs = TRUE, linesep = "", na = "–"
+  ) %>%
+  kable_styling(
+    bootstrap_options = c("striped","hover","condensed"),
+    full_width = FALSE, font_size = 12
+  ) %>%
+  row_spec(nrow(period_risk) + 1, bold = TRUE, background = "#D4EDDA")
+```
+
+---
+
+## Uzun Vadeli Risk Eğilimleri (Şekil 9)
+
+```{r fig-loess-trend, fig.cap="İlçe bazında uzun vadeli risk eğilimleri (2025–2075). P(≥1 majör salgın | yıl) değerlerinin LOESS düzleştirilmiş eğrileri. Gri bant ±95 GA'yi göstermektedir.", fig.height=7, fig.width=10}
+yearly_pos <- yearly %>%
+  filter(p_ge1_major_year_mean > 0)
+
+ggplot(yearly_pos,
+       aes(x = year, y = p_ge1_major_year_mean,
+           colour = district_id, fill = district_id)) +
+  geom_smooth(
+    method  = "loess", formula = y ~ x,
+    span    = 0.5, se = TRUE,
+    alpha   = 0.20, linewidth = 1.2
+  ) +
+  scale_colour_manual(values = COL_DISTRICT, labels = DISTRICT_LABELS, name = NULL) +
+  scale_fill_manual(  values = COL_DISTRICT, labels = DISTRICT_LABELS, name = NULL) +
+  scale_x_continuous(breaks = seq(2025, 2075, 10)) +
+  scale_y_continuous(labels = label_percent(accuracy = 0.01)) +
+  facet_wrap(~ district_id, scales = "free_y", ncol = 2) +
+  labs(
+    title    = "Long-term Risk Trends by District",
+    subtitle = "Annual major outbreak probability over time (LOESS smoothing)",
+    x        = "Year",
+    y        = "P(\u22651 major outbreak | year)"
+  ) +
+  theme_thesis() +
+  theme(legend.position = "none")
+```
+
+---
+
+## On Yıllık Risk Progresyonu (Şekil 10 / Tablo 11)
+
+```{r stat-dekad, echo=TRUE}
+# ── Decade-by-decade means ───────────────────────────────────────────
+decade_df <- yearly %>%
+  mutate(
+    dekad = paste0(floor(year / 10) * 10, "'", substr(
+      c("ler","lar","ler","lar","ler","lar","ler","lar")[
+        match(floor(year / 10) * 10,
+              c(2020,2030,2040,2050,2060,2070,2080,2090))
+      ], 1, 99
+    )),
+    dekad = factor(
+      paste0(floor(year / 10) * 10, "'",
+             ifelse(floor(year / 10) * 10 %in% c(2020,2040,2060), "ler","lar")),
+      levels = paste0(seq(2020,2070,10), "'",
+                      c("ler","lar","ler","lar","ler","lar"))
+    )
+  ) %>%
+  filter(!is.na(dekad)) %>%
+  group_by(district_id, district_label, dekad) %>%
+  summarise(
+    p_ort = mean(p_ge1_major_year_mean, na.rm = TRUE),
+    .groups = "drop"
+  )
+```
+
+```{r fig-dekad, fig.cap="On yıl bazlı risk progresyonu. 2020'lerden 2070'lere ortalama yıllık majör salgın riski.", fig.height=5.5, fig.width=10}
+ggplot(decade_df,
+       aes(x = dekad, y = p_ort, fill = district_id)) +
+  geom_col(
+    position = position_dodge(width = 0.8),
+    width = 0.7, colour = "grey30", linewidth = 0.25
+  ) +
+  scale_fill_manual(values = COL_DISTRICT, labels = DISTRICT_LABELS, name = "District") +
+  scale_y_continuous(labels = label_percent(accuracy = 0.1)) +
+  labs(
+    title    = "Decade-by-Decade Risk Progression",
+    subtitle = "Mean annual outbreak risk by decade",
+    x        = "Decade",
+    y        = "Mean Annual Risk"
+  ) +
+  theme_thesis() +
+  theme(legend.position = "bottom")
+```
+
+```{r tablo-dekad, echo=FALSE}
+decade_wide <- decade_df %>%
+  mutate(p_pct = sprintf("%%%s", round(p_ort * 100, 1))) %>%
+  select(district_id, district_label, dekad, p_pct) %>%
+  pivot_wider(names_from = dekad, values_from = p_pct)
+
+decade_wide %>%
+  select(-district_id) %>%
+  rename(İlçe = district_label) %>%
+  kable(
+    caption  = "On Yıllık Ortalama Yıllık Risk (P ≥ 1 majör salgın | yıl). Değerler yüzde (%) olarak ifade edilmiştir.",
+    booktabs = TRUE, linesep = ""
+  ) %>%
+  kable_styling(
+    bootstrap_options = c("striped","hover","condensed"),
+    full_width = FALSE, font_size = 12
+  )
+```
+
+---
+
+## Bulaş Sezonu Uzunluğu Değişimi (Şekil 11 / Tablo 12)
+
+```{r stat-sezon, echo=TRUE}
+# ── Transmission season: months with P(est) > 0.10 per year ─────────
+PEST_THRESH <- 0.10   # Eşik değeri — gerekirse güncelleyin
+
+season_yr <- monthly %>%
+  group_by(district_id, district_label, year) %>%
+  summarise(
+    season_len = sum(p_establishment_mean > PEST_THRESH, na.rm = TRUE),
+    peak_month = month.abb[which.max(p_establishment_mean)],
+    .groups    = "drop"
+  )
+
+# Early / late seasonality
+season_periods <- season_yr %>%
+  mutate(donem = case_when(
+    year >= 2025 & year <= 2035 ~ "Erken",
+    year >= 2065 & year <= 2075 ~ "Gec",
+    TRUE ~ NA_character_
+  )) %>%
+  filter(!is.na(donem)) %>%
+  group_by(district_id, district_label, donem) %>%
+  summarise(
+    sezon_ort  = mean(season_len,  na.rm = TRUE),
+    .groups    = "drop"
+  ) %>%
+  pivot_wider(names_from = donem, values_from = sezon_ort) %>%
+  mutate(delta_sezon = Gec - Erken)
+```
+
+```{r fig-sezon, fig.cap="Bulaş sezonu uzunluğu değişimi (2025–2075). P(yerleşme) > 0.10 koşulunu sağlayan ay sayısı. Her ilçe için gri bant ±95 GA'yi göstermektedir.", fig.height=5.5, fig.width=9}
+ggplot(season_yr,
+       aes(x = year, y = season_len,
+           colour = district_id, fill = district_id)) +
+  geom_smooth(
+    method  = "lm", formula = y ~ x,
+    se      = TRUE, alpha = 0.15, linewidth = 1.2
+  ) +
+  scale_colour_manual(values = COL_DISTRICT, labels = DISTRICT_LABELS, name = "District") +
+  scale_fill_manual(  values = COL_DISTRICT, labels = DISTRICT_LABELS, name = "District") +
+  scale_x_continuous(breaks = seq(2030, 2070, 10)) +
+  scale_y_continuous(breaks = 0:6) +
+  labs(
+    title    = "Transmission Season Extension",
+    subtitle = sprintf("Number of months with P(establishment) > %s", PEST_THRESH),
+    x        = "Year",
+    y        = "Transmission Season Length (months)"
+  ) +
+  theme_thesis() +
+  theme(legend.position = "bottom")
+```
+
+```{r tablo-sezon, echo=FALSE}
+# Peak month per period
+peak_periods <- monthly %>%
+  mutate(donem = case_when(
+    year >= 2025 & year <= 2035 ~ "Erken",
+    year >= 2065 & year <= 2075 ~ "Gec",
+    TRUE ~ NA_character_
+  )) %>%
+  filter(!is.na(donem)) %>%
+  group_by(district_id, district_label, donem, month) %>%
+  summarise(p_ort = mean(p_establishment_mean, na.rm = TRUE), .groups = "drop") %>%
+  group_by(district_id, district_label, donem) %>%
+  slice_max(p_ort, n = 1) %>%
+  ungroup() %>%
+  mutate(peak_ay = month.abb[month]) %>%
+  select(district_id, district_label, donem, peak_ay) %>%
+  pivot_wider(names_from = donem, values_from = peak_ay,
+              names_prefix = "zirve_")
+
+season_tbl <- season_periods %>%
+  left_join(peak_periods, by = c("district_id","district_label")) %>%
+  transmute(
+    İlçe               = district_label,
+    `Erken Sezon (ay)` = round(Erken, 2),
+    `Erken Zirve`      = zirve_Erken,
+    `Geç Sezon (ay)`   = round(Gec,   2),
+    `Geç Zirve`        = zirve_Gec,
+    `Δ Sezon (ay)`     = sprintf("%+.2f", delta_sezon),
+    `Zirve Kayması`    = if_else(
+      zirve_Erken == zirve_Gec, "Yok",
+      paste(zirve_Erken, "→", zirve_Gec)
+    )
+  ) %>%
+  bind_rows(
+    tibble(
+      İlçe               = "**Ortalama**",
+      `Erken Sezon (ay)` = NA_real_,
+      `Erken Zirve`      = "—",
+      `Geç Sezon (ay)`   = NA_real_,
+      `Geç Zirve`        = "—",
+      `Δ Sezon (ay)`     = sprintf("%+.2f", mean(season_periods$delta_sezon, na.rm = TRUE)),
+      `Zirve Kayması`    = "—"
+    )
+  )
+
+kable(
+  season_tbl,
+  caption  = "Mevsimsellik Değişimi: Erken (2025–2035) ve Geç (2065–2075) Dönem. Sezon uzunluğu P(yerleşme) > 0.10 eşiğini geçen ay sayısıdır.",
+  booktabs = TRUE, linesep = "", na = "—"
+) %>%
+  kable_styling(
+    bootstrap_options = c("striped","hover","condensed"),
+    full_width = FALSE, font_size = 12
+  ) %>%
+  row_spec(nrow(season_tbl), bold = TRUE, background = "#D4EDDA")
+```
+
+---
+
+## m Değerine Göre 50 Yıllık Kümülatif Risk (Şekil 12)
+
+```{r fig-m-cumulative, fig.cap="m değerine göre 50 yıllık kümülatif dengue yerleşme riski (2025–2075). P(≥1 majör salgın | 2025–2075) değerleri m = 0.5 ve m = 1.0 için karşılaştırmalı olarak sunulmaktadır. Hata çubukları %95 GA'yi göstermektedir.", fig.height=5.5, fig.width=8}
+m_comp <- sens_sum %>%
+  filter(scenario %in% c("base", "m_high")) %>%
+  mutate(
+    m_label = factor(
+      if_else(scenario == "base", "0.5", "1"),
+      levels = c("0.5", "1")
+    )
+  )
+
+ggplot(m_comp,
+       aes(x = m_label, y = p_ge1_major_mean,
+           fill = district_id)) +
+  geom_col(
+    position = position_dodge(width = 0.85),
+    width = 0.75, colour = "grey30", linewidth = 0.25
+  ) +
+  geom_errorbar(
+    aes(ymin = p_ge1_major_p2_5, ymax = p_ge1_major_p97_5),
+    position = position_dodge(width = 0.85),
+    width = 0.25, linewidth = 0.7
+  ) +
+  scale_fill_manual(values = COL_DISTRICT, labels = DISTRICT_LABELS, name = "District") +
+  scale_y_continuous(labels = label_percent(accuracy = 0.1)) +
+  labs(
+    title    = "50-Year Cumulative Risk by m Value",
+    subtitle = "P(\u22651 major outbreak | 2025–2075)",
+    x        = "Vector/Human Ratio (m)",
+    y        = "Cumulative Risk (Mean \u00b195% CI)"
+  ) +
+  theme_thesis() +
+  theme(legend.position = "bottom")
+```
