@@ -51,3 +51,16 @@ Thumbs.db
 *.swp
 desktop.ini
 bulgular.html
+desktop.ini
+/*.docx
+/*.jpg
+/convexity_*.png
+/kavramsal_cerceve_*
+/stokastik_gecis_*
+/stochastic_concept.png
+/fig_prcc_pm1.png
+/diagram_*.svg
+/diagram_*.html
+/r_project_tez_*.png
+/r_project_tez_*.svg
+/pipeline_diagram.R
