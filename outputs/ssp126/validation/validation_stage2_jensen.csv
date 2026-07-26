@@ -1,0 +1,2 @@
+ssp,n_active,mean_abs_diff,max_abs_diff,mean_pct_jensen,median_pct_jensen,max_abs_pct_jensen,within_5pct,within_5pct_pct
+ssp126,854,0.0017211239550795848,0.03133748369679727,1311.346582366702,771.5161084998042,55121.300357142856,14,1.6

@@ -106,7 +106,7 @@ load_ssp_data <- function(ssp, base_dir = here("outputs")) {
   if (length(monthly_files) == 0)
     stop("No MC monthly output for ", ssp, " in ", sim_dir)
 
-  monthly <- read_csv(sort(monthly_files, decreasing = TRUE)[1],
+  monthly <- read_csv(monthly_files[which.max(file.mtime(monthly_files))],
                       show_col_types = FALSE) %>%
     mutate(
       ssp = ssp,
@@ -115,7 +115,7 @@ load_ssp_data <- function(ssp, base_dir = here("outputs")) {
       month_name     = factor(AY_TR[month], levels = AY_TR)
     )
 
-  yearly <- read_csv(sort(yearly_files, decreasing = TRUE)[1],
+  yearly <- read_csv(yearly_files[which.max(file.mtime(yearly_files))],
                      show_col_types = FALSE) %>%
     mutate(
       ssp = ssp,
@@ -123,7 +123,7 @@ load_ssp_data <- function(ssp, base_dir = here("outputs")) {
       district_label = DISTRICT_LABELS[as.character(district_id)]
     )
 
-  horizon <- read_csv(sort(horizon_files, decreasing = TRUE)[1],
+  horizon <- read_csv(horizon_files[which.max(file.mtime(horizon_files))],
                       show_col_types = FALSE) %>%
     mutate(
       ssp = ssp,

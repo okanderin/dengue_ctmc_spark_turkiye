@@ -1,0 +1,64 @@
+cff-version: 1.2.0
+message: "If you use this software or its outputs, please cite both the software and the associated article."
+title: "dengue_ctmc_spark_turkiye: A CTMC spark-phase model of dengue establishment in Türkiye under CMIP6 scenarios"
+abstract: >-
+  R pipeline for a continuous-time Markov chain (CTMC) spark-phase birth–death
+  model estimating the probability that an imported dengue infection establishes
+  local transmission across five sentinel districts in Türkiye under CMIP6
+  SSP1-2.6, SSP2-4.5 and SSP5-8.5 scenarios (2025–2075). Includes climate
+  bias-correction, importation-pressure construction, nested Monte Carlo
+  simulation, two-stage verification, and sensitivity/regression analyses.
+type: software
+repository-code: "https://github.com/okanderin/dengue_ctmc_spark_turkiye"
+license: MIT
+version: "1.0.0"
+date-released: "2025-01-01"   # TODO: set to the release/tag date
+authors:
+  - family-names: Derin
+    given-names: Okan
+    affiliation: "Graduate School of Health Sciences, İstanbul Medipol University, İstanbul, Türkiye"
+    # orcid: "https://orcid.org/0000-0000-0000-0000"   # TODO
+  - family-names: Hayran
+    given-names: "Osman Erol"
+    affiliation: "Department of Public Health, İstanbul Medipol University, İstanbul, Türkiye"
+  - family-names: Yaylalı
+    given-names: Emine
+    affiliation: "Department of Industrial Engineering, Istanbul Technical University, İstanbul, Türkiye"
+  - family-names: Sevim
+    given-names: Kıvanç
+    affiliation: "Department of Biology, Hacettepe University, Ankara, Türkiye"
+  - family-names: Bayrak
+    given-names: "Ahmet Doğukan"
+    affiliation: "Istanbul Şişli Hamidiye Etfal Training and Research Hospital, İstanbul, Türkiye"
+  - family-names: Koçak
+    given-names: Mehmet
+    affiliation: "Department of Biostatistics and Medical Informatics, İstanbul Medipol University, İstanbul, Türkiye"
+  - family-names: Dökmetaş
+    given-names: İlyas
+    affiliation: "University of Health Sciences, İstanbul, Türkiye"
+  - family-names: Öztürk
+    given-names: Recep
+    affiliation: "Department of Infectious Diseases and Clinical Microbiology, İstanbul Medipol University, İstanbul, Türkiye"
+preferred-citation:
+  type: article
+  title: "A stochastic model of dengue establishment following importation into Türkiye under CMIP6 climate scenarios"
+  authors:
+    - family-names: Derin
+      given-names: Okan
+    - family-names: Hayran
+      given-names: "Osman Erol"
+    - family-names: Yaylalı
+      given-names: Emine
+    - family-names: Sevim
+      given-names: Kıvanç
+    - family-names: Bayrak
+      given-names: "Ahmet Doğukan"
+    - family-names: Koçak
+      given-names: Mehmet
+    - family-names: Dökmetaş
+      given-names: İlyas
+    - family-names: Öztürk
+      given-names: Recep
+  journal: "PLOS Neglected Tropical Diseases"   # TODO: confirm on acceptance
+  year: 2025                                    # TODO: update to publication year
+  # doi: "10.1371/journal.pntd.XXXXXXX"         # TODO: add on publication

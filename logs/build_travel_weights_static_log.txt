@@ -1,0 +1,235 @@
+2026-01-25 00:41:48 | Started build_travel_weights_static.R 
+2026-01-25 00:41:48 | ROOT = C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez 
+2026-01-25 00:41:48 | Baseline loaded: n_districts = 5 
+2026-01-25 00:41:48 | tesis columns: province, district, x3 
+2026-01-25 00:41:48 | tesis occupancy column not named; using fallback column: x3 
+2026-01-25 00:41:48 | Some districts missing total_doluluk after exact join; trying ASCII-normalized join. 
+2026-01-25 00:41:49 | total_doluluk missing after fallback: 0 
+2026-01-25 00:41:49 | STATIC travel weights computed: n_districts=5 | sum=1 
+2026-01-25 00:41:49 | Saved: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/travel_weights_static.csv 
+2026-01-25 00:41:49 | Saved: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/travel_weights_static.rds 
+2026-01-25 00:41:49 | Finished build_travel_weights_static.R successfully. 
+2026-01-25 00:45:54 | Started build_travel_weights_static.R 
+2026-01-25 00:45:54 | ROOT = C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez 
+2026-01-25 00:45:54 | Baseline loaded: n_districts = 5 
+2026-01-25 00:45:54 | tesis columns: province, district, x3 
+2026-01-25 00:45:54 | tesis occupancy column not named; using fallback column: x3 
+2026-01-25 00:45:54 | Some districts missing total_doluluk after exact join; trying ASCII-normalized join. 
+2026-01-25 00:45:54 | total_doluluk missing after fallback: 0 
+2026-01-25 00:45:54 | STATIC travel weights computed: n_districts=5 | sum=1 
+2026-01-25 00:45:54 | Saved: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/travel_weights_static.csv 
+2026-01-25 00:45:54 | Saved: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/travel_weights_static.rds 
+2026-01-25 00:45:54 | Finished build_travel_weights_static.R successfully. 
+2026-01-25 00:47:51 | Started build_travel_weights_static.R 
+2026-01-25 00:47:51 | ROOT = C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez 
+2026-01-25 00:47:51 | Baseline loaded: n_districts = 5 
+2026-01-25 00:47:51 | tesis columns: province, district, x3 
+2026-01-25 00:47:51 | tesis occupancy column not named; using fallback column: x3 
+2026-01-25 00:47:51 | Some districts missing total_doluluk after exact join; trying ASCII-normalized join. 
+2026-01-25 00:47:51 | total_doluluk missing after fallback: 0 
+2026-01-25 00:47:51 | STATIC travel weights computed: n_districts=5 | sum=1 
+2026-01-25 00:47:51 | Saved: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/travel_weights_static.csv 
+2026-01-25 00:47:51 | Saved: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/travel_weights_static.rds 
+2026-01-25 00:47:51 | Finished build_travel_weights_static.R successfully. 
+2026-01-25 00:48:34 | Started build_travel_weights_static.R 
+2026-01-25 00:48:34 | ROOT = C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez 
+2026-01-25 00:48:34 | Baseline loaded: n_districts = 5 
+2026-01-25 00:48:34 | tesis columns: province, district, x3 
+2026-01-25 00:48:34 | tesis occupancy column not named; using fallback column: x3 
+2026-01-25 00:48:35 | Some districts missing total_doluluk after exact join; trying ASCII-normalized join. 
+2026-01-25 00:48:35 | total_doluluk missing after fallback: 0 
+2026-01-25 00:48:35 | STATIC travel weights computed: n_districts=5 | sum=1 
+2026-01-25 00:48:35 | Saved: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/travel_weights_static.csv 
+2026-01-25 00:48:35 | Saved: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/travel_weights_static.rds 
+2026-01-25 00:48:35 | Finished build_travel_weights_static.R successfully. 
+2026-01-25 00:50:02 | Started build_travel_weights_static.R 
+2026-01-25 00:50:02 | ROOT = C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez 
+2026-01-25 00:50:02 | Baseline loaded: n_districts = 5 
+2026-01-25 00:50:02 | tesis columns: province, district, x3 
+2026-01-25 00:50:02 | tesis occupancy column not named; using fallback column: x3 
+2026-01-25 00:50:02 | Some districts missing total_doluluk after exact join; trying ASCII-normalized join. 
+2026-01-25 00:50:02 | total_doluluk missing after fallback: 0 
+2026-01-25 00:50:02 | STATIC travel weights computed: n_districts=5 | sum=1 
+2026-01-25 00:50:02 | Saved: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/travel_weights_static.csv 
+2026-01-25 00:50:02 | Saved: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/travel_weights_static.rds 
+2026-01-25 00:50:02 | Finished build_travel_weights_static.R successfully. 
+2026-01-26 15:37:51 | Started build_travel_weights_static.R 
+2026-01-26 15:37:51 | ROOT = C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez 
+2026-01-26 15:37:51 | Baseline loaded: n_districts = 5 
+2026-01-26 15:37:51 | tesis columns: province, district, x3 
+2026-01-26 15:37:51 | tesis occupancy column not named; using fallback column: x3 
+2026-01-26 15:37:51 | Some districts missing total_doluluk after exact join; trying ASCII-normalized join. 
+2026-01-26 15:37:51 | total_doluluk missing after fallback: 0 
+2026-01-26 15:37:51 | STATIC travel weights computed: n_districts=5 | sum=1 
+2026-01-26 15:37:51 | Saved: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/travel_weights_static.csv 
+2026-01-26 15:37:51 | Saved: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/travel_weights_static.rds 
+2026-01-26 15:37:51 | Finished build_travel_weights_static.R successfully. 
+2026-01-29 00:04:15 | Started build_travel_weights_static.R 
+2026-01-29 00:04:15 | ROOT = C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez 
+2026-01-29 00:04:16 | Baseline loaded: n_districts = 5 
+2026-01-29 00:04:16 | tesis columns: province, district, x3 
+2026-01-29 00:04:16 | tesis occupancy column not named; using fallback column: x3 
+2026-01-29 00:04:16 | Some districts missing total_doluluk after exact join; trying ASCII-normalized join. 
+2026-01-29 00:04:16 | total_doluluk missing after fallback: 0 
+2026-01-29 00:04:16 | Concentration QA | top1=0.4031 top5=1 top10=1 
+2026-01-29 00:04:16 | STATIC travel weights computed: n_districts=5 | sum=1 
+2026-01-29 00:04:16 | Saved: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/travel_weights_static.csv 
+2026-01-29 00:04:16 | Saved: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/travel_weights_static.rds 
+2026-01-29 00:04:16 | Finished build_travel_weights_static.R successfully. 
+2026-02-01 23:59:21 | Started build_travel_weights_static.R 
+2026-02-01 23:59:21 | ROOT = C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez 
+2026-02-01 23:59:22 | Baseline loaded: n_districts = 5 
+2026-02-01 23:59:22 | tesis columns: province, district, x3 
+2026-02-01 23:59:22 | tesis occupancy column not named; using fallback column: x3 
+2026-02-01 23:59:22 | Some districts missing total_doluluk after exact join; trying ASCII-normalized join. 
+2026-02-01 23:59:22 | total_doluluk missing after fallback: 0 
+2026-02-01 23:59:22 | Concentration QA | top1=0.4031 top5=1 top10=1 
+2026-02-01 23:59:22 | STATIC travel weights computed: n_districts=5 | sum=1 
+2026-02-01 23:59:22 | Saved: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/travel_weights_static.csv 
+2026-02-01 23:59:22 | Saved: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/travel_weights_static.rds 
+2026-02-01 23:59:22 | Finished build_travel_weights_static.R successfully. 
+2026-02-02 00:51:16 | Started build_travel_weights_static.R 
+2026-02-02 00:51:16 | ROOT = C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez 
+2026-02-02 00:51:16 | Baseline loaded: n_districts = 5 
+2026-02-02 00:51:16 | tesis columns: province, district, x3 
+2026-02-02 00:51:16 | tesis occupancy column not named; using fallback column: x3 
+2026-02-02 00:51:16 | Some districts missing total_doluluk after exact join; trying ASCII-normalized join. 
+2026-02-02 00:51:16 | total_doluluk missing after fallback: 0 
+2026-02-02 00:51:17 | Concentration QA | top1=0.4031 top5=1 top10=1 
+2026-02-02 00:51:17 | STATIC travel weights computed: n_districts=5 | sum=1 
+2026-02-02 00:51:17 | Saved: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/travel_weights_static.csv 
+2026-02-02 00:51:17 | Saved: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/travel_weights_static.rds 
+2026-02-02 00:51:17 | Finished build_travel_weights_static.R successfully. 
+2026-03-27 23:20:36 | Started build_travel_weights_static.R 
+2026-03-27 23:20:36 | ROOT = C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez 
+2026-03-27 23:20:36 | Baseline loaded: n_districts = 5 
+2026-03-27 23:20:36 | tesis columns: province, district, x3 
+2026-03-27 23:20:36 | tesis occupancy column not named; using fallback column: x3 
+2026-03-27 23:20:36 | Some districts missing total_doluluk after exact join; trying ASCII-normalized join. 
+2026-03-27 23:20:36 | total_doluluk missing after fallback: 0 
+2026-03-27 23:20:37 | Concentration QA | top1=0.4031 top5=1 top10=1 
+2026-03-27 23:20:37 | STATIC travel weights computed: n_districts=5 | sum=1 
+2026-03-27 23:20:37 | Saved: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/travel_weights_static.csv 
+2026-03-27 23:20:37 | Saved: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/travel_weights_static.rds 
+2026-03-27 23:20:37 | Finished build_travel_weights_static.R successfully. 
+2026-03-27 23:47:52 | Started build_travel_weights_static.R 
+2026-03-27 23:47:52 | ROOT = C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez 
+2026-03-27 23:47:52 | Baseline loaded: n_districts = 5 
+2026-03-27 23:47:52 | tesis columns: province, district, x3 
+2026-03-27 23:47:52 | tesis occupancy column not named; using fallback column: x3 
+2026-03-27 23:47:52 | Some districts missing total_doluluk after exact join; trying ASCII-normalized join. 
+2026-03-27 23:47:52 | total_doluluk missing after fallback: 0 
+2026-03-27 23:47:52 | Concentration QA | top1=0.4031 top5=1 top10=1 
+2026-03-27 23:47:52 | STATIC travel weights computed: n_districts=5 | sum=1 
+2026-03-27 23:47:52 | Saved: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/travel_weights_static.csv 
+2026-03-27 23:47:52 | Saved: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/travel_weights_static.rds 
+2026-03-27 23:47:52 | Finished build_travel_weights_static.R successfully. 
+2026-03-28 09:21:10 | Started build_travel_weights_static.R 
+2026-03-28 09:21:10 | ROOT = C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez 
+2026-03-28 09:21:10 | Baseline loaded: n_districts = 5 
+2026-03-28 09:21:10 | tesis columns: province, district, x3 
+2026-03-28 09:21:10 | tesis occupancy column not named; using fallback column: x3 
+2026-03-28 09:21:10 | Some districts missing total_doluluk after exact join; trying ASCII-normalized join. 
+2026-03-28 09:21:10 | total_doluluk missing after fallback: 0 
+2026-03-28 09:21:10 | Concentration QA | top1=0.4031 top5=1 top10=1 
+2026-03-28 09:21:10 | STATIC travel weights computed: n_districts=5 | sum=1 
+2026-03-28 09:21:10 | Saved: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/travel_weights_static.csv 
+2026-03-28 09:21:10 | Saved: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/travel_weights_static.rds 
+2026-03-28 09:21:10 | Finished build_travel_weights_static.R successfully. 
+2026-03-28 09:47:12 | Started build_travel_weights_static.R 
+2026-03-28 09:47:12 | ROOT = C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez 
+2026-03-28 09:47:13 | Baseline loaded: n_districts = 5 
+2026-03-28 09:47:13 | tesis columns: province, district, x3 
+2026-03-28 09:47:13 | tesis occupancy column not named; using fallback column: x3 
+2026-03-28 09:47:13 | Some districts missing total_doluluk after exact join; trying ASCII-normalized join. 
+2026-03-28 09:47:13 | total_doluluk missing after fallback: 0 
+2026-03-28 09:47:13 | Concentration QA | top1=0.4031 top5=1 top10=1 
+2026-03-28 09:47:13 | STATIC travel weights computed: n_districts=5 | sum=1 
+2026-03-28 09:47:13 | Saved: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/travel_weights_static.csv 
+2026-03-28 09:47:13 | Saved: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/travel_weights_static.rds 
+2026-03-28 09:47:13 | Finished build_travel_weights_static.R successfully. 
+2026-03-29 00:22:56 | Started build_travel_weights_static.R 
+2026-03-29 00:22:56 | ROOT = C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez 
+2026-03-29 00:22:56 | Baseline loaded: n_districts = 5 
+2026-03-29 00:22:57 | tesis columns: province, district, x3 
+2026-03-29 00:22:57 | tesis occupancy column not named; using fallback column: x3 
+2026-03-29 00:22:57 | Some districts missing total_doluluk after exact join; trying ASCII-normalized join. 
+2026-03-29 00:22:57 | total_doluluk missing after fallback: 0 
+2026-03-29 00:22:57 | GADM id assigned: 5 / 5 districts 
+2026-03-29 00:22:57 | Concentration QA | top1=0.4031 top5=1 top10=1 
+2026-03-29 00:22:57 | STATIC travel weights computed: n_districts=5 | sum=1 
+2026-03-29 00:22:57 | Saved: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/travel_weights_static.csv 
+2026-03-29 00:22:57 | Saved: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/travel_weights_static.rds 
+2026-03-29 00:22:57 | Finished build_travel_weights_static.R successfully. 
+2026-03-29 00:56:01 | Started build_travel_weights_static.R (v2 - TÜİK gelis_yabanci) 
+2026-03-29 00:56:02 | ROOT = C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez 
+2026-03-29 00:56:02 | Baseline loaded: 5 districts 
+2026-03-29 00:56:02 |   Districts: Hopa, Eğirdir, Kartal, Fethiye, Merkez 
+2026-03-29 00:56:03 | TÜİK raw rows: 824 
+2026-03-29 00:56:03 | TÜİK rows after cleaning: 820 
+2026-03-29 00:56:03 | Matched (province+district): 5 / 5 
+2026-03-29 00:56:03 | --- Travel weight diagnostics (TÜİK 2022 gelis_yabanci) --- 
+2026-03-29 00:56:03 |   Hopa                  gelis_yabanci=  13069  V_TR=0.0597 
+2026-03-29 00:56:03 |   Eğirdir              gelis_yabanci=    193  V_TR=0.0009 
+2026-03-29 00:56:03 |   Kartal                gelis_yabanci=  33823  V_TR=0.1545 
+2026-03-29 00:56:03 |   Fethiye               gelis_yabanci= 171775  V_TR=0.7844 
+2026-03-29 00:56:03 |   Merkez                gelis_yabanci=    129  V_TR=0.0006 
+2026-03-29 00:56:03 | sum(travel_weight) = 1  [OK] 
+2026-03-29 00:56:03 | GADM id assigned: 5 / 5 districts 
+2026-03-29 00:56:03 | Saved CSV: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/travel_weights_static.csv 
+2026-03-29 00:56:03 | Saved RDS: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/travel_weights_static.rds 
+2026-03-29 00:56:03 | Finished build_travel_weights_static.R (v2) successfully. 
+2026-03-29 15:56:22 | Started build_travel_weights_static.R (v2 - TÜİK gelis_yabanci) 
+2026-03-29 15:56:22 | ROOT = C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez 
+2026-03-29 15:56:22 | Baseline loaded: 5 districts 
+2026-03-29 15:56:22 |   Districts: Hopa, Eğirdir, Kartal, Fethiye, Merkez 
+2026-03-29 15:56:23 | TÜİK raw rows: 824 
+2026-03-29 15:56:23 | TÜİK rows after cleaning: 820 
+2026-03-29 15:56:23 | Matched (province+district): 5 / 5 
+2026-03-29 15:56:23 | --- Travel weight diagnostics (TÜİK 2022 gelis_yabanci) --- 
+2026-03-29 15:56:23 |   Hopa                  gelis_yabanci=  13069  V_TR=0.0597 
+2026-03-29 15:56:23 |   Eğirdir              gelis_yabanci=    193  V_TR=0.0009 
+2026-03-29 15:56:23 |   Kartal                gelis_yabanci=  33823  V_TR=0.1545 
+2026-03-29 15:56:23 |   Fethiye               gelis_yabanci= 171775  V_TR=0.7844 
+2026-03-29 15:56:23 |   Merkez                gelis_yabanci=    129  V_TR=0.0006 
+2026-03-29 15:56:23 | sum(travel_weight) = 1  [OK] 
+2026-03-29 15:56:23 | GADM id assigned: 5 / 5 districts 
+2026-03-29 15:56:23 | Saved CSV: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/travel_weights_static.csv 
+2026-03-29 15:56:23 | Saved RDS: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/travel_weights_static.rds 
+2026-03-29 15:56:23 | Finished build_travel_weights_static.R (v2) successfully. 
+2026-03-29 17:35:46 | Started build_travel_weights_static.R (v2 - TÜİK gelis_yabanci) 
+2026-03-29 17:35:46 | ROOT = C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez 
+2026-03-29 17:35:46 | Baseline loaded: 5 districts 
+2026-03-29 17:35:46 |   Districts: Hopa, Eğirdir, Kartal, Fethiye, Merkez 
+2026-03-29 17:35:47 | TÜİK raw rows: 824 
+2026-03-29 17:35:47 | TÜİK rows after cleaning: 820 
+2026-03-29 17:35:47 | Matched (province+district): 5 / 5 
+2026-03-29 17:35:47 | --- Travel weight diagnostics (TÜİK 2022 gelis_yabanci) --- 
+2026-03-29 17:35:47 |   Hopa                  gelis_yabanci=  13069  V_TR=0.0597 
+2026-03-29 17:35:47 |   Eğirdir              gelis_yabanci=    193  V_TR=0.0009 
+2026-03-29 17:35:47 |   Kartal                gelis_yabanci=  33823  V_TR=0.1545 
+2026-03-29 17:35:47 |   Fethiye               gelis_yabanci= 171775  V_TR=0.7844 
+2026-03-29 17:35:47 |   Merkez                gelis_yabanci=    129  V_TR=0.0006 
+2026-03-29 17:35:47 | sum(travel_weight) = 1  [OK] 
+2026-03-29 17:35:47 | GADM id assigned: 5 / 5 districts 
+2026-03-29 17:35:47 | Saved CSV: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/travel_weights_static.csv 
+2026-03-29 17:35:47 | Saved RDS: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/travel_weights_static.rds 
+2026-03-29 17:35:47 | Finished build_travel_weights_static.R (v2) successfully. 
+2026-04-10 21:54:07 | Started build_travel_weights_static.R (v2 - TÜİK gelis_yabanci) 
+2026-04-10 21:54:07 | ROOT = C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez 
+2026-04-10 21:54:07 | Baseline loaded: 5 districts 
+2026-04-10 21:54:07 |   Districts: Hopa, Eğirdir, Kartal, Fethiye, Merkez 
+2026-04-10 21:54:08 | TÜİK raw rows: 824 
+2026-04-10 21:54:08 | TÜİK rows after cleaning: 820 
+2026-04-10 21:54:08 | Matched (province+district): 5 / 5 
+2026-04-10 21:54:08 | --- Travel weight diagnostics (TÜİK 2022 gelis_yabanci) --- 
+2026-04-10 21:54:08 |   Hopa                  gelis_yabanci=  13069  V_TR=0.0597 
+2026-04-10 21:54:08 |   Eğirdir              gelis_yabanci=    193  V_TR=0.0009 
+2026-04-10 21:54:08 |   Kartal                gelis_yabanci=  33823  V_TR=0.1545 
+2026-04-10 21:54:08 |   Fethiye               gelis_yabanci= 171775  V_TR=0.7844 
+2026-04-10 21:54:08 |   Merkez                gelis_yabanci=    129  V_TR=0.0006 
+2026-04-10 21:54:08 | sum(travel_weight) = 1  [OK] 
+2026-04-10 21:54:08 | GADM id assigned: 5 / 5 districts 
+2026-04-10 21:54:08 | Saved CSV: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/travel_weights_static.csv 
+2026-04-10 21:54:08 | Saved RDS: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/travel_weights_static.rds 
+2026-04-10 21:54:08 | Finished build_travel_weights_static.R (v2) successfully. 

@@ -1,47 +1,53 @@
-# R session files
+# =============================================================================
+# .gitignore — dengue_ctmc_spark_turkiye
+# =============================================================================
+
+# ── R session / history ──────────────────────────────────────────────────────
+.Rproj.user/
 .Rhistory
 .RData
+.Ruserdata
+.RDataTmp
 .RDataTmp*
-.Rproj.user/
+*.RData.bak
 
-# OS files
+# ── renv: keep renv.lock and the activate script, ignore the local library ────
+renv/library/
+renv/local/
+renv/cellar/
+renv/staging/
+renv/python/
+renv/sandbox/
+
+# ── Raw climate data — NOT redistributed (size + licensing) ───────────────────
+# Retrieve via the Copernicus CDS queries documented in data_raw/README_data.md
+# (S1 Data: raw CMIP6 and ERA5-Land NetCDF are not redistributed)
+*.nc
+*.nc4
+*.grib
+*.grb
+
+# ── knitr / R Markdown render caches ──────────────────────────────────────────
+*_files/
+*_cache/
+**/figure-html/
+**/figure-latex/
+
+# ── Ad-hoc "new folder" and backup directories — do not track ─────────────────
+Yeni klasör/
+**/Yeni klasör/
+eski_v3_yedek/
+**/eski_v3_yedek/
+
+# ── Optional: rep1 single-draw sweep outputs (keep the rep1000 outputs) ───────
+# Uncomment to slim the repository; rep1000 files are the reproducible ones.
+# outputs/**/*_rep1.csv
+# outputs/**/*_rep1.rds
+
+# ── OS / editor junk ──────────────────────────────────────────────────────────
 .DS_Store
 Thumbs.db
+*~
+*.swp
 desktop.ini
-
-# Ham veri ve ara veri
-data_raw/
-data_interim/
-
-# SSP alt klasörleri (büyük klimat/importasyon RDS)
-data_processed/ssp126/
-data_processed/ssp245/
-data_processed/ssp585/
-
-# Outputs ve loglar
-outputs/
-logs/
-
-# Büyük binary/bilimsel format
-*.nc
-*.rds
-*.Rds
-*.RData
-
-# Ofis dosyaları
-*.xlsx
-*.xls
-*.zip
-
-# Geçici
-*.tmp
-*.bak
-
-# Draft dökümanlar ve türetilmiş HTML
-bulgular_bolumu*.docx
-elestiri_yanit_mektubu*.docx
-R/04_results/bulgular.html
-R/04_results/archive/*.html
-diagram_r_pipeline.html
-
-**/Yeni klasör/
+bulgular.html

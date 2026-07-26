@@ -43,7 +43,7 @@ run_sensitivity_mc <- function(
   # Base values — MUST match ctmc_spark_monte_carlo.R entrypoint
   # ----------------------------------------------------------
   BASE <- list(
-    m       = 1.0,    # Ross-Macdonald standard (1 female mosquito per person)
+    m       = 1.0,    # Conditional limit
     beta_vh = 0.3,    # vector-to-human transmission probability
     beta_hv = 0.33,   # human-to-vector transmission probability (fixed)
     ip_days = 5       # infectious period days; gamma = 1/ip_days

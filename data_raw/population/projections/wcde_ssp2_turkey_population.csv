@@ -1,0 +1,27 @@
+Source: Wittgenstein Centre for Demography and Global Human Capital (2023). Wittgenstein Centre Data Explorer Version 3.0
+Available at: www.wittgensteincentre.org/dataexplorer 
+
+""
+"Population Size (000's)"
+"De facto population in a country or region, classified by sex and by five-year age groups. Available in all scenarios and at all geographical scales. Figures are presented in thousands."
+"Medium (SSP2)"
+" "
+"Area","Year","Population"
+"Turkey",2015,78966.3
+"Turkey",2020,83811.7
+"Turkey",2025,87089
+"Turkey",2030,89963.2
+"Turkey",2035,92303.1
+"Turkey",2040,94200.3
+"Turkey",2045,95577.2
+"Turkey",2050,96374.9
+"Turkey",2055,96600.5
+"Turkey",2060,96239.5
+"Turkey",2065,95429.1
+"Turkey",2070,94302.9
+"Turkey",2075,92928.2
+"Turkey",2080,91349.6
+"Turkey",2085,89611.5
+"Turkey",2090,87768.7
+"Turkey",2095,85856.2
+"Turkey",2100,83891.8

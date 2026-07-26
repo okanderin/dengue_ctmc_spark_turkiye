@@ -1,0 +1,61 @@
+district_label,month_name,CSI_mean
+Eğirdir (Isparta),Jan,0.003934708513203222
+Eğirdir (Isparta),Feb,0.003571171302074014
+Eğirdir (Isparta),Mar,0.028119285741697107
+Eğirdir (Isparta),Apr,0.17121667432423343
+Eğirdir (Isparta),May,0.4391181206869764
+Eğirdir (Isparta),Jun,0.7010122254959056
+Eğirdir (Isparta),Jul,0.8245595987032868
+Eğirdir (Isparta),Aug,0.8225371779542718
+Eğirdir (Isparta),Sep,0.6831319579851114
+Eğirdir (Isparta),Oct,0.39539711774940917
+Eğirdir (Isparta),Nov,0.09968698006133005
+Eğirdir (Isparta),Dec,0.004737224381823459
+Fethiye (Muğla),Jan,0.04455801241151718
+Fethiye (Muğla),Feb,0.03482740014479748
+Fethiye (Muğla),Mar,0.13697508375415354
+Fethiye (Muğla),Apr,0.2875821904518124
+Fethiye (Muğla),May,0.5402675726608
+Fethiye (Muğla),Jun,0.7714847338939161
+Fethiye (Muğla),Jul,0.8528589322500617
+Fethiye (Muğla),Aug,0.8489076543935847
+Fethiye (Muğla),Sep,0.7491544401426871
+Fethiye (Muğla),Oct,0.5196136082374367
+Fethiye (Muğla),Nov,0.23410948925536224
+Fethiye (Muğla),Dec,0.06268392080846485
+Hopa (Artvin),Jan,0.01258075038668471
+Hopa (Artvin),Feb,0.011796910775568787
+Hopa (Artvin),Mar,0.04306062281781089
+Hopa (Artvin),Apr,0.22840806529383667
+Hopa (Artvin),May,0.39499864393230666
+Hopa (Artvin),Jun,0.5874960945951481
+Hopa (Artvin),Jul,0.69851241845898
+Hopa (Artvin),Aug,0.7422543471568379
+Hopa (Artvin),Sep,0.6322715079857946
+Hopa (Artvin),Oct,0.4037764414985224
+Hopa (Artvin),Nov,0.1783325766036268
+Hopa (Artvin),Dec,0.03140745129787226
+Kartal (İstanbul),Jan,0.08669188974657475
+Kartal (İstanbul),Feb,0.06671241624007163
+Kartal (İstanbul),Mar,0.12851788811847756
+Kartal (İstanbul),Apr,0.28796627121336416
+Kartal (İstanbul),May,0.538357600793875
+Kartal (İstanbul),Jun,0.7508477835836471
+Kartal (İstanbul),Jul,0.8193111274173904
+Kartal (İstanbul),Aug,0.8241859364701816
+Kartal (İstanbul),Sep,0.7304183494569018
+Kartal (İstanbul),Oct,0.5144785632586203
+Kartal (İstanbul),Nov,0.294018707941447
+Kartal (İstanbul),Dec,0.1262028108610395
+Zonguldak,Jan,0.02356240574412817
+Zonguldak,Feb,0.02071322494310215
+Zonguldak,Mar,0.06894929212931175
+Zonguldak,Apr,0.22066765872866784
+Zonguldak,May,0.4490266239039309
+Zonguldak,Jun,0.6700945398570448
+Zonguldak,Jul,0.771870099387068
+Zonguldak,Aug,0.7895654050095033
+Zonguldak,Sep,0.6596077199632827
+Zonguldak,Oct,0.42008609583130513
+Zonguldak,Nov,0.19456078558463838
+Zonguldak,Dec,0.047149707658048455

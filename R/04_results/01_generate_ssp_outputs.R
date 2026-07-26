@@ -192,6 +192,46 @@ ggsave("fig_yearly_risk.png", fig_yearly, path = DIR_FIG,
        width = 8, height = 5, dpi = 300)
 
 ## =========================================================
+## 4) Annual Risk Trend  (ENGLISH)
+## 01_generate_ssp_outputs.R içindeki "4) Yıllık Risk Trendi"
+## bölümünün İngilizce karşılığı. Per-SSP döngü içinde
+## (SSP_LABEL, DIR_FIG, yearly, COL_DISTRICT, DISTRICT_LABELS
+## tanımlıyken) çalışır. Çıktı: fig_yearly_risk_en.png
+##
+## Yalnızca İngilizce isterseniz mevcut Türkçe bloğun yerine koyun;
+## ikisini birlikte üretmek isterseniz bu bloğu Türkçe bloğun
+## hemen altına ekleyin.
+## =========================================================
+cat(">>> 4) Annual risk trend <<<\n")
+
+# İngilizce ilçe etiketleri: mevcut DISTRICT_LABELS'tan yalnızca İstanbul -> Istanbul
+DISTRICT_LABELS_EN <- gsub("\u0130stanbul", "Istanbul", DISTRICT_LABELS)
+
+fig_yearly_en <- ggplot(yearly, aes(x = year, y = p_ge1_major_year_mean,
+                                    colour = district_id,
+                                    fill   = district_id)) +
+  geom_ribbon(aes(ymin = p_ge1_major_year_p2_5,
+                  ymax = p_ge1_major_year_p97_5),
+              alpha = 0.15, colour = NA) +
+  geom_line(linewidth = 0.8) +
+  scale_y_log10(labels = label_scientific()) +
+  scale_colour_manual(values = COL_DISTRICT, labels = DISTRICT_LABELS_EN, name = NULL) +
+  scale_fill_manual(values   = COL_DISTRICT, labels = DISTRICT_LABELS_EN, guide = "none") +
+  labs(x = "Year",
+       y = expression(P["\u22651 major/year"] ~ "(log)"),
+       title = paste("Annual outbreak risk \u2014", SSP_LABEL)) +
+  theme_thesis()
+
+ggsave("fig_yearly_risk_en.png", fig_yearly_en, path = DIR_FIG,
+       width = 8, height = 5, dpi = 300)
+
+## =========================================================
+## Not: Bu grafiği Rmd'de PNG olarak dahil ediyorsanız (ör. CSI trend
+## chunk'ındaki gibi outputs/{SSP}/figures/... okuma), dosya yolunu
+## "fig_yearly_risk_en.png" olarak güncelleyin.
+## =========================================================
+
+## =========================================================
 ## 5) Ufuk Tablosu
 ## =========================================================
 cat(">>> 5) Ufuk risk tablosu <<<\n")
@@ -512,8 +552,8 @@ write_csv(prcc_result, file.path(DIR_TBL, "tbl_prcc.csv"))
 
 # Parametre aralıklarını kaydet
 param_ranges_tbl <- tibble(
-  Parametre = c("m", "beta_vh", "beta_hv", "ip_days", "T_C", "RH"),
-  Alt = c(
+  Parameter = c("m", "beta_vh", "beta_hv", "ip_days", "T_C", "RH"),
+  Lower = c(
     param_ranges_other$m[1], 
     param_ranges_other$beta_vh[1], 
     param_ranges_other$beta_hv[1], 
@@ -521,7 +561,7 @@ param_ranges_tbl <- tibble(
     T_range[1], 
     RH_range[1]
   ),
-  Üst = c(
+  Upper = c(
     param_ranges_other$m[2], 
     param_ranges_other$beta_vh[2], 
     param_ranges_other$beta_hv[2], 
@@ -529,10 +569,10 @@ param_ranges_tbl <- tibble(
     T_range[2], 
     RH_range[2]
   ),
-  Kaynak = c(
-    "Literatür", "Literatür", "Literatür", "Literatür",
-    paste0("Bootstrap (", SSP_LABEL, " aktif aylar)"),
-    paste0("Bootstrap (", SSP_LABEL, " aktif aylar)")
+  Source = c(
+    "Literature", "Literature", "Literature", "Literature",
+    paste0("Bootstrap (", SSP_LABEL, " active months)"),
+    paste0("Bootstrap (", SSP_LABEL, " active months)")
   )
 )
 
@@ -545,8 +585,8 @@ fig_prcc <- ggplot(prcc_result, aes(x = reorder(parameter, abs(PRCC)), y = PRCC)
   coord_flip() +
   scale_fill_manual(values = c("TRUE" = "#E63946", "FALSE" = "#457B9D")) +
   labs(x = NULL, y = "PRCC",
-       title = paste(SSP_LABEL, "LHS–PRCC Duyarlılık Analizi"),
-       subtitle = sprintf("n = %d | T: %.1f–%.1f°C | RH: %.1f–%.1f%% (aktif ay bootstrap)",
+       title = paste(SSP_LABEL, "LHS\u2013PRCC Sensitivity Analysis"),
+       subtitle = sprintf("n = %d | T: %.1f\u2013%.1f\u00b0C | RH: %.1f\u2013%.1f%% (active-month bootstrap)",
                           n_lhs, T_range[1], T_range[2],
                           RH_range[1], RH_range[2])) +
   theme_thesis()
@@ -578,13 +618,20 @@ csi_heat <- monthly_csi %>%
   group_by(district_label, month_name) %>%
   summarise(CSI_mean = mean(CSI, na.rm = TRUE), .groups = "drop")
 
+csi_heat <- csi_heat %>%
+  mutate(month_name = factor(month_name,
+                             levels = c("Oca","Şub","Mar","Nis","May","Haz",
+                                        "Tem","Ağu","Eyl","Eki","Kas","Ara"),
+                             labels = c("Jan","Feb","Mar","Apr","May","Jun",
+                                        "Jul","Aug","Sep","Oct","Nov","Dec")))
+
 fig_csi_heat <- ggplot(csi_heat, aes(x = month_name, y = fct_rev(factor(district_label)),
                                      fill = CSI_mean)) +
   geom_tile(colour = "white", linewidth = 0.6) +
   geom_text(aes(label = sprintf("%.2f", CSI_mean)), size = 2.8, colour = "grey20") +
   scale_fill_gradientn(
     colours = c("#EFF3FF","#BDD7E7","#6BAED6","#2171B5","#08306B"),
-    name    = "İklim Uygunluk\nİndeksi (CSI)",
+    name    = "Climate Suitability\nIndex (CSI)",
     limits  = c(0, 1),
     breaks  = c(0, 0.25, 0.50, 0.75, 1.00),
     labels  = c("0.00", "0.25", "0.50", "0.75", "1.00"),
@@ -597,10 +644,10 @@ fig_csi_heat <- ggplot(csi_heat, aes(x = month_name, y = fct_rev(factor(district
     )
   ) +
   labs(
-    x       = NULL,
-    y       = NULL,
-    title   = paste("\Climate Suitability Index \u2014", SSP_LABEL),
-    caption = "CSI = (a_norm + lf_norm + eip_norm) / 3; Bri\u00e8re thermal performence curves, Mordecai 2017"
+    x       = "Year",
+    y       = "Mean CSI",
+    title   = paste("Climate Suitability Index \u2014", SSP_LABEL),
+    caption = "CSI = (a_norm + lf_norm + eip_norm) / 3; Bri\u00e8re thermal performance curves, Mordecai 2017"
   ) +
   theme_thesis() +
   theme(
@@ -631,7 +678,7 @@ fig_csi_trend <- ggplot(csi_yearly, aes(x = year, y = CSI_year,
     guide = "none"
   ) +
   labs(x = "Yıl", y = "Ortalama CSI",
-       title = paste("CSI yıllık trendi —", SSP_LABEL)) +
+       title = paste("CSI anuual trend —", SSP_LABEL)) +
   theme_thesis()
 
 ggsave("fig_csi_trend.png", fig_csi_trend, path = DIR_FIG, width = 8, height = 5, dpi = 300)
@@ -889,6 +936,7 @@ cat("DONE:", SSP_LABEL, "\n")
 cat("Figures:", DIR_FIG, "\n")
 cat("Tables:", DIR_TBL, "\n")
 cat(strrep("=", 55), "\n")
+
 
 
 ## =========================================================

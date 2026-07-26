@@ -1,0 +1,68 @@
+```{r fig-oat-profile-en, fig.cap="OAT sensitivity analysis: effect of the m parameter on P_horizon. Each line represents a district; panels represent SSP scenarios. The vertical dashed line indicates the baseline scenario (m = 1.00).", fig.height=6, fig.width=10}
+# ---- OAT profile plot (English) ----
+
+# İngilizce ilçe etiketleri: mevcut DISTRICT_LABELS'tan yalnızca İstanbul -> Istanbul
+DISTRICT_LABELS_EN <- gsub("\u0130stanbul", "Istanbul", DISTRICT_LABELS)
+
+oat_plot_data <- oat_all %>%
+  mutate(
+    m_numeric = m_values[scenario],
+    ssp_label = factor(ssp_label, levels = c("SSP1-2.6", "SSP2-4.5", "SSP5-8.5"))
+  ) %>%
+  filter(p_ufuk > 0)  # filter zeros for log scale
+
+fig_oat <- ggplot(oat_plot_data,
+                  aes(x = m_numeric, y = p_ufuk,
+                      colour = district_id,
+                      group = district_label)) +
+  # Baseline scenario line
+  geom_vline(xintercept = 1.0, linetype = "dashed",
+             colour = "grey50", linewidth = 0.5) +
+  # Data points and lines
+  geom_line(linewidth = 0.8, alpha = 0.8) +
+  geom_point(size = 2.5, alpha = 0.9) +
+  # 1% reference line (optional)
+  geom_hline(yintercept = 0.01, linetype = "dotted",
+             colour = "grey70", linewidth = 0.4) +
+  annotate("text", x = 2.05, y = 0.012, label = "1%",
+           size = 2.5, colour = "grey50", hjust = 0) +
+  # Scales
+  scale_y_log10(
+    labels = scales::label_log(digits = 2),
+    breaks = scales::trans_breaks("log10", function(x) 10^x)
+  ) +
+  scale_x_continuous(
+    breaks = c(0.5, 0.8, 1.0, 1.2, 2.0),
+    labels = c("0.50", "0.80", "1.00", "1.20", "2.00")
+  ) +
+  scale_colour_manual(
+    values = COL_DISTRICT,
+    labels = DISTRICT_LABELS_EN,
+    name = NULL
+  ) +
+  # Panels
+  facet_wrap(~ssp_label, ncol = 3) +
+  # Labels
+  labs(
+    x = expression("Mosquito-to-human ratio (" * italic(m) * ")"),
+    y = expression(P[horizon] ~ "(log scale)"),
+    title = expression("OAT: effect of " * italic(m) * " on cumulative establishment risk"),
+    subtitle = "\u03c4 = 30, \u03b3 = 0.20 day\u207b\u00b9. Dashed line: baseline scenario (m = 1.00)"
+  ) +
+  theme_thesis() +
+  theme(
+    strip.text = element_text(size = 10, face = "bold"),
+    legend.position = "bottom"
+  )
+
+print(fig_oat)
+
+# Save (_en)
+ggsave(
+  filename = "fig_oat_m_profile_en.png",
+  plot = fig_oat,
+  path = DIR_OUTPUT_CROSS,
+  width = 10, height = 6,
+  dpi = 300, bg = "white"
+)
+```

@@ -1,0 +1,48 @@
+=============================================
+import_raw.R started at : 2026-01-26 15:38:06.823284 
+Project ROOT            : C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez 
+DIR_CLIMATE             : C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_raw/climate/cmip6/ssp245 
+DIR_SHP                 : C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_raw/geography/districts_shapefile 
+DIR_INTERIM             : C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_interim 
+=============================================
+
+
+--- Sentinel matching report ---
+Requested sentinel units:
+# A tibble: 5 x 2
+  prov      dist          
+  <chr>     <chr>         
+1 Artvin    "Hopa"        
+2 Zinguldak "Merkez"      
+3 Istanbul  "Kartal"      
+4 Isparta   "E\u011firdir"
+5 Mugla     "Fethiye"     
+
+Matched units in GADM ADM2:
+  province_name  district_name district_id
+1        Artvin           Hopa  TUR.10.4_1
+2       Isparta E<U+011F>irdir  TUR.39.3_1
+3      Istanbul         Kartal TUR.40.25_1
+4         Mugla        Fethiye  TUR.59.4_1
+5     Zinguldak         Merkez  TUR.81.6_1
+
+=============================================
+import_raw.R finished at : 2026-01-26 15:38:08.826398 
+Boundary file            : C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_raw/geography/districts_shapefile/gadm41_TUR_2.shp 
+Output file              : C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_interim/climate_district_monthly_2015_2100.rds 
+Total rows               : 25800 
+Districts                : 5 
+Date range               : 2015-01-16 -> 2100-12-16 
+Variables                : hur, pr, tas, tasmax, tasmin 
+=============================================
+indexing trait_params_albopictus.csv [================================================================] 68.79MB/s, eta:  0s                                                                                                                           wrote 2.15GB in  0s, 2.15GB/s                                                                                                                         indexing sentinel_species.csv [=======================================================================] 15.42MB/s, eta:  0s                                                                                                                           indexing trait_params_aegypti.csv [==================================================================] 135.37MB/s, eta:  0s                                                                                                                           indexing trait_params_albopictus.csv [================================================================] 97.13MB/s, eta:  0s                                                                                                                           wrote 3.16kB in  0s, 259.55MB/s                                                                                                                         wrote 2.15GB in  0s, 2.15GB/s                                                                                                                         wrote 1.61kB in  0s, 116.57MB/s                                                                                                                         wrote 2.15GB in  0s, 2.15GB/s                                                                                                                         wrote 2.15GB in  0s, 2.15GB/s                                                                                                                         Called from: read_rds_checked(path)
+indexing sentinel_species.csv [=======================================================================] 12.48MB/s, eta:  0s                                                                                                                           indexing trait_params_aegypti.csv [==================================================================] 103.31MB/s, eta:  0s                                                                                                                           indexing trait_params_albopictus.csv [================================================================] 97.13MB/s, eta:  0s                                                                                                                           wrote 3.16kB in  0s, 264.74MB/s                                                                                                                         wrote 2.15GB in  0s, 2.15GB/s                                                                                                                         wrote 1.61kB in  0s, 125.21MB/s                                                                                                                         wrote 2.15GB in  0s, 2.15GB/s                                                                                                                         wrote 2.15GB in  0s, 2.15GB/s                                                                                                                         # A tibble: 0 x 4
+# i 4 variables: district_id <chr>, year <int>, month <int>, n <int>
+indexing ctmc_spark_monthly_2025_2075.csv [============================================================] 2.15GB/s, eta:  0s                                                                                                                           indexing ctmc_spark_yearly_2025_2075.csv [=============================================================] 2.15GB/s, eta:  0s                                                                                                                           indexing ctmc_spark_horizon_2025_2075.csv [===========================================================] 64.57MB/s, eta:  0s                                                                                                                           wrote 2.15GB in  0s, 2.15GB/s                                                                                                                         wrote 2.43kB in  0s, 185.46MB/s                                                                                                                         wrote 2.15GB in  0s, 2.15GB/s                                                                                                                         # A tibble: 5 x 6
+  sentinel                 species    p_ge1_major hazard_thinned Lambda_import mean_p_est
+  <chr>                    <chr>            <dbl>          <dbl>         <dbl>      <dbl>
+1 "Kartal (Istanbul)"      albopictus       1              93.4         107.        0.801
+2 "Fethiye (Mugla)"        albopictus       1              56.8          71.7       0.678
+3 "Merkez (Zinguldak)"     aegypti          1.000          14.9          23.7       0.475
+4 "Hopa (Artvin)"          aegypti          0.957           3.14          5.39      0.436
+5 "E\u011firdir (Isparta)" albopictus       0.902           2.33          3.26      0.569

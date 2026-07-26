@@ -1,0 +1,5 @@
+Seasonality and warming-shift note
+----------------------------------
+Seasonality figures are descriptive summaries of observed model outputs.
+Warming-shift figures are exploratory perturbation analyses based on the empirical temperature-R0 and temperature-lambda relationships.
+They do NOT replace a full mechanistic rerun under IPCC scenario-specific climate inputs.

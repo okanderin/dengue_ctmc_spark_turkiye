@@ -1,0 +1,6 @@
+Yontem,Deger,Not
+"Mekanistik (∂λ/∂T=0) — BIRINCIL, yansiz",28.18 °C,P_est ithalattan bagimsiz; peak = argmax lambda; m/beta peaki kaydirmaz
+"Tobit-FE (sansurlu, tum aylar, ilce sabit etkisi)",26.33 °C,Sansur sinir alti aylar bilgi tasir; yansiz T_opt
+OLS-FE (yalnizca aktif ay) — TRUNCATION etkili (tani),26.41 °C,Eski filtrenin (P_est>1e-15) urettigi yanliligi gosterir
+Truncation bias (aktif − Tobit),+0.08 °C,Bu fark ne kadar buyukse eski T_opt o kadar yanliydi
+Mordecai ~26–28°C ile karsilastirma,IC TUTARLILIK KONTROLU,"Mordecai egrileri modelin GIRDISI; uyum KODLAMA dogrulugunu gosterir, DIS gecerliligi DEGIL. Gercek dogrulama: Avrupa otokton salgin hindcast'i ([164] Farooq)."

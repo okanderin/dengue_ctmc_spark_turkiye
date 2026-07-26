@@ -1,0 +1,61 @@
+district_label,month_name,CSI_mean
+Eğirdir (Isparta),Oca,0.003934708513203222
+Eğirdir (Isparta),Şub,0.003571171302074014
+Eğirdir (Isparta),Mar,0.028119285741697107
+Eğirdir (Isparta),Nis,0.17121667432423343
+Eğirdir (Isparta),May,0.4391181206869764
+Eğirdir (Isparta),Haz,0.7010122254959056
+Eğirdir (Isparta),Tem,0.8245595987032868
+Eğirdir (Isparta),Ağu,0.8225371779542718
+Eğirdir (Isparta),Eyl,0.6831319579851114
+Eğirdir (Isparta),Eki,0.39539711774940917
+Eğirdir (Isparta),Kas,0.09968698006133005
+Eğirdir (Isparta),Ara,0.004737224381823459
+Fethiye (Muğla),Oca,0.04455801241151718
+Fethiye (Muğla),Şub,0.03482740014479748
+Fethiye (Muğla),Mar,0.13697508375415354
+Fethiye (Muğla),Nis,0.2875821904518124
+Fethiye (Muğla),May,0.5402675726608
+Fethiye (Muğla),Haz,0.7714847338939161
+Fethiye (Muğla),Tem,0.8528589322500617
+Fethiye (Muğla),Ağu,0.8489076543935847
+Fethiye (Muğla),Eyl,0.7491544401426871
+Fethiye (Muğla),Eki,0.5196136082374367
+Fethiye (Muğla),Kas,0.23410948925536224
+Fethiye (Muğla),Ara,0.06268392080846485
+Hopa (Artvin),Oca,0.01258075038668471
+Hopa (Artvin),Şub,0.011796910775568787
+Hopa (Artvin),Mar,0.04306062281781089
+Hopa (Artvin),Nis,0.22840806529383667
+Hopa (Artvin),May,0.39499864393230666
+Hopa (Artvin),Haz,0.5874960945951481
+Hopa (Artvin),Tem,0.69851241845898
+Hopa (Artvin),Ağu,0.7422543471568379
+Hopa (Artvin),Eyl,0.6322715079857946
+Hopa (Artvin),Eki,0.4037764414985224
+Hopa (Artvin),Kas,0.1783325766036268
+Hopa (Artvin),Ara,0.03140745129787226
+Kartal (İstanbul),Oca,0.08669188974657475
+Kartal (İstanbul),Şub,0.06671241624007163
+Kartal (İstanbul),Mar,0.12851788811847756
+Kartal (İstanbul),Nis,0.28796627121336416
+Kartal (İstanbul),May,0.538357600793875
+Kartal (İstanbul),Haz,0.7508477835836471
+Kartal (İstanbul),Tem,0.8193111274173904
+Kartal (İstanbul),Ağu,0.8241859364701816
+Kartal (İstanbul),Eyl,0.7304183494569018
+Kartal (İstanbul),Eki,0.5144785632586203
+Kartal (İstanbul),Kas,0.294018707941447
+Kartal (İstanbul),Ara,0.1262028108610395
+Zonguldak,Oca,0.02356240574412817
+Zonguldak,Şub,0.02071322494310215
+Zonguldak,Mar,0.06894929212931175
+Zonguldak,Nis,0.22066765872866784
+Zonguldak,May,0.4490266239039309
+Zonguldak,Haz,0.6700945398570448
+Zonguldak,Tem,0.771870099387068
+Zonguldak,Ağu,0.7895654050095033
+Zonguldak,Eyl,0.6596077199632827
+Zonguldak,Eki,0.42008609583130513
+Zonguldak,Kas,0.19456078558463838
+Zonguldak,Ara,0.047149707658048455

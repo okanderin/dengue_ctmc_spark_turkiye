@@ -4,64 +4,51 @@
 ## Purpose : Monthly importation pressure dataset (sentinel districts)
 ##           SSP-aware: M_climate varies by scenario.
 ##
-## VERSION 3 — GBD-weighted, S_m relocated to V_in(t)
+## VERSION 4 — METHOD 1: district-level RAW arrivals (A_d), direct
 ##
-## KEY CHANGES FROM v2:
+## KEY CHANGE FROM v3
+##   V_in_day now uses each district's OWN raw foreign accommodation
+##   arrivals A_d directly, instead of allocating the NATIONAL total
+##   across the 5 sentinels via a within-5-district share (V_TR).
 ##
-## (1) S_m moved from daily_rate to V_in_day
-##     BEFORE: daily_rate = rate_pp_year × S_m × 12 / 365 × M_climate
-##             V_in_day   = V_TR × N_total / 365
-##     AFTER:  daily_rate = rate_pp_year / 365 × M_climate
-##             V_in_day   = V_TR × N_total × S_m / 365
+##     v3 (K1):  V_in_day = V_TR_d × N_total × S_m / 365
+##               V_TR_d = A_d / Σ_{5} A_j   ⟹  Σ_{5} V_in = N_total
+##               (all Türkiye funneled into 5 districts — dimensional error)
 ##
-##     Rationale: S_m is derived from monthly visitor departure counts
-##     (TÜİK/EGM passport records), measuring the seasonal variation
-##     in international travel volume to Türkiye. It modulates the
-##     number of arriving travelers (exposure population), not the
-##     per-capita infection risk in source countries (γ_GBD).
-##     The GBD incidence rate is an annual per-capita rate for each
-##     source country; Türkiye's hotel occupancy/visitor volume does
-##     not affect dengue incidence in Brazil or India.
+##     v4 (M1):  V_in_day = A_d × S_m / 365
+##               A_d = TÜİK district foreign accommodation arrivals
+##               (each district gets its OWN arrivals; no funneling)
 ##
-## (2) ×12 scaling factor removed
-##     The previous formula multiplied rate_pp_year by 12, which
-##     inflated the annual integral by a factor of 12 when S_m is
-##     normalized to mean=1 (sum=12). With S_m now in V_in_day,
-##     the daily rate is simply rate_pp_year / 365.
-##     Verification: Σ_m(daily_rate × days_m) = rate_pp_year/365 × 365
-##                 = rate_pp_year ✓
+##   All other terms (π_weighted, η, λ_import, downstream P_ufuk) are
+##   UNCHANGED. v4 = v3 × c, with c = (Σ_{5} A_j)/N_total a single global
+##   scalar ⟹ district ranking, threshold years and season length are
+##   INVARIANT; only the absolute P_ufuk scale changes.
+##   (Proof + numerical check: invariance_check_importation.R)
 ##
-## (3) S_m source updated from occupancy to TÜİK departures (v3)
-##     See build_seasonality_monthly.R for details.
+##   Source-country composition (w_c) remains NATIONAL — an explicit
+##   assumption that the source mix is similar across sentinels.
 ##
-## Thesis formula (Denklem 5):
-##   λ_ithal(d,t,m) = V_in(d,t,m) · π_weighted(t,m) · η
+## Thesis formula (Denklem 5, revised):
+##   λ_ithal(d,t,m) = V_in(d,m) · π_weighted(t,m) · η
+##   V_in(d,m)      = A_d × S_m / 365
+##   π_weighted     = 1 - exp(-γ_GBD(t,m) · d_days)
+##   γ_GBD(t,m)     = (GBD_insidans(t)/100000) · M_climate(t,m)
 ##
-##   V_in(d,t,m) = V_TR_d × N_total × S_m / 365
-##
-##   π_weighted(t,m) = 1 - exp(-γ_GBD(t) / 365 × M_climate(t,m) × d_days)
-##
-##   γ_GBD(t) = Σ_c [ w_c · rate_pp_c(t) ]   (GBD-weighted annual rate)
-##
-##   References:
-##     - Liebig et al. (2019) PLoS ONE — GBD-based formula
-##     - Wilder-Smith & Gubler (2008) — travel volume as primary driver
-##     - Semenza et al. (2014) PLoS NTD — air travel dengue importation
-##     - Stanaway et al. (2016) Lancet Infect Dis — GBD dengue
-##     - Massad et al. (2018) Sci Rep — Europe importation model
+## References:
+##   - Liebig et al. (2019) PLoS ONE  [115]  GBD-based arrival model
+##   - Semenza et al. (2014) PLoS NTD [104]  air-travel importation
+##   - Massad et al. (2018) Sci Rep   [113]  introduction probability
+##   - Wilder-Smith & Gubler (2008)   [116]  travel as primary driver
 ##
 ## Inputs (SSP-independent, from DIR_PROCESSED):
 ##   - population_sentinel_baseline_2024.csv
-##   - travel_weights_static.rds
-##   - seasonality_monthly.rds  (v3: TÜİK departures)
-##
+##   - travel_weights_static.rds        (MUST contain `gelis_yabanci` = A_d)
+##   - seasonality_monthly.rds          (v3: TÜİK departures)
 ## Inputs (from data_raw/population):
 ##   - GBD_2023_DATA/GBD_2023_DATA.csv
 ##   - turizm_verileri/tourist_arrivals_by_country.csv
-##
 ## Inputs (SSP-dependent, from DIR_PROCESSED_SSP):
 ##   - import_climate_multiplier_monthly.rds
-##
 ## Outputs (SSP-dependent, to DIR_PROCESSED_SSP):
 ##   - importation_pressure_monthly_2025_2075.csv/.rds
 ##   - importation_pressure_yearly_2025_2075.csv/.rds
@@ -71,7 +58,7 @@ source("R/01_setup/init.R")
 
 SSP_SCENARIO <- Sys.getenv("SSP_SCENARIO", unset = "ssp245")
 cat("\n=============================================\n")
-cat("build_importation_pressure_monthly.R (v3 — S_m in V_in)\n")
+cat("build_importation_pressure_monthly.R (v4 — METHOD 1: A_d direct)\n")
 cat("SSP scenario:", SSP_SCENARIO, "\n")
 cat("Started at  :", as.character(Sys.time()), "\n")
 cat("=============================================\n\n")
@@ -125,24 +112,39 @@ sentinel <- baseline %>%
 
 cat("Sentinel districts:", nrow(sentinel), "\n")
 
-## Travel weights (V_TR per district)
-tw_path <- file.path(DIR_PROCESSED, "travel_weights_static.rds")
+## Travel weights + RAW arrivals A_d per district
+## -------------------------------------------------------------------
+## METHOD 1: pull the raw `gelis_yabanci` column (A_d) directly.
+## `travel_weight` (V_TR) is retained for reference/diagnostics only.
+tw_path <- file.path(DIR_PROCESSED, "travel_weights_zone.rds")
 if (!file.exists(tw_path)) {
-  tw_path2 <- file.path(DIR_PROCESSED, "travel_weights.rds")
+  tw_path2 <- file.path(DIR_PROCESSED, "travel_weights_zone.rds")
   if (file.exists(tw_path2)) tw_path <- tw_path2
   else stop("Travel weights file not found.", call. = FALSE)
 }
 tw <- readRDS(tw_path)
 
+if (!"gelis_yabanci" %in% names(tw)) {
+  stop("travel_weights_zone.rds `gelis_yabanci` (A_d) sutununu icermiyor; ",
+       "build_travel_weights.R'yi (v2) yeniden calistirin.", call. = FALSE)
+}
+
 districts <- sentinel %>%
   dplyr::left_join(
-    tw %>% dplyr::select(district_id, V_TR = travel_weight),
+    tw %>% dplyr::select(
+      district_id,
+      V_TR = travel_weight,     # korunuyor: goreli 5-ilce payi (yalnizca tanilama)
+      A_d  = gelis_yabanci      # METHOD 1: ham yillik yabanci tesis gelisi
+    ),
     by = "district_id"
   )
 
-if (any(is.na(districts$V_TR))) {
-  stop("Some districts have no travel weight (V_TR).", call. = FALSE)
+if (any(is.na(districts$V_TR)) || any(is.na(districts$A_d))) {
+  stop("Bazi ilcelerde V_TR ya da A_d (gelis_yabanci) eksik.", call. = FALSE)
 }
+
+cat("  A_d (ham yabanci gelis) yuklendi:\n")
+print(districts %>% dplyr::select(district_name, A_d, V_TR))
 
 ## Seasonality (v3: TÜİK departures, mean=1)
 seas_path <- file.path(DIR_PROCESSED, "seasonality_monthly.rds")
@@ -199,6 +201,7 @@ gbd <- gbd_raw %>%
 
 ## =========================================================
 ## 5) Load and process tourist arrivals by country
+##    (national source-country weights w_c; N_total for diagnostics)
 ## =========================================================
 cat("\n--- Loading tourist arrivals by country ---\n")
 
@@ -223,6 +226,9 @@ tourist_weights <- tourist_raw %>%
   ) %>%
   dplyr::arrange(dplyr::desc(w_c))
 
+## NOTE (METHOD 1): TOTAL_ARRIVALS_ANNUAL is NO LONGER used in V_in.
+## Kept for source-country diagnostics and for computing the invariance
+## scale c = sum(A_d)/N_total (see invariance_check_importation.R).
 TOTAL_ARRIVALS_ANNUAL <- sum(tourist_weights$mean_arrivals)
 
 cat("  Tourist source countries:", nrow(tourist_weights), "\n")
@@ -230,6 +236,11 @@ cat("  Total mean arrivals (annual):", round(TOTAL_ARRIVALS_ANNUAL), "\n")
 cat("  Total mean arrivals (daily) :", round(TOTAL_ARRIVALS_ANNUAL / 365), "\n")
 cat("  Top 5:\n")
 print(head(tourist_weights, 5))
+
+## Invariance scale (informational): NEW = OLD × c, with c constant.
+c_scale <- sum(districts$A_d) / TOTAL_ARRIVALS_ANNUAL
+cat(sprintf("\n  [METHOD 1] c = sum(A_d)/N_total = %.5f  (v3 Lambda ~%.1f kat sisikti)\n",
+            c_scale, 1 / c_scale))
 
 ## =========================================================
 ## 6) Country name harmonization (tourist <-> GBD)
@@ -377,7 +388,7 @@ cat("    high:", signif(baseline_rates$base_rate_upper, 4), "\n")
 cat("\n--- Building monthly grid ---\n")
 
 grid <- districts %>%
-  dplyr::select(district_id, province_name, district_name, V_TR) %>%
+  dplyr::select(district_id, province_name, district_name, V_TR, A_d) %>%
   tidyr::crossing(pi_scenarios %>% dplyr::select(pi_scenario, year, rate_pp_year)) %>%
   tidyr::crossing(seasonality %>% dplyr::select(month, seasonal_multiplier)) %>%
   dplyr::mutate(
@@ -403,32 +414,27 @@ if (USE_M_CLIMATE) {
 ## =========================================================
 ## 10) Compute monthly importation pressure
 ##
-## Formula (Denklem 5, revised):
+## Formula (Denklem 5, METHOD 1):
 ##   λ_ithal(d,t,m) = V_in(d,m) · π_weighted(t,m) · η
 ##
 ## Where:
-##   V_in(d,m) = V_TR_d × N_total × S_m / 365
-##     → S_m modulates TRAVEL VOLUME (TÜİK departure counts)
-##     → V_TR_d is district-level share (TÜİK accommodation data)
+##   V_in(d,m) = A_d × S_m / 365      (Yontem 1: dogrudan ilce gelisi)
+##     → A_d : TUIK ilce bazli yillik yabanci tesis gelisi (ham)
+##     → S_m : uluslararasi seyahat hacminin aylik degisimi (ortalama=1)
+##     → NO N_total, NO 5-ilce normalizasyonu
 ##
 ##   daily_rate = rate_pp_year / 365 × M_climate
-##     → rate_pp_year is the GBD-weighted annual per-capita
-##       dengue risk across source countries
-##     → NO seasonal multiplier here: GBD rate is a country-
-##       level annual average; Türkiye's visitor seasonality
-##       does not modulate source-country dengue incidence
+##     → rate_pp_year is the GBD-weighted annual per-capita dengue risk
+##       across NATIONAL source countries
+##     → NO S_m here: source-country dengue incidence is independent of
+##       Türkiye's visitor seasonality
 ##
-##   π_weighted = 1 - exp(-daily_rate × d_days)
-##     → d_days = average exposure duration (3 days)
+##   π_weighted = 1 - exp(-daily_rate × d_days)    (d_days = 3)
 ##
 ## Annual conservation check:
-##   Σ_m(daily_rate × days_m) = rate_pp_year/365 × Σ(days_m)
-##                            = rate_pp_year/365 × 365
-##                            = rate_pp_year  ✓
-##
-##   Σ_m(V_in_day_m × days_m) = V_TR × N_total/365 × Σ(S_m × days_m)
-##                             ≈ V_TR × N_total/365 × 365   [S_m mean=1]
-##                             = V_TR × N_total  ✓
+##   Σ_m(daily_rate × days_m) = rate_pp_year/365 × 365 = rate_pp_year  ✓
+##   Σ_m(V_in_day_m × days_m) = A_d/365 × Σ(S_m × days_m)
+##                            ≈ A_d/365 × 365 = A_d                     ✓
 ## =========================================================
 cat("\n--- Computing importation pressure ---\n")
 
@@ -445,10 +451,10 @@ imp_m <- grid %>%
     # π = probability of infection during d-day exposure (Liebig Eq 1 form)
     pi_weighted = 1 - exp(-daily_rate * d_days),
 
-    # V_in_day: absolute daily arrivals to this district
-    # S_m HERE: seasonal variation in international travel volume
-    # to Türkiye (TÜİK/EGM departure statistics, mean=1)
-    V_in_day = V_TR * TOTAL_ARRIVALS_ANNUAL * seasonal_multiplier / 365,
+    # V_in_day: bu ilcenin MUTLAK gunluk yabanci gelisi (METHOD 1)
+    # Dogrudan ham ilce verisi A_d; ulusal toplam / normalizasyon YOK.
+    # S_m: uluslararasi seyahat hacminin aylik mevsimselligi (ortalama=1)
+    V_in_day = A_d * seasonal_multiplier / 365,
 
     # Per-day importation rate
     lambda_import_per_day = V_in_day * pi_weighted * eta,
@@ -466,7 +472,7 @@ imp_m <- grid %>%
   dplyr::select(
     district_id, province_name, district_name,
     pi_scenario, year, month,
-    V_TR, V_in_day, rate_pp_year, daily_rate, pi_weighted, seasonal_multiplier, M_climate,
+    V_TR, A_d, V_in_day, rate_pp_year, daily_rate, pi_weighted, seasonal_multiplier, M_climate,
     eta, days_in_month, d_days,
     lambda_import_per_day,
     lambda_import_window,
@@ -505,7 +511,7 @@ cat("\n--- Projected imported cases (2075) ---\n")
 print(check_2075)
 
 ## =========================================================
-## 12) Conservation check
+## 12) Conservation check (METHOD 1: annual V_in must equal A_d)
 ## =========================================================
 cat("\n--- Annual conservation check (main scenario, 2024) ---\n")
 cons_check <- imp_m %>%
@@ -513,14 +519,14 @@ cons_check <- imp_m %>%
   dplyr::group_by(district_id) %>%
   dplyr::summarise(
     sum_daily_rate_x_days = sum(daily_rate * days_in_month),
-    rate_pp_year = dplyr::first(rate_pp_year),
-    sum_Vin_x_days = sum(V_in_day * days_in_month),
-    expected_annual_Vin = dplyr::first(V_TR) * TOTAL_ARRIVALS_ANNUAL,
+    rate_pp_year          = dplyr::first(rate_pp_year),
+    sum_Vin_x_days        = sum(V_in_day * days_in_month),
+    expected_annual_Vin   = dplyr::first(A_d),   # METHOD 1: yillik V_in = A_d
     .groups = "drop"
   ) %>%
   dplyr::mutate(
     rate_ratio = sum_daily_rate_x_days / rate_pp_year,
-    Vin_ratio = sum_Vin_x_days / expected_annual_Vin
+    Vin_ratio  = sum_Vin_x_days / expected_annual_Vin   # ~1.0 olmali
   )
 
 cat("  Rate conservation (should be ~1.0):\n")
@@ -577,7 +583,7 @@ cat("Finished at   :", as.character(Sys.time()), "\n")
 cat("SSP scenario  :", SSP_SCENARIO, "\n")
 cat("M_climate used:", USE_M_CLIMATE, "\n")
 cat("GBD data      : country-specific, under-report corrected\n")
-cat("ρ             : NOT USED (GBD already corrected)\n")
+cat("V_in method   : METHOD 1 — raw district arrivals A_d (no N_total)\n")
 cat("S_m location  : V_in(t) (travel volume, NOT γ_GBD)\n")
 cat("S_m source    : TÜİK departures (v3)\n")
 cat("Output CSV    :", out_csv, "\n")

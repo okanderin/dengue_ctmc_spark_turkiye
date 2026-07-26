@@ -48,14 +48,14 @@ for (k_val in K_GRID) {
   k_label <- sprintf("k%03d", round(k_val * 100))
   k_dir <- file.path(SENS_DIR, k_label)
   dir.create(k_dir, recursive = TRUE, showWarnings = FALSE)
-
+  
   cat("  ", k_label, ": k =", k_val, "\n")
-
+  
   Sys.setenv(K_ELASTICITY = as.character(k_val))
   source("R/02_data/build_climate_ssp.R", local = new.env(parent = globalenv()))
   source("R/02_data/build_importation_pressure_monthly.R",
          local = new.env(parent = globalenv()))
-
+  
   # Copy outputs to sensitivity directory
   for (ext in c(".rds")) {
     for (prefix in c("importation_pressure_monthly_2025_2075",
@@ -68,7 +68,7 @@ for (k_val in K_GRID) {
       }
     }
   }
-
+  
   cat("    Outputs saved to:", k_dir, "\n")
 }
 
@@ -112,31 +112,31 @@ for (j in seq_len(nrow(ETA_GRID))) {
   e_eta   <- ETA_GRID$eta[j]
   e_dir   <- file.path(SENS_DIR, e_label)
   dir.create(e_dir, recursive = TRUE, showWarnings = FALSE)
-
+  
   cat("  ", e_label, ": η=", e_eta,
       " scale=", round(e_scale, 3), "\n")
-
+  
   # Scale all lambda columns
   imp_scaled <- imp_base %>%
     dplyr::mutate(
       eta_sens = e_eta,
       scale_factor = e_scale,
-
+      
       lambda_import_per_day = lambda_import_per_day * e_scale,
       lambda_import_window  = lambda_import_window  * e_scale,
       lambda_import         = lambda_import         * e_scale,
       expected_imported_cases_per_month =
         expected_imported_cases_per_month * e_scale,
-
+      
       # Recompute q from scaled lambda
       q_import_month = 1 - exp(-lambda_import_window)
     )
-
+  
   saveRDS(imp_scaled,
           file.path(e_dir, "importation_pressure_monthly_2025_2075.rds"))
   readr::write_csv(imp_scaled,
                    file.path(e_dir, "importation_pressure_monthly_2025_2075.csv"))
-
+  
   # Yearly summary
   imp_y <- imp_scaled %>%
     dplyr::group_by(district_id, province_name, district_name,
@@ -147,10 +147,10 @@ for (j in seq_len(nrow(ETA_GRID))) {
       M_climate_mean = mean(M_climate, na.rm = TRUE),
       .groups = "drop"
     )
-
+  
   saveRDS(imp_y,
           file.path(e_dir, "importation_pressure_yearly_2025_2075.rds"))
-
+  
   cat("    Saved to:", e_dir, "\n")
 }
 
@@ -165,7 +165,7 @@ summary_rows <- list()
 for (k_val in K_GRID) {
   k_label <- sprintf("k%03d", round(k_val * 100))
   k_path <- file.path(SENS_DIR, k_label,
-                       "importation_pressure_yearly_2025_2075.rds")
+                      "importation_pressure_yearly_2025_2075.rds")
   if (file.exists(k_path)) {
     k_data <- readRDS(k_path)
     for (yr in c(2025, 2050, 2075)) {
@@ -189,7 +189,7 @@ for (k_val in K_GRID) {
 for (j in seq_len(nrow(ETA_GRID))) {
   e_label <- ETA_GRID$label[j]
   e_path <- file.path(SENS_DIR, e_label,
-                       "importation_pressure_yearly_2025_2075.rds")
+                      "importation_pressure_yearly_2025_2075.rds")
   if (file.exists(e_path)) {
     e_data <- readRDS(e_path)
     for (yr in c(2025, 2050, 2075)) {

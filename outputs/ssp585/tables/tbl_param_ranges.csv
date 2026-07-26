@@ -1,0 +1,7 @@
+Parameter,Lower,Upper,Source
+m,0.1,2,Literature
+beta_vh,0.1,0.6,Literature
+beta_hv,0.1,0.6,Literature
+ip_days,3,10,Literature
+T_C,10.4,32.1,Bootstrap (SSP5-8.5 active months)
+RH,18.1,97.1,Bootstrap (SSP5-8.5 active months)

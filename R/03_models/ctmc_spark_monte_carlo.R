@@ -859,7 +859,7 @@ if (identical(environment(), globalenv())) {
     beta_hv = 0.33,
     m = 1.0,         # Ross-Macdonald standard; sensitivity at {0.5, 0.8, 1.2, 2.0}
     include_import_in_q = FALSE,
-    use_stochastic_EIP = FALSE,
+    use_stochastic_EIP = TRUE,
     n_mc_eip = 2000L,
     n_rep = 1000L,
     seed = 123L,

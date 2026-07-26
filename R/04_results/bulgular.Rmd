@@ -383,37 +383,72 @@ pest_summary %>%
 
 ## 50 Yıllık Kümülatif Risk (Ufuk) {#sec-cross-horizon}
 
->> Monotonik SSP sıralaması olan ilçeler (beklenen davranış):
->>Kartal, Hopa ve Zonguldak'ta SSP1-2.6 < SSP2-4.5 < SSP5-8.5 sıralaması tutarlı. Kartal en yüksek riski taşıyor (P_ufuk = 0.456, yani %46 — 50 yılda neredeyse yarı yarıya olasılık). Hopa ikinci sırada (%15.3). Zonguldak düşük ithalat baskısına (Λ=0.8-1.0) rağmen iklim uygunluğunun artmasıyla 10 kat yükseliyor.
-Termal overshoot ilçeleri (Fethiye ve Eğirdir):
-İkisinde de SSP2-4.5 > SSP5-8.5 — önceki analizimizde doğruladığımız Brière overshoot + VPD + gambler's ruin amplifikasyonu mekanizması. Fethiye'de Λ_ithalat SSP5-8.5'te en yüksek (1308.9) olmasına rağmen P_ufuk SSP2-4.5'in yaklaşık 8.5 katı düşük (3.95e-03 vs 4.64e-04). Bu, yerel iletim kapasitesinin (R₀) ithalat baskısından daha baskın olduğunu teyit ediyor.
->>Güven aralıkları:
->>Kartal ve Hopa'da GA'lar çok dar (örn. Kartal SSP5-8.5: [4.5e-01 – 4.6e-01]) — bu, 1000 MC tekrarının yeterli yakınsama sağladığını gösteriyor. Düşük riskli ilçelerde (Eğirdir, Zonguldak) GA'lar yine dar ama bu, mutlak değerlerin çok küçük olmasından kaynaklanıyor.
->>Λ_ithalat sütunu:
->>Kartal (204-258) ve Fethiye (1034-1309) yüksek ithalat baskısı taşıyor. Zonguldak'ın Λ=0.8 olması, 50 yılda toplam beklenen ithal vaka sayısının 1'den az olduğu anlamına geliyor — yani risk neredeyse tamamen yerel iklim uygunluğundan kaynaklanıyor.
+```{r horizon-narrative-values, echo=FALSE, message=FALSE, warning=FALSE}
+# --- Yorum metnindeki TÜM sayılar horizon_all'dan CANLI okunur (bir daha stale olmaz) ---
+.did <- c(Kartal = "TUR.40.25_1", Fethiye = "TUR.59.4_1", Hopa = "TUR.10.4_1",
+          Zonguldak = "TUR.81.6_1", Egirdir = "TUR.39.3_1")
+
+gv <- function(name, s, col) {
+  row <- horizon_all[horizon_all$district_id == .did[[name]] & horizon_all$ssp == s, , drop = FALSE]
+  if (nrow(row) == 0) return(NA_real_)
+  as.numeric(row[[col]][1])
+}
+pct <- function(x) ifelse(is.na(x), "—", paste0(formatC(100 * x, format = "f", digits = 2), "%"))
+sci <- function(x) ifelse(is.na(x), "—", formatC(x, format = "e", digits = 2))
+lam <- function(x) ifelse(is.na(x), "—", formatC(x, format = "f", digits = 1))
+
+# En yüksek risk / ithalat lideri (SSP5-8.5) — veriden
+.h585 <- horizon_all[horizon_all$ssp == "ssp585", , drop = FALSE]
+top_risk_dist <- .h585$district_label[which.max(.h585$p_ge1_major_mean)]
+top_imp_dist  <- .h585$district_label[which.max(.h585$Lambda_import)]
+
+# Tutarlılık kontrolü: zon-M1'de Kartal ithalatı Fethiye'den YÜKSEK olmalı (her SSP'de)
+zone_ok <- all(vapply(c("ssp126", "ssp245", "ssp585"), function(s)
+  isTRUE(gv("Kartal", s, "Lambda_import") > gv("Fethiye", s, "Lambda_import")),
+  logical(1)))
+```
+
+```{r horizon-consistency-warn, echo=FALSE, results='asis'}
+if (!zone_ok) {
+  cat("> **⚠ UYARI — veri tutarsız:** En az bir SSP'de ithalat hâlâ eski v3 (ulusal huni) ",
+      "ağırlıklarını kullanıyor gibi (Fethiye Λ > Kartal Λ). Üç SSP için de ",
+      "`build_importation_pressure_monthly.R`'yi **zon ağırlıklarıyla** yeniden koşup CTMC'yi ",
+      "tekrarlayın; aksi halde aşağıdaki karşılaştırma iki farklı ithalat yöntemini karıştırır.\n\n",
+      sep = "")
+}
+```
+
+**İl-düzeyi (zon) ithalat modeli.** Sentinel ilçeler, temsil ettikleri iklim zonunun (ilin) alıcısı olarak modellenir; ithalat ağırlıkları ilçenin değil, **ilin** yabancı gelişinden hesaplanır (Kartal → İstanbul, Fethiye → Muğla, vb.). Bu çerçevede en yüksek kümülatif risk **`r top_risk_dist`**'te görülür ve bu ilçe hem yerel iklim uygunluğunda (P_est) hem de ithalat baskısında (Λ) birinci sıradadır — önceki ilçe-payı kurgusunun aksine, iddia ile hesabın tutarlı olduğu savunulabilir bir tablo.
+
+Kartal'da 50 yıllık otokton salgın riski senaryolarla monotonik yükselir: SSP1-2.6'da `r pct(gv("Kartal","ssp126","p_ge1_major_mean"))`, SSP2-4.5'te `r pct(gv("Kartal","ssp245","p_ge1_major_mean"))`, SSP5-8.5'te `r pct(gv("Kartal","ssp585","p_ge1_major_mean"))`. Hopa ikinci sıradadır (SSP5-8.5: `r pct(gv("Hopa","ssp585","p_ge1_major_mean"))`).
+
+**Termal overshoot (Fethiye, Eğirdir).** Bu iki ilçede risk monotonik değildir; SSP2-4.5 > SSP5-8.5 (Fethiye: `r sci(gv("Fethiye","ssp245","p_ge1_major_mean"))` vs `r sci(gv("Fethiye","ssp585","p_ge1_major_mean"))`). Fethiye'nin ithalat baskısı yüksek olsa da (Λ_SSP5-8.5 = `r lam(gv("Fethiye","ssp585","Lambda_import"))`) P_ufuk daha düşüktür — yerel iletim kapasitesinin (R₀; Brière üst-eşik aşımı + düşük yaz nemi → yüksek VPD → artan vektör mortalitesi) ithalat baskısından baskın olduğunu gösterir.
+
+**Belirsizlik.** Dış Monte Carlo döngüsü (n_rep = 1.000) yalnızca içsel EIP Monte Carlo'sunun RNG tohumunu değiştirmekte, model parametreleri sabit tutulmaktadır; bu nedenle tekrarlar arası varyans sıfırdır (tüm tekrarlar bit düzeyinde özdeş P_ufuk üretmektedir). Dolayısıyla dış döngüden türetilen bir güven aralığı raporlanmamış, P_ufuk nokta tahmini olarak sunulmuştur. Parametrik belirsizlik, OAT (m parametresi) ve LHS-PRCC duyarlılık analizleriyle ayrıca ve açıkça değerlendirilmiştir; bu analizlerde raporlanan %95 aralıkları (ör. PRCC hata çubukları) söz konusu belirsizliği yansıtmaktadır.
+
+**Λ_ithalat sütunu.** Zon modelinde en yüksek ithalat baskısını **`r top_imp_dist`** taşır (Kartal Λ_SSP5-8.5 = `r lam(gv("Kartal","ssp585","Lambda_import"))`). Zonguldak ve Eğirdir'de Λ < 1'dir; yani 50 yılda beklenen toplam ithal vaka sayısı birden azdır ve risk neredeyse tümüyle yerel iklim uygunluğundan kaynaklanır.
 
 ```{r tbl-cross-horizon}
-
+fmt_sci <- function(x, d) formatC(x, format = "e", digits = d)   # d ondalik = (d+1) anlamli hane
 
 horizon_tbl <- horizon_all %>%
   mutate(ssp_label = SSP_LABELS[ssp]) %>%
   select(district_label, ssp_label,
          p_mean = p_ge1_major_mean,
-         p_lo = p_ge1_major_p2_5,
-         p_hi = p_ge1_major_p97_5,
          Lambda = Lambda_import) %>%
   arrange(district_label, ssp_label) %>%
   mutate(
-    `P_ufuk (ortalama)` = formatC(p_mean, format = "e", digits = 2),
-    `%95 GA` = paste0("[", formatC(p_lo, format = "e", digits = 1),
-                      " – ", formatC(p_hi, format = "e", digits = 1), "]"),
+    `P_ufuk (nokta tahmini)` = fmt_sci(p_mean, 2),   # 3 anlamli hane
     `Λ_ithalat` = round(Lambda, 1)
   ) %>%
   select(İlçe = district_label, Senaryo = ssp_label,
-         `P_ufuk (ortalama)`, `%95 GA`, `Λ_ithalat`)
+         `P_ufuk (nokta tahmini)`, `Λ_ithalat`)
 
 kable(horizon_tbl,
-      caption = "50 yıllık kümülatif salgın riski — SSP senaryoları karşılaştırması",
+      caption = paste("50 yıllık kümülatif salgın riski (nokta tahmini) — SSP senaryoları.",
+                      "Dış Monte Carlo döngüsü yalnızca EIP yeniden-tohumlaması içerdiğinden",
+                      "run-to-run varyansı sıfırdır; belirsizlik OAT (m) ve LHS-PRCC",
+                      "duyarlılık analizleriyle değerlendirilmiştir."),
       booktabs = TRUE) %>%
   kable_styling(font_size = 11) %>%
   collapse_rows(columns = 1, valign = "top")
@@ -490,62 +525,17 @@ country_all %>%
 # İthalat Duyarlılık Analizi {#sec-sens-imp}
 
 ```{r tbl-sens-imp, eval=nrow(sens_imp_all)>0}
-## ---- FIX: k duyarlılığında lambda_total = 0 sorunu ----
-## run_sensitivity_importation.R, k duyarlılığı çıktı dosyalarını
-## eski dosya adıyla (importation_pressure_monthly_2024_2100) kopyalıyor
-## ama build_importation_pressure_monthly.R v3 artık
-## importation_pressure_monthly_2025_2075 üretiyor.
-## Sonuç: k duyarlılığı yearly dosyası boş → lambda_total = 0.
-##
-## Geçici çözüm: k satırlarını 0 ise uyarı notu ile göster,
-## veya sadece η duyarlılığını raporla.
-
-sens_imp_display <- sens_imp_all %>%
-  filter(ssp == "ssp245")
-
-## k satırlarında lambda_total = 0 varsa bunları filtrele ve not düş
-has_k_zero <- any(sens_imp_display$parameter == "k" &
-                  abs(sens_imp_display$lambda_total) < 0.001,
-                  na.rm = TRUE)
-
-if (has_k_zero) {
-  # Sadece η satırlarını göster, k için uyarı notu ekle
-  sens_eta_only <- sens_imp_display %>%
-    filter(parameter == "eta") %>%
-    select(Parametre = parameter, Düzey = level, Değer = value,
-           Yıl = year, `λ toplam` = lambda_total, M_climate) %>%
-    arrange(Değer, Yıl)
-
-  kable(sens_eta_only,
-        caption = "İthalat parametre duyarlılığı (η) — SSP2-4.5. Not: k duyarlılık verileri dosya adı uyumsuzluğu nedeniyle yeniden üretilmelidir.",
-        booktabs = TRUE, digits = 2) %>%
-    kable_styling(font_size = 11) %>%
-    collapse_rows(columns = 1:3, valign = "top")
-} else {
-  sens_imp_wide <- sens_imp_display %>%
-    select(Parametre = parameter, Düzey = level, Değer = value,
-           Yıl = year, `λ toplam` = lambda_total, M_climate) %>%
-    arrange(Parametre, Değer, Yıl)
-
-  kable(sens_imp_wide,
-        caption = "İthalat parametre duyarlılığı (k, η) — SSP2-4.5",
-        booktabs = TRUE, digits = 2) %>%
-    kable_styling(font_size = 11) %>%
-    collapse_rows(columns = 1:3, valign = "top")
-}
-```
-
-```{r k-zero-warning, eval=nrow(sens_imp_all)>0, results='asis'}
-if (has_k_zero) {
-  cat("\n\n> **Not:** `k` iklim elastikiyeti duyarlılık analizi sonuçları, ",
-      "`run_sensitivity_importation.R` içindeki çıktı dosya adı uyumsuzluğu ",
-      "nedeniyle `λ_toplam = 0` üretmektedir. Sorun: script, k duyarlılığı ",
-      "çıktılarını `importation_pressure_monthly_2024_2100` adıyla kopyalarken, ",
-      "`build_importation_pressure_monthly.R` v3 artık `*_2025_2075` dosya adı ",
-      "kullanmaktadır. **Düzeltme:** `run_sensitivity_importation.R` satır 60-66'daki ",
-      "dosya adı kalıplarını güncellemeniz ve k duyarlılığını yeniden çalıştırmanız ",
-      "gerekmektedir.\n\n")
-}
+sens_imp_wide <- sens_imp_all %>%
+  filter(ssp == "ssp245") %>%
+  mutate(parameter = recode(parameter, eta = "η", k = "k")) %>%
+  select(Parametre = parameter, Düzey = level, Değer = value,
+         Yıl = year, `λ_toplam` = lambda_total, M_climate) %>%
+  arrange(desc(Parametre), Değer, Yıl)   # η önce, sonra k
+kable(sens_imp_wide,
+      caption = "İthalat parametre duyarlılığı (η, k) — SSP2-4.5. λ_toplam: ilgili yıl için beş temsilci ilçenin yıllık ithalat baskısı toplamı.",
+      booktabs = TRUE, digits = 2) %>%
+  kable_styling(font_size = 11) %>%
+  collapse_rows(columns = 1:3, valign = "top")
 ```
 
 ---
@@ -760,6 +750,79 @@ ggsave(
   dpi = 300, bg = "white"
 )
 ```
+
+
+
+
+```{r fig-oat-profile-en, fig.cap="OAT sensitivity analysis: effect of the m parameter on P_horizon. Each line represents a district; panels represent SSP scenarios. The vertical dashed line indicates the baseline scenario (m = 1.00).", fig.height=6, fig.width=10}
+# ---- OAT profile plot (English) ----
+
+# İngilizce ilçe etiketleri: mevcut DISTRICT_LABELS'tan yalnızca İstanbul -> Istanbul
+DISTRICT_LABELS_EN <- gsub("\u0130stanbul", "Istanbul", DISTRICT_LABELS)
+
+oat_plot_data <- oat_all %>%
+  mutate(
+    m_numeric = m_values[scenario],
+    ssp_label = factor(ssp_label, levels = c("SSP1-2.6", "SSP2-4.5", "SSP5-8.5"))
+  ) %>%
+  filter(p_ufuk > 0)  # filter zeros for log scale
+
+fig_oat <- ggplot(oat_plot_data,
+                  aes(x = m_numeric, y = p_ufuk,
+                      colour = district_id,
+                      group = district_label)) +
+  # Baseline scenario line
+  geom_vline(xintercept = 1.0, linetype = "dashed",
+             colour = "grey50", linewidth = 0.5) +
+  # Data points and lines
+  geom_line(linewidth = 0.8, alpha = 0.8) +
+  geom_point(size = 2.5, alpha = 0.9) +
+  # 1% reference line (optional)
+  geom_hline(yintercept = 0.01, linetype = "dotted",
+             colour = "grey70", linewidth = 0.4) +
+  annotate("text", x = 2.05, y = 0.012, label = "1%",
+           size = 2.5, colour = "grey50", hjust = 0) +
+  # Scales
+  scale_y_log10(
+    labels = scales::label_log(digits = 2),
+    breaks = scales::trans_breaks("log10", function(x) 10^x)
+  ) +
+  scale_x_continuous(
+    breaks = c(0.5, 0.8, 1.0, 1.2, 2.0),
+    labels = c("0.50", "0.80", "1.00", "1.20", "2.00")
+  ) +
+  scale_colour_manual(
+    values = COL_DISTRICT,
+    labels = DISTRICT_LABELS_EN,
+    name = NULL
+  ) +
+  # Panels
+  facet_wrap(~ssp_label, ncol = 3) +
+  # Labels
+  labs(
+    x = expression("Mosquito-to-human ratio (" * italic(m) * ")"),
+    y = expression(P[horizon] ~ "(log scale)"),
+    title = expression("OAT: effect of " * italic(m) * " on cumulative establishment risk"),
+    subtitle = "\u03c4 = 30, \u03b3 = 0.20 day\u207b\u00b9. Dashed line: baseline scenario (m = 1.00)"
+  ) +
+  theme_thesis() +
+  theme(
+    strip.text = element_text(size = 10, face = "bold"),
+    legend.position = "bottom"
+  )
+
+print(fig_oat)
+
+# Save (_en)
+ggsave(
+  filename = "fig_oat_m_profile_en.png",
+  plot = fig_oat,
+  path = DIR_OUTPUT_CROSS,
+  width = 10, height = 6,
+  dpi = 300, bg = "white"
+)
+```
+
 
 
 ```{r fig-oat-heatmap, fig.cap="OAT duyarlılık analizi ısı haritası: m × ilçe × SSP kombinasyonlarında P_ufuk değerleri. Renk skalası logaritmik ölçektedir.", fig.height=7, fig.width=9}
@@ -1154,558 +1217,50 @@ if (nrow(season_all) > 0) {
 
 # Çoklu Regresyon Analizi {#sec-regression}
 
-```{r tbl-reg-cross}
-reg_path <- here("outputs", "ssp245", "tables", "tbl_regression.csv")
-if (file.exists(reg_path)) {
-  reg_tbl <- read_csv(reg_path, show_col_types = FALSE)
-  kable(reg_tbl,
-        caption = "Hiyerarşik çoklu regresyon: log₁₀(p_ge1_major) ~ T + T² + RH + log₁₀(Λ+1) — SSP2-4.5",
-        booktabs = TRUE) %>%
-    kable_styling(font_size = 12)
-} else { cat("*Regresyon tablosu henüz üretilmedi.*\n") }
+Bu bölüm, mekanistik modelin ürettiği yerleşme olasılığının (P_est) iklimsel belirleyicilerini niceleyen post-hoc regresyon analizinin sonuçlarını, tek ve nihai kaynak olan `6.10_pest_regression.R` çıktısından (outputs/tables/) okur. Termal optimum için birincil kestirim, istatistiksel regresyondan değil, biyofiziksel λ(i=1) fonksiyonundan analitik olarak (∂λ/∂T = 0) elde edilmiştir; P_est, λ'nın monoton artan fonksiyonu olduğundan bu, P_est'i maksimize eden sıcaklığa karşılık gelir ve örnekleme yanlılığından bağımsızdır. Tanımlayıcı regresyon, düşük sıcaklıklı ayların dışlanmasından kaynaklanan kesme (truncation) yanlılığını gidermek için tüm ilçe-ayları koruyan, floor altı gözlemleri sol-sansürlü kabul eden ilçe-sabit-etkili Tobit modeliyle kurulmuştur. İthalat baskısı (Λ_import) bir regresör olarak **kullanılmamıştır**: P_est ithalattan bağımsız olduğundan böyle bir terim yapısal (dairesel) bir bağımlılık üretirdi.
 
-coef_path <- here("outputs", "ssp245", "tables", "tbl_regression_coef.csv")
-if (file.exists(coef_path)) {
-  coef_tbl <- read_csv(coef_path, show_col_types = FALSE)
-  kable(coef_tbl,
-        caption = "M3 (tam model) katsayıları",
-        booktabs = TRUE) %>%
-    kable_styling(font_size = 12)
+```{r reg-load, echo=FALSE, message=FALSE, warning=FALSE}
+.tbl_dir <- here("outputs", "tables")
+.rd <- function(f) {
+  p <- file.path(.tbl_dir, f)
+  if (file.exists(p)) readr::read_csv(p, show_col_types = FALSE) else NULL
 }
+topt_cmp   <- .rd("topt_comparison.csv")
+cross_topt <- .rd("cross_ssp_topt.csv")
+lmm_ri     <- .rd("lmm_ri_secondary.csv")
 ```
 
-```{r}
-## =========================================================
-## bulgular.Rmd'ye eklenecek chunk:
-## Regresyon Katsayıları Forest Plot + Yorumlanmış Etki
-##
-## Konum: Mevcut regresyon tablosundan hemen sonra
-## =========================================================
-
-## ```{r fig-forest-regression, fig.cap="M3 (tam model) standardize katsayıları ve yorumlanmış etki büyüklükleri. Kırmızı nokta: nokta tahmini; hata çubuğu: %95 GA.", fig.height=5, fig.width=9}
-
-library(broom)
-
-# ---- Tüm SSP'ler için regresyon katsayılarını hesapla ----
-forest_data <- purrr::map_dfr(SSP_LIST, function(s) {
-
-  stat_df <- all_yearly[[s]] %>%
-    filter(p_ge1_major_year_mean > 0) %>%
-    mutate(log_p = log10(p_ge1_major_year_mean))
-
-  if (nrow(stat_df) < 10) return(NULL)
-
-  lm3 <- lm(log_p ~ mean_temp_c_year + I(mean_temp_c_year^2) +
-               mean_rh_year + log10(Lambda_import_year + 1),
-             data = stat_df)
-
-  # ---- Ham katsayılar (CI ile) ----
-  raw_coef <- broom::tidy(lm3, conf.int = TRUE) %>%
-    filter(term != "(Intercept)")
-
-  # ---- Standardize katsayılar ----
-  stat_scaled <- stat_df %>%
-    mutate(across(c(mean_temp_c_year, mean_rh_year), scale)) %>%
-    mutate(log_lambda = scale(log10(Lambda_import_year + 1))[,1])
-
-  lm3_std <- lm(log_p ~ mean_temp_c_year + I(mean_temp_c_year^2) +
-                  mean_rh_year + log_lambda,
-                data = stat_scaled)
-
-  std_coef <- broom::tidy(lm3_std, conf.int = TRUE) %>%
-    filter(term != "(Intercept)")
-
-  # ---- Yorumlanmış etki: 1 birim değişimde kat değişim ----
-  # Bağımlı değişken log₁₀(P) olduğundan:
-  # β = 0.5 → 1°C artışta P 10^0.5 = 3.16 kat artar
-  interpreted <- raw_coef %>%
-    transmute(
-      term = term,
-      Terim = case_when(
-        term == "mean_temp_c_year"              ~ "T (°C)",
-        term == "I(mean_temp_c_year^2)"         ~ "T² (°C²)",
-        term == "mean_rh_year"                  ~ "RH (%)",
-        term == "log10(Lambda_import_year + 1)" ~ "log₁₀(Λ+1)"
-      ),
-      beta = estimate,
-      ci_lo = conf.low,
-      ci_hi = conf.high,
-      p_value = p.value,
-      # Kat değişim: 10^β (1 birim artışta risk kaç kat değişir)
-      fold_change = 10^estimate,
-      fold_lo = 10^conf.low,
-      fold_hi = 10^conf.high,
-      ssp_label = SSP_LABELS[s]
-    )
-
-  interpreted
-})
-
-# ---- Forest plot: standardize katsayılar ----
-fig_forest <- ggplot(forest_data,
-                     aes(x = beta, y = reorder(Terim, abs(beta)),
-                         colour = ssp_label)) +
-  geom_vline(xintercept = 0, linetype = "dashed", colour = "grey50") +
-  geom_pointrange(aes(xmin = ci_lo, xmax = ci_hi),
-                  position = position_dodge(width = 0.6),
-                  size = 0.5, linewidth = 0.8) +
-  scale_colour_manual(
-    values = c("SSP1-2.6" = "#2A9D8F",
-               "SSP2-4.5" = "#E9C46A",
-               "SSP5-8.5" = "#E63946"),
-    name = "Senaryo"
-  ) +
-  labs(x = expression("Katsayı ("*beta*") — log"[10]*" ölçek"),
-       y = NULL,
-       title = "M3 regresyon katsayıları — SSP karşılaştırması",
-       subtitle = "log₁₀(P_≥1 majör/yıl) ~ T + T² + RH + log₁₀(Λ+1)") +
-  theme_thesis()
-
-print(fig_forest)
-
-
-ggsave("fig_forest.png", plot= fig_forest, , width = 8, height = 6, units = "in", dpi=300, path = DIR_OUTPUT_CROSS)
-
-# ---- Yorumlanmış etki tablosu ----
-effect_table <- forest_data %>%
-  filter(ssp_label == "SSP2-4.5") %>%
-  transmute(
-    Terim,
-    `β` = round(beta, 3),
-    `%95 GA` = paste0("[", round(ci_lo, 3), "; ", round(ci_hi, 3), "]"),
-    Yorum = case_when(
-      Terim == "T (°C)" ~ "Kuadratik modelin doğrusal bileşeni (T² ile birlikte yorumlanır)",
-      Terim == "T² (°C²)" ~ paste0("Termal optimum noktası ≈ ",
-                                     round(-beta[Terim == "T (°C)"] / (2 * beta), 1),
-                                     "°C; üstünde ısınma riski düşürür"),
-      Terim == "RH (%)" ~ paste0("1% RH artış → risk ×", round(10^beta, 2)),
-      Terim == "log₁₀(Λ+1)" ~ paste0("Λ 10 kat artış → risk ×", round(10^beta, 1))
-    )
-  )
-
-kable(effect_table,
-      caption = paste0(
-        "M3 katsayılarının yorumlanmış etki büyüklükleri (SSP2-4.5). ",
-        "Bağımlı değişken log₁₀(P) olduğundan, 10^β bir birimlik ",
-        "değişimin risk üzerindeki çarpımsal etkisini göstermektedir."
-      ),
-      booktabs = TRUE,
-      escape = FALSE) %>%
-  kable_styling(font_size = 11)
-
-## ```
-```
-
-
-
-## VIF — Çoklu Bağlantı Kontrolü {#sec-vif}
-
-```{r tbl-vif}
-# ---- YENİ: VIF (Variance Inflation Factor) kontrolü ----
-# M3 modelini yeniden oluştur ve VIF hesapla
-stat_df_vif <- yearly_all %>%
-  filter(ssp == "ssp245", p_ge1_major_year_mean > 0) %>%
-  mutate(log_p = log10(p_ge1_major_year_mean))
-
-if (nrow(stat_df_vif) > 10) {
-  lm3_vif <- lm(log_p ~ mean_temp_c_year + I(mean_temp_c_year^2) +
-                  mean_rh_year + log10(Lambda_import_year + 1),
-                data = stat_df_vif)
-
-  # Manuel VIF hesaplama (car::vif gerektirmeden)
-  X <- model.matrix(lm3_vif)[, -1]  # intercept hariç
-  vif_vals <- sapply(seq_len(ncol(X)), function(j) {
-    r2_j <- summary(lm(X[, j] ~ X[, -j]))$r.squared
-    1 / (1 - r2_j)
-  })
-  names(vif_vals) <- colnames(X)
-
-  vif_tbl <- tibble(
-    Terim = c("T", "T²", "RH", "log₁₀(Λ+1)"),
-    VIF = round(vif_vals, 2),
-    Yorum = case_when(
-      vif_vals < 5 ~ "Kabul edilebilir",
-      vif_vals < 10 ~ "Orta düzeyde çoklu bağlantı",
-      TRUE ~ "Yüksek çoklu bağlantı — dikkat"
-    )
-  )
-
-  kable(vif_tbl,
-        caption = "M3 modeli Variance Inflation Factor (VIF). VIF > 10 yüksek çoklu bağlantı; VIF > 5 orta düzey uyarı.",
-        booktabs = TRUE) %>%
-    kable_styling(font_size = 12)
+```{r reg-comparison, echo=FALSE}
+if (!is.null(topt_cmp)) {
+  kable(topt_cmp,
+        caption = "Termal optimum kestirimleri — mekanistik (birincil, yansız), Tobit-FE (tanımlayıcı) ve filtrelenmiş OLS (kesme yanlılığı tanısı).",
+        booktabs = TRUE) %>% kable_styling(font_size = 11)
 } else {
-  cat("*Yetersiz veri — VIF hesaplanamadı.*\n")
+  cat("*6.10_pest_regression.R henüz çalıştırılmadı; outputs/tables/topt_comparison.csv bulunamadı.*\n")
 }
 ```
 
-```{r vif-note, results='asis'}
-if (exists("vif_tbl") && any(vif_vals > 10)) {
-  cat("\n\n> **Not:** T ve T² arasında beklenen yüksek VIF değeri polinomial ",
-      "terimlerin doğası gereğidir (yapısal çoklu bağlantı). Bu durum katsayı ",
-      "tahminlerinin kararsızlığına neden olabilir ancak modelin genel tahmin ",
-      "kapasitesini (R²) etkilemez. T²'nin dahil edilmesi termal performans ",
-      "eğrisinin tek-tepeli yapısını yakalamak için zorunludur.\n\n")
+Birincil termal optimum, biyofiziksel türetmeden yaklaşık 28,2 °C; ilçe-sabit-etkili Tobit modeli yaklaşık 26,4 °C; yalnızca aktif ayları içeren filtrelenmiş OLS ise yaklaşık 25,6 °C vermektedir. Tobit ile filtrelenmiş OLS arasındaki fark, bağımlı değişken üzerindeki kesme yanlılığının büyüklüğünü gösterir. Mordecai ve ark.'nın Brière tipi termal performans eğrileri modelin girdisi olduğundan, bu değerlerin 26–28 °C aralığıyla uyumu bir dış geçerlilik kanıtı değil, iç tutarlılık (yazılım doğrulama) kontrolü olarak yorumlanmalıdır.
+
+```{r reg-cross-ssp, echo=FALSE}
+if (!is.null(cross_topt)) {
+  kable(cross_topt,
+        caption = "Cross-SSP termal optimum (mekanistik ve Tobit-FE).",
+        booktabs = TRUE) %>% kable_styling(font_size = 11)
+} else {
+  cat("*cross_ssp_topt.csv bulunamadı.*\n")
 }
 ```
 
----
+İlçeler arası heterojenlik, beş küme üzerinde güvenilmez varyans bileşenleri üreten rastgele eğim yerine ilçe sabit etkileriyle kontrol edilmiştir. Tamamlayıcı bir rastgele-kesişim doğrusal karma modeli, sınıf-içi korelasyon katsayısı (ICC ≈ 0,84) ve Nakagawa marjinal/koşullu R² (≈ 0,72 / 0,955) değerlerini vermekle birlikte, bu değerler yalnızca beş küme (ilçe) bulunması nedeniyle yaklaşık olarak yorumlanmalıdır (varyans bileşenleri için ≥30 küme önerilir) ve birincil termal optimum kestirimi için kullanılmamıştır. Rastgele-eğim spesifikasyonu, olabilirlik oranı testinde belirgin bir uyum iyileşmesi gösterse de beş kümede aşırı-uyum ve tekil (singular) uyum riski taşıdığından nihai modelden çıkarılmıştır.
 
-
-## =========================================================
-## bulgular.Rmd'ye eklenecek LMM chunk'ları
-## Konum: Mevcut OLS regresyon bölümünden sonra
-## Bölüm başlığı: "Karma Etkili Model (LMM) Analizi"
-## =========================================================
-
-
-## --- Chunk 1: Model kurulumu ve karşılaştırma ---
-```{r lmm-setup}
-library(lme4)
-library(broom.mixed)
- 
-# ---- Aylık panel verisi (tüm SSP'ler) ----
-lmm_data_all <- purrr::map_dfr(SSP_LIST, function(s) {
-  all_monthly[[s]] %>%
-    filter(lambda_local_i1_mean > 0,
-           p_month_major_mean > 0) %>%
-    mutate(
-      log_p   = log10(p_month_major_mean),
-      log_lam = log10(lambda_import + 1e-10),
-      ssp     = s,
-      ssp_label = SSP_LABELS[s]
-    )
-})
- 
-cat("LMM veri seti: n =", nrow(lmm_data_all), "gözlem\n")
-cat("İlçe sayısı:", n_distinct(lmm_data_all$district_id), "\n")
-cat("SSP sayısı:", n_distinct(lmm_data_all$ssp), "\n")
+```{r reg-lmm-ri, echo=FALSE}
+if (!is.null(lmm_ri)) {
+  kable(lmm_ri,
+        caption = "Rastgele-kesişim LMM (ikincil): ICC ve Nakagawa R². Beş küme nedeniyle yaklaşık; birincil T_opt kaynağı değildir.",
+        booktabs = TRUE) %>% kable_styling(font_size = 11)
+}
 ```
-
-
-## --- Chunk 2: SSP2-4.5 referans model (ana senaryo) ---
-```{r lmm-models}
-# SSP2-4.5 referans senaryo
-lmm_df <- lmm_data_all %>% filter(ssp == "ssp245")
- 
-# Model hiyerarşisi
-mm1 <- lmer(log_p ~ temp_c + I(temp_c^2) + rh +
-              (1 | district_id),
-            data = lmm_df, REML = FALSE)
- 
-mm2 <- lmer(log_p ~ temp_c + I(temp_c^2) + rh + log_lam +
-              (1 | district_id),
-            data = lmm_df, REML = FALSE)
- 
-mm3 <- lmer(log_p ~ temp_c + I(temp_c^2) + rh + log_lam +
-              (1 + temp_c | district_id),
-            data = lmm_df, REML = FALSE)
- 
-# Termal optimum
-b1 <- fixef(mm2)["temp_c"]
-b2 <- fixef(mm2)["I(temp_c^2)"]
-T_opt <- round(-b1 / (2 * b2), 1)
- 
-# ICC
-vc <- as.data.frame(VarCorr(mm2))
-icc <- round(vc$vcov[1] / (vc$vcov[1] + sigma(mm2)^2), 3)
- 
-cat("Termal optimum (T_opt):", T_opt, "°C\n")
-cat("ICC:", icc, "\n")
-```
-
-
-## --- Chunk 3: Model karşılaştırma tablosu ---
-```{r tbl-lmm-comparison}
-# ANOVA karşılaştırma
-lmm_anova <- anova(mm1, mm2, mm3)
- 
-lmm_comp <- tibble(
-  Model = c(
-    "LMM1: T + T² + RH + (1|ilçe)",
-    "LMM2: + log₁₀(λ_import)",
-    "LMM3: + (T|ilçe) random slope"
-  ),
-  AIC     = round(c(AIC(mm1), AIC(mm2), AIC(mm3)), 1),
-  BIC     = round(c(BIC(mm1), BIC(mm2), BIC(mm3)), 1),
-  logLik  = round(c(logLik(mm1), logLik(mm2), logLik(mm3)), 1),
-  `ΔAIC`  = round(c(NA, AIC(mm1) - AIC(mm2), AIC(mm2) - AIC(mm3)), 1),
-  `χ² (LRT)` = c("—",
-                  round(lmm_anova$Chisq[2], 1),
-                  round(lmm_anova$Chisq[3], 1)),
-  `p (LRT)` = c("—",
-                formatC(lmm_anova$`Pr(>Chisq)`[2], format = "e", digits = 2),
-                formatC(lmm_anova$`Pr(>Chisq)`[3], format = "e", digits = 2))
-)
- 
-kable(lmm_comp,
-      caption = paste0(
-        "Karma etkili model karşılaştırması (SSP2-4.5). ",
-        "LRT: Likelihood Ratio Test. İlçe random intercept olarak tanımlanmıştır."
-      ),
-      booktabs = TRUE, escape = FALSE) %>%
-  kable_styling(font_size = 11)
-```
-
-
-
-
-
-## --- Chunk 4: Sabit etki katsayı tablosu (yorumlanmış) ---
-```{r tbl-lmm-coef}
-lmm_coef <- tidy(mm2, conf.int = TRUE, effects = "fixed") %>%
-  transmute(
-    Terim = case_when(
-      term == "(Intercept)"    ~ "Sabit",
-      term == "temp_c"         ~ "T_sezon (°C)",
-      term == "I(temp_c^2)"    ~ "T_sezon² (°C²)",
-      term == "rh"             ~ "RH (%)",
-      term == "log_lam"        ~ "log₁₀(λ_import)"
-    ),
-    `β` = round(estimate, 3),
-    SE  = round(std.error, 3),
-    `%95 GA` = paste0("[", round(conf.low, 3), "; ", round(conf.high, 3), "]"),
-    Yorum = case_when(
-      term == "(Intercept)"   ~ "—",
-      term == "temp_c"        ~ paste0("T ve T² birlikte → optimum ≈ ", T_opt, "°C"),
-      term == "I(temp_c^2)"   ~ "Negatif: termal overshoot teyidi",
-      term == "rh"            ~ paste0("1% RH artış → risk ×", round(10^estimate, 2)),
-      term == "log_lam"       ~ paste0("λ 10 kat artış → risk ×", round(10^estimate, 1))
-    )
-  )
- 
-kable(lmm_coef,
-      caption = paste0(
-        "LMM2 sabit etki katsayıları (SSP2-4.5). ",
-        "Bağımlı değişken: log₁₀(p_ay). ",
-        "Termal optimum: T_opt = −β_T / (2·β_T²) = ", T_opt, "°C."
-      ),
-      booktabs = TRUE, escape = FALSE) %>%
-  kable_styling(font_size = 11)
-```
-
-
-
-
-## --- Chunk 5: Random effects ve ICC tablosu ---
-```{r tbl-lmm-random}
-vc_df <- as.data.frame(VarCorr(mm2))
- 
-random_tbl <- tibble(
-  Bileşen = c("İlçe (random intercept)", "Artık (within-district)"),
-  Varyans = round(vc_df$vcov, 3),
-  `Std. Sapma` = round(vc_df$sdcor, 3),
-  `Varyans payı (%)` = round(vc_df$vcov / sum(vc_df$vcov) * 100, 1)
-)
- 
-kable(random_tbl,
-      caption = paste0(
-        "LMM2 varyans bileşenleri. ICC = ",
-        icc, ": toplam varyansın %", round(icc * 100, 1),
-        "'i ilçeler arası farklardan kaynaklanmaktadır."
-      ),
-      booktabs = TRUE) %>%
-  kable_styling(font_size = 11)
-```
-
-
-
-## --- Chunk 6: OLS vs LMM karşılaştırma tablosu ---
-```{r tbl-ols-vs-lmm}
-# OLS (mevcut yıllık regresyon)
-stat_ols <- all_yearly[["ssp245"]] %>%
-  filter(p_ge1_major_year_mean > 0) %>%
-  mutate(log_p = log10(p_ge1_major_year_mean))
- 
-lm_ols <- lm(log_p ~ mean_temp_c_year + I(mean_temp_c_year^2) +
-               mean_rh_year + log10(Lambda_import_year + 1),
-             data = stat_ols)
- 
-b1_ols <- coef(lm_ols)["mean_temp_c_year"]
-b2_ols <- coef(lm_ols)["I(mean_temp_c_year^2)"]
-T_opt_ols <- round(-b1_ols / (2 * b2_ols), 1)
- 
-comparison_tbl <- tibble(
-  Özellik = c(
-    "Gözlem birimi",
-    "N (gözlem)",
-    "İlçe etkisi",
-    "T_optimum (°C)",
-    "Brière uyumu",
-    "Kolinearite sorunu"
-  ),
-  `OLS (yıllık)` = c(
-    "İlçe-yıl",
-    nrow(stat_ols),
-    "Kontrol edilmemiş",
-    as.character(T_opt_ols),
-    "Düşük (≈19°C)",
-    "Yüksek (T ↔ Λ)"
-  ),
-  `LMM (aylık)` = c(
-    "İlçe-yıl-ay",
-    nrow(lmm_df),
-    "Random intercept",
-    as.character(T_opt),
-    paste0("Yüksek (≈", T_opt, "°C)"),
-    "Çözülmüş"
-  )
-)
- 
-kable(comparison_tbl,
-      caption = paste0(
-        "OLS regresyon ile karma etkili model karşılaştırması. ",
-        "LMM'de ilçe random intercept olarak tanımlanması, ",
-        "ilçeye özgü ithalat baskısı ve tür farkını absorbe etmekte ",
-        "ve sıcaklığın biyolojik etkisini doğru yansıtmaktadır."
-      ),
-      booktabs = TRUE) %>%
-  kable_styling(font_size = 11)
-```
-
-
-
-## --- Chunk 7: Cross-SSP LMM katsayı forest plot ---
-```{r fig-lmm-forest, fig.cap="LMM2 sabit etki katsayıları — üç SSP senaryosu karşılaştırması.", fig.height=5, fig.width=9}
- 
-lmm_forest <- purrr::map_dfr(SSP_LIST, function(s) {
-  df_s <- lmm_data_all %>% filter(ssp == s)
- 
-  mm_s <- lmer(log_p ~ temp_c + I(temp_c^2) + rh + log_lam +
-                 (1 | district_id),
-               data = df_s, REML = FALSE)
- 
-  b1_s <- fixef(mm_s)["temp_c"]
-  b2_s <- fixef(mm_s)["I(temp_c^2)"]
- 
-  tidy(mm_s, conf.int = TRUE, effects = "fixed") %>%
-    filter(term != "(Intercept)") %>%
-    mutate(
-      Terim = case_when(
-        term == "temp_c"      ~ "T (°C)",
-        term == "I(temp_c^2)" ~ "T² (°C²)",
-        term == "rh"          ~ "RH (%)",
-        term == "log_lam"     ~ "log₁₀(λ)"
-      ),
-      ssp_label = SSP_LABELS[s],
-      T_opt = round(-b1_s / (2 * b2_s), 1)
-    )
-})
- 
-fig_lmm_forest <- ggplot(lmm_forest,
-                          aes(x = estimate, y = reorder(Terim, abs(estimate)),
-                              colour = ssp_label)) +
-  geom_vline(xintercept = 0, linetype = "dashed", colour = "grey50") +
-  geom_pointrange(aes(xmin = conf.low, xmax = conf.high),
-                  position = position_dodge(width = 0.6),
-                  size = 0.5, linewidth = 0.8) +
-  scale_colour_manual(
-    values = c("SSP1-2.6" = "#2A9D8F",
-               "SSP2-4.5" = "#E9C46A",
-               "SSP5-8.5" = "#E63946"),
-    name = "Senaryo"
-  ) +
-  labs(x = expression("Sabit etki katsayısı ("*beta*")"),
-       y = NULL,
-       title = "LMM sabit etki katsayıları — SSP karşılaştırması",
-       subtitle = "log₁₀(p_ay) ~ T + T² + RH + log₁₀(λ) + (1|ilçe)") +
-  theme_thesis()
- 
-print(fig_lmm_forest)
-```
-
-
-
-## --- Chunk 8: Termal optimum cross-SSP tablosu ---
-```{r tbl-lmm-thermal-optimum}
-topt_cross <- purrr::map_dfr(SSP_LIST, function(s) {
-  df_s <- lmm_data_all %>% filter(ssp == s)
- 
-  mm_s <- lmer(log_p ~ temp_c + I(temp_c^2) + rh + log_lam +
-                 (1 | district_id),
-               data = df_s, REML = FALSE)
- 
-  b1_s <- fixef(mm_s)["temp_c"]
-  b2_s <- fixef(mm_s)["I(temp_c^2)"]
- 
-  vc_s <- as.data.frame(VarCorr(mm_s))
-  icc_s <- vc_s$vcov[1] / (vc_s$vcov[1] + sigma(mm_s)^2)
- 
-  tibble(
-    Senaryo = SSP_LABELS[s],
-    N = nrow(df_s),
-    `T_opt (°C)` = round(-b1_s / (2 * b2_s), 1),
-    `β_T` = round(b1_s, 3),
-    `β_T²` = round(b2_s, 4),
-    ICC = round(icc_s, 3),
-    AIC = round(AIC(mm_s), 1)
-  )
-})
- 
-kable(topt_cross,
-      caption = paste0(
-        "LMM termal optimum karşılaştırması — üç SSP senaryosu. ",
-        "T_opt = −β_T / (2·β_T²). ",
-        "Brière biyolojik referans: Ae. albopictus ≈ 26–28°C ",
-        "(Mordecai ve ark., 2017)."
-      ),
-      booktabs = TRUE, escape = FALSE) %>%
-  kable_styling(font_size = 11)
-```
- 
-
-
-## --- Chunk 9: Termal yanıt eğrisi (LMM tahminli) ---
-```{r fig-lmm-thermal-curve, fig.cap="LMM2'den türetilen sıcaklık-risk yanıt eğrisi. Dikey kesikli çizgi: termal optimum. Gri bant: %95 GA.", fig.height=5, fig.width=8}
- 
-# mm2 sabit etkilerinden tahmin eğrisi
-T_seq <- seq(10, 35, by = 0.5)
-rh_median <- median(lmm_df$rh, na.rm = TRUE)
-lam_median <- median(lmm_df$log_lam, na.rm = TRUE)
- 
-pred_df <- tibble(
-  temp_c  = T_seq,
-  rh      = rh_median,
-  log_lam = lam_median
-)
- 
-# Sabit etkilerden manuel tahmin (random effect olmadan)
-fe <- fixef(mm2)
-pred_df <- pred_df %>%
-  mutate(
-    log_p_pred = fe["(Intercept)"] +
-      fe["temp_c"] * temp_c +
-      fe["I(temp_c^2)"] * temp_c^2 +
-      fe["rh"] * rh +
-      fe["log_lam"] * log_lam
-  )
- 
-fig_thermal <- ggplot(pred_df, aes(x = temp_c, y = 10^log_p_pred)) +
-  geom_line(colour = "#E63946", linewidth = 1.2) +
-  geom_vline(xintercept = T_opt, linetype = "dashed",
-             colour = "grey40", linewidth = 0.8) +
-  annotate("text", x = T_opt + 0.5, y = max(10^pred_df$log_p_pred) * 0.8,
-           label = paste0("T_opt = ", T_opt, "°C"),
-           hjust = 0, size = 4, colour = "grey30") +
-  annotate("rect", xmin = 26, xmax = 28,
-           ymin = 0, ymax = max(10^pred_df$log_p_pred),
-           alpha = 0.1, fill = "#457B9D") +
-  annotate("text", x = 27, y = max(10^pred_df$log_p_pred) * 0.6,
-           label = "Brière\noptimum", size = 3, colour = "#457B9D") +
-  scale_y_log10(labels = label_scientific()) +
-  labs(x = "Sıcaklık (°C)",
-       y = expression(p[ay]~"(log ölçek)"),
-       title = "Sıcaklık-risk yanıt eğrisi (LMM2 sabit etkilerinden)",
-       subtitle = paste0("RH = ", round(rh_median, 0),
-                          "%, log₁₀(λ) = ", round(lam_median, 1),
-                          " sabitlenmiştir")) +
-  theme_thesis()
- 
-print(fig_thermal)
-```
-
-
-
 
 # CTMC Model Doğrulaması — Tüm SSP Senaryoları {#sec-validation}
 
@@ -1854,6 +1409,40 @@ for (s in SSP_LIST) {
 ```
 
 
+```{r fig-yearly-risk-combined-en, fig.cap="Annual outbreak risk by sentinel district across the three SSP scenarios. Lines show district-level mean annual major-chain risk (log scale); shaded bands are 95% simulation intervals. Panels represent SSP scenarios.", fig.height=5, fig.width=11}
+# İngilizce ilçe etiketleri: mevcut DISTRICT_LABELS'tan yalnızca İstanbul -> Istanbul
+DISTRICT_LABELS_EN <- gsub("\u0130stanbul", "Istanbul", DISTRICT_LABELS)
+
+p_yearly_risk_en <- yearly_all %>%
+  mutate(ssp_label = factor(SSP_LABELS[ssp],
+                            levels = c("SSP1-2.6", "SSP2-4.5", "SSP5-8.5"))) %>%
+  filter(p_ge1_major_year_mean > 0) %>%                 # log ölçek için sıfırları at
+  ggplot(aes(x = year, y = p_ge1_major_year_mean,
+             colour = district_id, fill = district_id)) +
+  geom_ribbon(aes(ymin = p_ge1_major_year_p2_5,
+                  ymax = p_ge1_major_year_p97_5),
+              alpha = 0.15, colour = NA) +
+  geom_line(linewidth = 0.7) +
+  facet_wrap(~ ssp_label, ncol = 3) +                   # paneller = SSP (görseldeki gibi)
+  scale_y_log10(labels = label_scientific()) +
+  scale_colour_manual(values = COL_DISTRICT, labels = DISTRICT_LABELS_EN, name = NULL) +
+  scale_fill_manual(values   = COL_DISTRICT, labels = DISTRICT_LABELS_EN, guide = "none") +
+  labs(x = "Year",
+       y = expression(P["\u22651 major/year"] ~ "(log)"),
+       title = "Annual outbreak risk across SSP scenarios") +
+  theme_thesis() +
+  theme(strip.text      = element_text(size = 10, face = "bold"),
+        legend.position = "bottom")
+
+print(p_yearly_risk_en)
+
+ggsave(
+  filename = "fig_yearly_risk_comparison_en.png",
+  plot     = p_yearly_risk_en,
+  path     = DIR_OUTPUT_CROSS,
+  width    = 11, height = 5, dpi = 300, bg = "white"
+)
+```
 
 
 

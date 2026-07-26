@@ -38,6 +38,18 @@ ggsave(
 
 
 # 2. CSI heatmap Resimleri oku ve ggplot nesnesine çevir
+
+for (ssp in c("ssp126", "ssp245", "ssp585")) {
+  SSP_CODE  <- ssp
+  SSP_LABEL <- switch(ssp,
+                      ssp126 = "SSP1-2.6",
+                      ssp245 = "SSP2-4.5",
+                      ssp585 = "SSP5-8.5")
+  source(here("R", "04_results", "01_generate_ssp_outputs.R"))
+}
+
+
+
 plot_list_csi_heat <- lapply(SSP_LIST, function(s) {
   path <- here("outputs", s, "figures", "fig_csi_heat.png")
   if (file.exists(path)) {
@@ -64,10 +76,6 @@ ggsave(
   units = "in"
 )
 
-
-library(magick)
-library(grid)
-library(here)
 
 
 # 3. CSI yıllık tend Resimleri oku ve ggplot nesnesine çevir
@@ -112,9 +120,15 @@ plot_list_csi_trend <- lapply(SSP_LIST, function(s) {
 # NULL olanları temizle
 plot_list_csi_trend <- plot_list_csi_trend[!sapply(plot_list_csi_trend, is.null)]
 
+
+
 # 2. Patchwork ile birleştir (Örn: Yan yana 3 grafik)
 combined_plot_csi_trend <- wrap_plots(plot_list_csi_trend) + 
   plot_layout(ncol = 2)
+
+
+
+
 
 # 3. 300 DPI olarak kaydet
 ggsave(

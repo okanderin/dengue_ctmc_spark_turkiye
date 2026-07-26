@@ -1,0 +1,163 @@
+=============================================
+build_importation_pressure_monthly.R started at : 2026-02-02 00:50:43.434049 
+ROOT          : C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez 
+DIR_PROCESSED : C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed 
+=============================================
+
+indexing population_sentinel_baseline_2024.csv [====================] 18.28MB/s, eta:  0s                                                                                         
+--- Sentinel districts (baseline ids kept) ---
+# A tibble: 5 × 4
+  district_id province_name district_name join_key        
+  <chr>       <chr>         <chr>         <chr>           
+1 TUR.10.4_1  Artvin        Hopa          artvin_hopa     
+2 TUR.39.3_1  Isparta       Eğirdir       isparta_egirdir 
+3 TUR.40.25_1 Istanbul      Kartal        istanbul_kartal 
+4 TUR.59.4_1  Mugla         Fethiye       mugla_fethiye   
+5 TUR.81.6_1  Zonguldak     Merkez        zonguldak_merkez
+
+--- District V_TR (sum should be 1) ---
+# A tibble: 5 × 4
+  district_id province_name district_name   V_TR
+  <chr>       <chr>         <chr>          <dbl>
+1 TUR.10.4_1  Artvin        Hopa          0.0671
+2 TUR.39.3_1  Isparta       Eğirdir       0.0496
+3 TUR.40.25_1 Istanbul      Kartal        0.403 
+4 TUR.59.4_1  Mugla         Fethiye       0.317 
+5 TUR.81.6_1  Zonguldak     Merkez        0.163 
+sum(V_TR)= 1 
+
+--- Seasonality (mean should be 1) ---
+# A tibble: 12 × 2
+   month seasonal_multiplier
+   <int>               <dbl>
+ 1     1               0.628
+ 2     2               0.655
+ 3     3               0.652
+ 4     4               0.801
+ 5     5               1.10 
+ 6     6               1.25 
+ 7     7               1.43 
+ 8     8               1.53 
+ 9     9               1.32 
+10    10               1.24 
+11    11               0.725
+12    12               0.654
+
+Effective days (seasonality-weighted, with M_climate) for 2024: 366.5942
+
+--- Calibrated rho (seasonality + M_climate@2024 + days consistent) ---
+# A tibble: 3 × 4
+  pi_scenario target_expected_imported_cases_2024 eff_days   rho
+  <chr>                                     <dbl>    <dbl> <dbl>
+1 low                                          10     367. 0.136
+2 main                                         50     367. 0.682
+3 high                                        100     367. 1.36 
+
+--- Calibration check (2024 totals) ---
+# A tibble: 3 × 4
+  pi_scenario expected_2024_total target_expected_imported_cases_2024  diff
+  <chr>                     <dbl>                               <dbl> <dbl>
+1 high                        100                                 100     0
+2 low                          10                                  10     0
+3 main                         50                                  50     0
+wrote 26.87kB in  0s, 572.02MB/s                                                                                       wrote 2.15GB in  0s, 2.15GB/s                                                                                       
+=============================================
+Finished at : 2026-02-02 00:50:44.143411 
+Output CSV : C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/importation_pressure_monthly_2024_2100.csv 
+Output RDS : C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/importation_pressure_monthly_2024_2100.rds 
+Rows       : 13860 
+Districts  : 5 
+Years      : 2024 - 2100 
+Scenarios  : high, low, main 
+=============================================
+2026-02-02 00:51:16 | Started build_travel_weights_static.R 
+2026-02-02 00:51:16 | ROOT = C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez 
+-/                                                                                       /                                                                                       -                                                                                       2026-02-02 00:51:16 | Baseline loaded: n_districts = 5 
+-/                                                                                       /                                                                                       -                                                                                       2026-02-02 00:51:16 | tesis columns: province, district, x3 
+2026-02-02 00:51:16 | tesis occupancy column not named; using fallback column: x3 
+2026-02-02 00:51:16 | Some districts missing total_doluluk after exact join; trying ASCII-normalized join. 
+2026-02-02 00:51:16 | total_doluluk missing after fallback: 0 
+2026-02-02 00:51:17 | Concentration QA | top1=0.4031 top5=1 top10=1 
+2026-02-02 00:51:17 | STATIC travel weights computed: n_districts=5 | sum=1 
+wrote 2.15GB in  0s, 2.15GB/s                                                                                       2026-02-02 00:51:17 | Saved: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/travel_weights_static.csv 
+2026-02-02 00:51:17 | Saved: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/travel_weights_static.rds 
+2026-02-02 00:51:17 | Finished build_travel_weights_static.R successfully. 
+indexing trait_params_albopictus.csv [==============================] 99.56MB/s, eta:  0s                                                                                         wrote 2.15GB in  0s, 2.15GB/s                                                                                       R/03_models/ctmc_spark.R:34:imp_main <- load_importation_monthly(fp_import, scenario_use = "main")
+R/03_models/ctmc_spark.R:112:load_importation_monthly <- function(path, scenario_use = "high") {
+R/03_models/ctmc_spark.R:450:  df_import  <- load_importation_monthly(fp_import)
+R/03_models/ctmc_spark.R:624:imp_main <- load_importation_monthly(fp_import, scenario_use = "main")
+R/03_models/ctmc_spark_monte_carlo.R:110:load_importation_monthly <- function(path, scenario_use = "main") {
+R/03_models/ctmc_spark_monte_carlo.R:399:  df_import  <- load_importation_monthly(fp_import)
+/usr/bin/grep: |: No such file or directory
+/usr/bin/grep: head: No such file or directory
+/usr/bin/grep: 50: No such file or directory
+indexing sentinel_species.csv [======================================] 8.32MB/s, eta:  0s                                                                                         indexing trait_params_aegypti.csv [================================] 103.31MB/s, eta:  0s                                                                                         indexing trait_params_albopictus.csv [==============================] 99.76MB/s, eta:  0s                                                                                         wrote 3.95kB in  0s, 159.10MB/swrote 523.28kB in  0s, 2.61MB/swrote 527.57kB in  0s, 2.61MB/swrote 531.93kB in  0s, 2.60MB/swrote 536.28kB in  0s, 2.60MB/swrote 540.64kB in  0s, 2.60MB/swrote 544.94kB in  0s, 2.60MB/swrote 549.24kB in  0s, 2.60MB/swrote 553.68kB in  0s, 2.60MB/swrote 557.96kB in  0s, 2.61MB/swrote 562.22kB in  0s, 2.60MB/swrote 566.54kB in  0s, 2.61MB/s                                                                                       wrote 2.15GB in  0s, 2.15GB/s                                                                                       wrote 1.30kB in  0s, 48.36MB/s                                                                                       wrote 2.15GB in  0s, 2.15GB/s                                                                                       wrote 2.15GB in  0s, 2.15GB/s                                                                                       # A tibble: 0 × 4
+# ℹ 4 variables: district_id <chr>, year <int>, month <int>, n <int>
+indexing ctmc_spark_monthly_2025_2075.csv [==========================] 2.15GB/s, eta:  0s                                                                                         indexing ctmc_spark_yearly_2025_2075.csv [===========================] 1.74GB/s, eta:  0s                                                                                         indexing ctmc_spark_horizon_2025_2075.csv [=========================] 46.26MB/s, eta:  0s                                                                                         wrote 2.15GB in  0s, 2.15GB/s                                                                                       wrote 1.66kB in  0s, 129.01MB/s                                                                                       wrote 2.15GB in  0s, 2.15GB/s                                                                                       # A tibble: 5 × 7
+  sentinel  species p_ge1_major mean_p_month_major mean_q_import Lambda_import mean_p_est
+  <chr>     <chr>         <dbl>              <dbl>         <dbl>         <dbl>      <dbl>
+1 Kartal (… albopi…       1.000            0.0166          0.952        66332.    0.0170 
+2 Fethiye … albopi…       0.998            0.0103          0.934        52158.    0.0107 
+3 Merkez (… aegypti       0.958            0.00515         0.871        26874.    0.00558
+4 Eğirdir … albopi…       0.915            0.00400         0.705         8168.    0.00511
+5 Hopa (Ar… aegypti       0.867            0.00327         0.753        11035.    0.00393
+# A tibble: 0 × 4
+# ℹ 4 variables: district_id <chr>, year <int>, month <int>, n <int>
+indexing sentinel_species.csv [=====================================] 12.48MB/s, eta:  0s                                                                                         indexing trait_params_aegypti.csv [=================================] 93.47MB/s, eta:  0s                                                                                         indexing trait_params_albopictus.csv [==============================] 78.53MB/s, eta:  0s                                                                                         wrote 3.97kB in  0s, 160.19MB/swrote 541.71kB in  0s, 2.71MB/swrote 546.09kB in  0s, 2.69MB/swrote 550.41kB in  0s, 2.69MB/swrote 554.72kB in  0s, 2.69MB/swrote 559.18kB in  0s, 2.68MB/swrote 563.47kB in  0s, 2.67MB/swrote 567.77kB in  0s, 2.68MB/swrote 572.15kB in  0s, 2.68MB/s                                                                                       wrote 2.15GB in  0s, 2.15GB/s                                                                                       wrote 1.31kB in  0s, 48.55MB/s                                                                                       wrote 2.15GB in  0s, 2.15GB/s                                                                                       wrote 2.15GB in  0s, 2.15GB/s                                                                                       indexing ctmc_spark_monthly_2025_2075.csv [==========================] 2.15GB/s, eta:  0s                                                                                         indexing ctmc_spark_yearly_2025_2075.csv [===========================] 2.15GB/s, eta:  0s                                                                                         indexing ctmc_spark_horizon_2025_2075.csv [=========================] 83.55MB/s, eta:  0s                                                                                         wrote 2.15GB in  0s, 2.15GB/s                                                                                       wrote 1.68kB in  0s, 138.08MB/s                                                                                       wrote 2.15GB in  0s, 2.15GB/s                                                                                       # A tibble: 5 × 7
+  sentinel  species p_ge1_major mean_p_month_major mean_q_import Lambda_import mean_p_est
+  <chr>     <chr>         <dbl>              <dbl>         <dbl>         <dbl>      <dbl>
+1 Kartal (… albopi…       1.000            0.0126          0.678        27420.    0.0170 
+2 Fethiye … albopi…       0.991            0.00765         0.646        21561.    0.0107 
+3 Merkez (… aegypti       0.879            0.00342         0.558        11109.    0.00558
+4 Eğirdir … albopi…       0.775            0.00242         0.392         3376.    0.00511
+5 Hopa (Ar… aegypti       0.670            0.00180         0.436         4562.    0.00393
+# A tibble: 0 × 4
+# ℹ 4 variables: district_id <chr>, year <int>, month <int>, n <int>
+# A tibble: 0 × 4
+# ℹ 4 variables: district_id <chr>, year <int>, month <int>, n <int>
+indexing sentinel_species.csv [======================================] 7.83MB/s, eta:  0s                                                                                         indexing trait_params_aegypti.csv [================================] 103.31MB/s, eta:  0s                                                                                         indexing trait_params_albopictus.csv [==============================] 90.02MB/s, eta:  0s                                                                                         wrote 3.97kB in  0s, 132.22MB/swrote 550.41kB in  0s, 2.74MB/swrote 554.72kB in  0s, 2.73MB/swrote 559.18kB in  0s, 2.73MB/swrote 563.47kB in  0s, 2.73MB/swrote 567.77kB in  0s, 2.73MB/swrote 572.15kB in  0s, 2.74MB/s                                                                                       wrote 2.15GB in  0s, 2.15GB/s                                                                                       wrote 1.31kB in  0s, 92.99MB/s                                                                                       wrote 2.15GB in  0s, 2.15GB/s                                                                                       wrote 2.15GB in  0s, 2.15GB/s                                                                                       indexing ctmc_spark_monthly_2025_2075.csv [==========================] 2.15GB/s, eta:  0s                                                                                         indexing ctmc_spark_yearly_2025_2075.csv [===========================] 2.15GB/s, eta:  0s                                                                                         indexing ctmc_spark_horizon_2025_2075.csv [=========================] 69.02MB/s, eta:  0s                                                                                         wrote 2.15GB in  0s, 2.15GB/s                                                                                       wrote 1.68kB in  0s, 67.07MB/s                                                                                       wrote 2.15GB in  0s, 2.15GB/s                                                                                       # A tibble: 5 × 7
+  sentinel  species p_ge1_major mean_p_month_major mean_q_import Lambda_import mean_p_est
+  <chr>     <chr>         <dbl>              <dbl>         <dbl>         <dbl>      <dbl>
+1 Kartal (… albopi…       1.000            0.0126          0.678        27420.    0.0170 
+2 Fethiye … albopi…       0.991            0.00765         0.646        21561.    0.0107 
+3 Merkez (… aegypti       0.879            0.00342         0.558        11109.    0.00558
+4 Eğirdir … albopi…       0.775            0.00242         0.392         3376.    0.00511
+5 Hopa (Ar… aegypti       0.670            0.00180         0.436         4562.    0.00393
+indexing ctmc_spark_monthly_2025_2075.csv [==========================] 2.15GB/s, eta:  0s                                                                                         indexing ctmc_spark_yearly_2025_2075.csv [===========================] 2.15GB/s, eta:  0s                                                                                         indexing ctmc_spark_horizon_2025_2075.csv [=========================] 75.60MB/s, eta:  0s                                                                                         wrote 2.15GB in  0s, 2.15GB/s                                                                                       wrote 1.68kB in  0s, 121.42MB/s                                                                                       wrote 2.15GB in  0s, 2.15GB/s                                                                                       # A tibble: 5 × 7
+  sentinel  species p_ge1_major mean_p_month_major mean_q_import Lambda_import mean_p_est
+  <chr>     <chr>         <dbl>              <dbl>         <dbl>         <dbl>      <dbl>
+1 Kartal (… albopi…       1.000            0.0126          0.678        27420.    0.0170 
+2 Fethiye … albopi…       0.991            0.00765         0.646        21561.    0.0107 
+3 Merkez (… aegypti       0.879            0.00342         0.558        11109.    0.00558
+4 Eğirdir … albopi…       0.775            0.00242         0.392         3376.    0.00511
+5 Hopa (Ar… aegypti       0.670            0.00180         0.436         4562.    0.00393
+indexing sentinel_species.csv [=====================================] 14.17MB/s, eta:  0s                                                                                         indexing trait_params_aegypti.csv [================================] 103.31MB/s, eta:  0s                                                                                         indexing trait_params_albopictus.csv [==============================] 97.13MB/s, eta:  0s                                                                                         wrote 4.59kB in  0s, 99.75MB/s                                                                                       wrote 2.15GB in  0s, 2.15GB/s                                                                                       wrote 2.42kB in  0s, 203.17MB/s                                                                                       wrote 2.15GB in  0s, 2.15GB/s                                                                                       wrote 2.15GB in  0s, 2.15GB/s                                                                                       package ‘renv’ successfully unpacked and MD5 sums checked
+
+The downloaded binary packages are in
+	C:\Users\oderin\AppData\Local\Temp\RtmpiylpC1\downloaded_packages
+.392         3376.    0.00511
+5 Hopa (Ar… aegypti       0.670            0.00180         0.436         4562.    0.00393
+# A tibble: 0 × 4
+# ℹ 4 variables: district_id <chr>, year <int>, month <int>, n <int>
+# A tibble: 0 × 4
+# ℹ 4 variables: district_id <chr>, year <int>, month <int>, n <int>
+indexing sentinel_species.csv [======================================] 7.83MB/s, eta:  0s                                                                                         indexing trait_params_aegypti.csv [================================] 103.31MB/s, eta:  0s                                                                                         indexing trait_params_albopictus.csv [==============================] 90.02MB/s, eta:  0s                                                                                         wrote 3.97kB in  0s, 132.22MB/swrote 550.41kB in  0s, 2.74MB/swrote 554.72kB in  0s, 2.73MB/swrote 559.18kB in  0s, 2.73MB/swrote 563.47kB in  0s, 2.73MB/swrote 567.77kB in  0s, 2.73MB/swrote 572.15kB in  0s, 2.74MB/s                                                                                       wrote 2.15GB in  0s, 2.15GB/s                                                                                       wrote 1.31kB in  0s, 92.99MB/s                                                                                       wrote 2.15GB in  0s, 2.15GB/s                                                                                       wrote 2.15GB in  0s, 2.15GB/s                                                                                       indexing ctmc_spark_monthly_2025_2075.csv [==========================] 2.15GB/s, eta:  0s                                                                                         indexing ctmc_spark_yearly_2025_2075.csv [===========================] 2.15GB/s, eta:  0s                                                                                         indexing ctmc_spark_horizon_2025_2075.csv [=========================] 69.02MB/s, eta:  0s                                                                                         wrote 2.15GB in  0s, 2.15GB/s                                                                                       wrote 1.68kB in  0s, 67.07MB/s                                                                                       wrote 2.15GB in  0s, 2.15GB/s                                                                                       # A tibble: 5 × 7
+  sentinel  species p_ge1_major mean_p_month_major mean_q_import Lambda_import mean_p_est
+  <chr>     <chr>         <dbl>              <dbl>         <dbl>         <dbl>      <dbl>
+1 Kartal (… albopi…       1.000            0.0126          0.678        27420.    0.0170 
+2 Fethiye … albopi…       0.991            0.00765         0.646        21561.    0.0107 
+3 Merkez (… aegypti       0.879            0.00342         0.558        11109.    0.00558
+4 Eğirdir … albopi…       0.775            0.00242         0.392         3376.    0.00511
+5 Hopa (Ar… aegypti       0.670            0.00180         0.436         4562.    0.00393
+indexing ctmc_spark_monthly_2025_2075.csv [==========================] 2.15GB/s, eta:  0s                                                                                         indexing ctmc_spark_yearly_2025_2075.csv [===========================] 2.15GB/s, eta:  0s                                                                                         indexing ctmc_spark_horizon_2025_2075.csv [=========================] 75.60MB/s, eta:  0s                                                                                         wrote 2.15GB in  0s, 2.15GB/s                                                                                       wrote 1.68kB in  0s, 121.42MB/s                                                                                       wrote 2.15GB in  0s, 2.15GB/s                                                                                       # A tibble: 5 × 7
+  sentinel  species p_ge1_major mean_p_month_major mean_q_import Lambda_import mean_p_est
+  <chr>     <chr>         <dbl>              <dbl>         <dbl>         <dbl>      <dbl>
+1 Kartal (… albopi…       1.000            0.0126          0.678        27420.    0.0170 
+2 Fethiye … albopi…       0.991            0.00765         0.646        21561.    0.0107 
+3 Merkez (… aegypti       0.879            0.00342         0.558        11109.    0.00558
+4 Eğirdir … albopi…       0.775            0.00242         0.392         3376.    0.00511
+5 Hopa (Ar… aegypti       0.670            0.00180         0.436         4562.    0.00393
+indexing sentinel_species.csv [=====================================] 14.17MB/s, eta:  0s                                                                                         indexing trait_params_aegypti.csv [================================] 103.31MB/s, eta:  0s                                                                                         indexing trait_params_albopictus.csv [==============================] 97.13MB/s, eta:  0s                                                                                         wrote 4.59kB in  0s, 99.75MB/s                                                                                       wrote 2.15GB in  0s, 2.15GB/s                                                                                       wrote 2.42kB in  0s, 203.17MB/s                                                                                       wrote 2.15GB in  0s, 2.15GB/s                                                                                       wrote 2.15GB in  0s, 2.15GB/s                                                                                       package ‘renv’ successfully unpacked and MD5 sums checked
+
+The downloaded binary packages are in
+	C:\Users\oderin\AppData\Local\Temp\RtmpiylpC1\downloaded_packages

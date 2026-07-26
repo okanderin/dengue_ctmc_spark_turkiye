@@ -1,0 +1,764 @@
+
+============================================================
+build_travel_weights.R started at: 2026-01-24 19:43:03.92858 
+ROOT: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez 
+============================================================
+
+Using baseline source: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/population_sentinel_baseline_2024.csv 
+Using occupancy file: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_raw/population/turizm_verileri/occupancy_by months.xlsx 
+Profile map present? FALSE 
+indexing population_sentinel_baseline_2024.csv [========================================================] 2.68MB/s, eta:  0s                                                                                                                            Baseline districts: 5 
+District_share sum: 1 
+
+Occupancy sheets: Sayfa1 
+-/                                                                                                                          /                                                                                                                          -                                                                                                                          -/                                                                                                                          /                                                                                                                          -                                                                                                                          2026-01-24 19:48:24 | Started build_travel_weights.R 
+2026-01-24 19:48:24 | ROOT = C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez 
+-/                                                                                                                          /                                                                                                                          -                                                                                                                          2026-01-24 19:48:37 | Started build_travel_weights.R 
+2026-01-24 19:48:37 | ROOT = C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez 
+-/                                                                                                                          /                                                                                                                          -                                                                                                                          2026-01-24 19:55:50 | Started build_travel_weights.R 
+2026-01-24 19:55:50 | ROOT = C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez 
+-/                                                                                                                          /                                                                                                                          -                                                                                                                          2026-01-24 19:55:50 | Loaded baseline districts: n = 5 
+2026-01-24 19:55:50 | Sum(base_weight) = 1 
+-/                                                                                                                          /                                                                                                                          -                                                                                                                          2026-01-24 19:58:52 | Started build_travel_weights.R 
+2026-01-24 19:58:52 | ROOT = C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez 
+-/                                                                                                                          /                                                                                                                          -                                                                                                                          2026-01-24 19:58:52 | Loaded baseline districts: n = 5 
+2026-01-24 19:58:52 | Sum(base_weight) = 1 
+-/                                                                                                                          /                                                                                                                          -                                                                                                                          2026-01-24 19:59:42 | Started build_travel_weights.R 
+2026-01-24 19:59:42 | ROOT = C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez 
+-/                                                                                                                          /                                                                                                                          -                                                                                                                          2026-01-24 19:59:42 | Loaded baseline districts: n = 5 
+2026-01-24 19:59:42 | Sum(base_weight) = 1 
+-/                                                                                                                          /                                                                                                                          -                                                                                                                          2026-01-24 20:04:22 | Started build_travel_weights.R 
+2026-01-24 20:04:22 | ROOT = C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez 
+-/                                                                                                                          /                                                                                                                          -                                                                                                                          2026-01-24 20:04:22 | Loaded baseline districts: n = 5 
+2026-01-24 20:04:22 | Sum(base_weight) = 1 
+-/                                                                                                                          /                                                                                                                          -                                                                                                                          2026-01-24 20:04:22 | occupancy_by months.xlsx columns: months, occupancy_rate, x3, x4 
+2026-01-24 20:04:23 | Seasonality global: n_months = 12 
+2026-01-24 20:04:23 | Computed travel weights: rows = 4620 
+wrote 2.13kB in  0s, 111.62MB/s                                                                                                                          wrote 2.15GB in  0s, 2.15GB/s                                                                                                                          2026-01-24 20:04:23 | Saved: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/travel_weights_monthly_2024_2100.csv 
+2026-01-24 20:04:23 | Saved: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/travel_weights_monthly_2024_2100.rds 
+2026-01-24 20:04:23 | Finished build_travel_weights.R successfully. 
+2026-01-24 20:06:52 | Started build_travel_weights.R 
+2026-01-24 20:06:52 | ROOT = C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez 
+-/                                                                                                                          /                                                                                                                          -                                                                                                                          2026-01-24 20:06:52 | Baseline districts loaded: n=5 
+-/                                                                                                                          /                                                                                                                          -                                                                                                                          2026-01-24 20:06:52 | Loaded occupancy file: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_raw/population/turizm_verileri/occupancy_by months.xlsx | cols=months, occupancy_rate, x3, x4 
+2026-01-24 20:07:04 | Started build_travel_weights.R 
+2026-01-24 20:07:04 | ROOT = C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez 
+-/                                                                                                                          /                                                                                                                          -                                                                                                                          2026-01-24 20:07:04 | Baseline districts loaded: n=5 
+-/                                                                                                                          /                                                                                                                          -                                                                                                                          2026-01-24 20:07:04 | Loaded occupancy file: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_raw/population/turizm_verileri/occupancy_by months.xlsx | cols=months, occupancy_rate, x3, x4 
+2026-01-24 20:07:12 | Started build_travel_weights.R 
+2026-01-24 20:07:12 | ROOT = C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez 
+-/                                                                                                                          /                                                                                                                          -                                                                                                                          2026-01-24 20:07:12 | Baseline districts loaded: n=5 
+-/                                                                                                                          /                                                                                                                          -                                                                                                                          2026-01-24 20:07:13 | Loaded occupancy file: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_raw/population/turizm_verileri/occupancy_by months.xlsx | cols=months, occupancy_rate, x3, x4 
+2026-01-24 20:07:21 | Started build_travel_weights.R 
+2026-01-24 20:07:21 | ROOT = C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez 
+-/                                                                                                                          /                                                                                                                          -                                                                                                                          2026-01-24 20:07:21 | Baseline districts loaded: n=5 
+-/                                                                                                                          /                                                                                                                          -                                                                                                                          2026-01-24 20:07:21 | Loaded occupancy file: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_raw/population/turizm_verileri/occupancy_by months.xlsx | cols=months, occupancy_rate, x3, x4 
+2026-01-24 20:07:30 | Started build_travel_weights.R 
+2026-01-24 20:07:30 | ROOT = C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez 
+-/                                                                                                                          /                                                                                                                          -                                                                                                                          2026-01-24 20:07:30 | Loaded baseline districts: n = 5 
+2026-01-24 20:07:30 | Sum(base_weight) = 1 
+-/                                                                                                                          /                                                                                                                          -                                                                                                                          2026-01-24 20:07:30 | occupancy_by months.xlsx columns: months, occupancy_rate, x3, x4 
+2026-01-24 20:07:30 | Seasonality global: n_months = 12 
+2026-01-24 20:07:30 | Computed travel weights: rows = 4620 
+wrote 2.13kB in  0s, 81.92MB/s                                                                                                                          wrote 2.15GB in  0s, 2.15GB/s                                                                                                                          2026-01-24 20:07:30 | Saved: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/travel_weights_monthly_2024_2100.csv 
+2026-01-24 20:07:30 | Saved: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/travel_weights_monthly_2024_2100.rds 
+2026-01-24 20:07:30 | Finished build_travel_weights.R successfully. 
+2026-01-24 20:17:35 | Started build_travel_weights.R 
+2026-01-24 20:17:35 | ROOT = C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez 
+-/                                                                                                                          /                                                                                                                          -                                                                                                                          2026-01-24 20:17:35 | Baseline loaded: n_districts = 5 
+-/                                                                                                                          /                                                                                                                          -                                                                                                                          2026-01-24 20:17:35 | Loaded occupancy_by_months: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_raw/population/turizm_verileri/occupancy_by months.xlsx 
+2026-01-25 00:27:20 | Started build_travel_weights.R 
+2026-01-25 00:27:20 | ROOT = C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez 
+-/                                                                                                                          /                                                                                                                          -                                                                                                                          2026-01-25 00:27:20 | Baseline loaded: n_districts = 5 
+-/                                                                                                                          /                                                                                                                          -                                                                                                                          2026-01-25 00:27:20 | Loaded occupancy_by_months: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_raw/population/turizm_verileri/occupancy_by months.xlsx 
+2026-01-25 00:27:20 | occupancy columns: months, occupancy_rate, x3, x4 
+2026-01-25 00:27:20 | Seasonality OK: 12 months using value column: occupancy_rate 
+-/                                                                                                                          /                                                                                                                          -                                                                                                                          2026-01-25 00:27:20 | Loaded tesis_doluluk_2024: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_raw/population/turizm_verileri/tesis_doluluk_2024.xlsx | cols=province, district, x3 
+2026-01-25 00:30:25 | Started build_travel_weights.R 
+-/                                                                                                                          /                                                                                                                          -                                                                                                                          -/                                                                                                                          /                                                                                                                          -                                                                                                                          -/                                                                                                                          /                                                                                                                          -                                                                                                                          2026-01-25 00:30:26 | tesis columns: province, district, x3 
+2026-01-25 00:30:26 | tesis occupancy column not named; using fallback column: x3 
+wrote 2.13kB in  0s, 41.65MB/s                                                                                                                          wrote 2.15GB in  0s, 2.15GB/s                                                                                                                          2026-01-25 00:30:26 | Saved: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/travel_weights_monthly_2024_2100.csv 
+2026-01-25 00:30:26 | Saved: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/travel_weights_monthly_2024_2100.rds 
+2026-01-25 00:30:26 | Finished build_travel_weights.R successfully. 
+2026-01-25 00:41:48 | Started build_travel_weights_static.R 
+2026-01-25 00:41:48 | ROOT = C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez 
+-/                                                                                                                          /                                                                                                                          -                                                                                                                          2026-01-25 00:41:48 | Baseline loaded: n_districts = 5 
+-/                                                                                                                          /                                                                                                                          -                                                                                                                          2026-01-25 00:41:48 | tesis columns: province, district, x3 
+2026-01-25 00:41:48 | tesis occupancy column not named; using fallback column: x3 
+2026-01-25 00:41:48 | Some districts missing total_doluluk after exact join; trying ASCII-normalized join. 
+2026-01-25 00:41:49 | total_doluluk missing after fallback: 0 
+2026-01-25 00:41:49 | STATIC travel weights computed: n_districts=5 | sum=1 
+wrote 2.15GB in  0s, 2.15GB/s                                                                                                                          2026-01-25 00:41:49 | Saved: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/travel_weights_static.csv 
+2026-01-25 00:41:49 | Saved: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/travel_weights_static.rds 
+2026-01-25 00:41:49 | Finished build_travel_weights_static.R successfully. 
+# A tibble: 1 × 2
+  district_id      n
+  <chr>        <int>
+1 7ecc79257084     5
+2026-01-25 00:45:54 | Started build_travel_weights_static.R 
+2026-01-25 00:45:54 | ROOT = C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez 
+-/                                                                                                                          /                                                                                                                          -                                                                                                                          2026-01-25 00:45:54 | Baseline loaded: n_districts = 5 
+-/                                                                                                                          /                                                                                                                          -                                                                                                                          2026-01-25 00:45:54 | tesis columns: province, district, x3 
+2026-01-25 00:45:54 | tesis occupancy column not named; using fallback column: x3 
+2026-01-25 00:45:54 | Some districts missing total_doluluk after exact join; trying ASCII-normalized join. 
+2026-01-25 00:45:54 | total_doluluk missing after fallback: 0 
+2026-01-25 00:45:54 | STATIC travel weights computed: n_districts=5 | sum=1 
+wrote 2.15GB in  0s, 2.15GB/s                                                                                                                          2026-01-25 00:45:54 | Saved: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/travel_weights_static.csv 
+2026-01-25 00:45:54 | Saved: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/travel_weights_static.rds 
+2026-01-25 00:45:54 | Finished build_travel_weights_static.R successfully. 
+2026-01-25 00:47:51 | Started build_travel_weights_static.R 
+2026-01-25 00:47:51 | ROOT = C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez 
+-/                                                                                                                          /                                                                                                                          -                                                                                                                          2026-01-25 00:47:51 | Baseline loaded: n_districts = 5 
+-/                                                                                                                          /                                                                                                                          -                                                                                                                          2026-01-25 00:47:51 | tesis columns: province, district, x3 
+2026-01-25 00:47:51 | tesis occupancy column not named; using fallback column: x3 
+2026-01-25 00:47:51 | Some districts missing total_doluluk after exact join; trying ASCII-normalized join. 
+2026-01-25 00:47:51 | total_doluluk missing after fallback: 0 
+2026-01-25 00:47:51 | STATIC travel weights computed: n_districts=5 | sum=1 
+wrote 2.15GB in  0s, 2.15GB/s                                                                                                                          2026-01-25 00:47:51 | Saved: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/travel_weights_static.csv 
+2026-01-25 00:47:51 | Saved: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/travel_weights_static.rds 
+2026-01-25 00:47:51 | Finished build_travel_weights_static.R successfully. 
+2026-01-25 00:48:34 | Started build_travel_weights_static.R 
+2026-01-25 00:48:34 | ROOT = C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez 
+-/                                                                                                                          /                                                                                                                          -                                                                                                                          2026-01-25 00:48:34 | Baseline loaded: n_districts = 5 
+-/                                                                                                                          /                                                                                                                          -                                                                                                                          2026-01-25 00:48:34 | tesis columns: province, district, x3 
+2026-01-25 00:48:34 | tesis occupancy column not named; using fallback column: x3 
+2026-01-25 00:48:35 | Some districts missing total_doluluk after exact join; trying ASCII-normalized join. 
+2026-01-25 00:48:35 | total_doluluk missing after fallback: 0 
+2026-01-25 00:48:35 | STATIC travel weights computed: n_districts=5 | sum=1 
+wrote 2.15GB in  0s, 2.15GB/s                                                                                                                          2026-01-25 00:48:35 | Saved: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/travel_weights_static.csv 
+2026-01-25 00:48:35 | Saved: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/travel_weights_static.rds 
+2026-01-25 00:48:35 | Finished build_travel_weights_static.R successfully. 
+2026-01-25 00:50:02 | Started build_travel_weights_static.R 
+2026-01-25 00:50:02 | ROOT = C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez 
+-/                                                                                                                          /                                                                                                                          -                                                                                                                          2026-01-25 00:50:02 | Baseline loaded: n_districts = 5 
+-/                                                                                                                          /                                                                                                                          -                                                                                                                          2026-01-25 00:50:02 | tesis columns: province, district, x3 
+2026-01-25 00:50:02 | tesis occupancy column not named; using fallback column: x3 
+2026-01-25 00:50:02 | Some districts missing total_doluluk after exact join; trying ASCII-normalized join. 
+2026-01-25 00:50:02 | total_doluluk missing after fallback: 0 
+2026-01-25 00:50:02 | STATIC travel weights computed: n_districts=5 | sum=1 
+wrote 2.15GB in  0s, 2.15GB/s                                                                                                                          2026-01-25 00:50:02 | Saved: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/travel_weights_static.csv 
+2026-01-25 00:50:02 | Saved: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/travel_weights_static.rds 
+2026-01-25 00:50:02 | Finished build_travel_weights_static.R successfully. 
+=============================================
+build_importation_pressure_dataset.R started at : 2026-01-25 01:00:01.941073 
+ROOT           : C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez 
+DIR_PROCESSED  : C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed 
+DIR_RAW        : C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_raw 
+DIR_LOGS       : C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/logs 
+=============================================
+
+
+--- Parameter block ---
+BASELINE_YEAR : 2024 
+END_YEAR      : 2100 
+ETA           : 0.25 
+D_DAYS        : 7 
+VTR_DEFAULT   : 0.2 
+
+Targets (2024 total expected imported cases/year):
+# A tibble: 3 × 2
+  pi_scenario target_expected_imported_cases_2024
+  <chr>                                     <dbl>
+1 low                                          10
+2 main                                         20
+3 high                                         50
+
+pi_2100 targets:
+# A tibble: 3 × 2
+  pi_scenario pi_2100
+  <chr>         <dbl>
+1 low             1.5
+2 main            2  
+3 high            3  
+
+--- Districts loaded from travel_weights_static ---
+# A tibble: 5 × 4
+  district_id      province_name district_name travel_weight
+  <chr>            <chr>         <chr>                 <dbl>
+1 artvin_hopa      Artvin        Hopa                 0.0255
+2 isparta_egirdir  Isparta       Eğirdir              0.0155
+3 istanbul_kartal  İstanbul      Kartal               0.507 
+4 mugla_fethiye    Muğla         Fethiye              0.340 
+5 zonguldak_merkez Zonguldak     Merkez               0.112 
+
+No V_TR override found. Using V_TR := travel_weight.
+
+--- District-level V_TR used in importation ---
+# A tibble: 5 × 4
+  district_id      province_name district_name   V_TR
+  <chr>            <chr>         <chr>          <dbl>
+1 artvin_hopa      Artvin        Hopa          0.0255
+2 isparta_egirdir  Isparta       Eğirdir       0.0155
+3 istanbul_kartal  İstanbul      Kartal        0.507 
+4 mugla_fethiye    Muğla         Fethiye       0.340 
+5 zonguldak_merkez Zonguldak     Merkez        0.112 
+
+WARNING: seasonality_monthly not found. Using flat seasonality (all months=1).
+
+--- Seasonality table (month multipliers) ---
+# A tibble: 12 × 2
+   month seasonal_multiplier
+   <int>               <dbl>
+ 1     1                   1
+ 2     2                   1
+ 3     3                   1
+ 4     4                   1
+ 5     5                   1
+ 6     6                   1
+ 7     7                   1
+ 8     8                   1
+ 9     9                   1
+10    10                   1
+11    11                   1
+12    12                   1
+
+--- Calibrated rho by scenario ---
+# A tibble: 3 × 3
+  pi_scenario target_expected_imported_cases_2024   rho
+  <chr>                                     <dbl> <dbl>
+1 low                                          10 0.110
+2 main                                         20 0.219
+3 high                                         50 0.548
+
+--- Calibration check (should be ~0 diff) ---
+# A tibble: 3 × 4
+  pi_scenario expected_2024_total target_expected_imported_cases_2024  diff
+  <chr>                     <dbl>                               <dbl> <dbl>
+1 low                          10                                  10     0
+2 main                         20                                  20     0
+3 high                         50                                  50     0
+
+--- Calibration sanity check (2024 totals) ---
+# A tibble: 3 × 4
+  pi_scenario expected_2024_total target_expected_imported_cases_2024      diff
+  <chr>                     <dbl>                               <dbl>     <dbl>
+1 high                         50                                  50  0       
+2 low                          10                                  10 -1.78e-15
+3 main                         20                                  20 -3.55e-15
+
+--- Monthly vs yearly check (2024) ---
+# A tibble: 3 × 4
+  pi_scenario expected_2024_total_monthly expected_2024_total     diff
+  <chr>                             <dbl>               <dbl>    <dbl>
+1 high                                 50                  50 0       
+2 low                                  10                  10 1.78e-15
+3 main                                 20                  20 3.55e-15
+wrote 1.26kB in  0s, 27.47MB/swrote 136.41kB in  0s, 681.23kB/swrote 137.67kB in  0s, 609.92kB/swrote 139.03kB in  0s, 612.11kB/swrote 140.38kB in  0s, 614.32kB/swrote 141.73kB in  0s, 615.29kB/swrote 143.09kB in  0s, 617.49kB/swrote 144.44kB in  0s, 619.66kB/swrote 145.79kB in  0s, 623.18kB/swrote 147.15kB in  0s, 622.82kB/swrote 148.49kB in  0s, 627.11kB/swrote 149.85kB in  0s, 626.59kB/swrote 151.14kB in  0s, 629.53kB/swrote 152.46kB in  0s, 630.17kB/swrote 153.76kB in  0s, 633.07kB/swrote 155.09kB in  0s, 633.16kB/swrote 156.41kB in  0s, 636.36kB/swrote 157.70kB in  0s, 636.29kB/swrote 159.01kB in  0s, 637.87kB/swrote 160.31kB in  0s, 638.98kB/swrote 161.63kB in  0s, 642.27kB/swrote 162.93kB in  0s, 642.40kB/swrote 164.20kB in  0s, 644.76kB/swrote 165.50kB in  0s, 645.13kB/swrote 166.78kB in  0s, 647.98kB/swrote 168.07kB in  0s, 648.24kB/swrote 169.35kB in  0s, 651.32kB/swrote 170.66kB in  0s, 651.48kB/swrote 171.96kB in  0s, 654.53kB/swrote 173.25kB in  0s, 653.89kB/swrote 174.55kB in  0s, 656.68kB/swrote 175.83kB in  0s, 657.45kB/swrote 177.18kB in  0s, 659.95kB/swrote 178.54kB in  0s, 661.49kB/swrote 179.87kB in  0s, 664.43kB/swrote 181.22kB in  0s, 665.70kB/swrote 182.55kB in  0s, 667.97kB/swrote 183.89kB in  0s, 670.29kB/swrote 185.22kB in  0s, 671.79kB/swrote 186.56kB in  0s, 672.86kB/swrote 187.90kB in  0s, 674.16kB/s                                                                                                                                                                                          wrote 2.15GB in  0s, 2.15GB/s                                                                                                                                                                                          wrote 22.25kB in  0s, 1.70GB/s                                                                                                                                                                                          wrote 2.15GB in  0s, 2.15GB/s                                                                                                                                                                                          
+=============================================
+build_importation_pressure_dataset.R finished at : 2026-01-25 01:00:02.831765 
+Output YEARLY CSV : C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/importation_pressure_yearly_2024_2100.csv 
+Output YEARLY RDS : C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/importation_pressure_yearly_2024_2100.rds 
+Output MONTHLY CSV: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/importation_pressure_monthly_2024_2100.csv 
+Output MONTHLY RDS: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/importation_pressure_monthly_2024_2100.rds 
+Rows YEARLY       : 1155 
+Rows MONTHLY      : 13860 
+Districts         : 5 
+Years             : 2024 - 2100 
+Scenarios         : high, low, main 
+=============================================
+-/                                                                                                                                                   /                                                                                                                                                   -                                                                                                                                                   wrote 165.00B in  0s, 4.87MB/s                                                                                                                                                   wrote 2.15GB in  0s, 2.15GB/s                                                                                                                                                   =============================================
+build_importation_pressure_dataset.R started at : 2026-01-25 01:15:11.234841 
+ROOT           : C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez 
+DIR_PROCESSED  : C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed 
+DIR_RAW        : C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_raw 
+DIR_LOGS       : C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/logs 
+=============================================
+
+
+--- Parameter block ---
+BASELINE_YEAR : 2024 
+END_YEAR      : 2100 
+ETA           : 0.25 
+D_DAYS        : 7 
+VTR_DEFAULT   : 0.2 
+
+Targets (2024 total expected imported cases/year):
+# A tibble: 3 × 2
+  pi_scenario target_expected_imported_cases_2024
+  <chr>                                     <dbl>
+1 low                                          10
+2 main                                         20
+3 high                                         50
+
+pi_2100 targets:
+# A tibble: 3 × 2
+  pi_scenario pi_2100
+  <chr>         <dbl>
+1 low             1.5
+2 main            2  
+3 high            3  
+
+--- District-level V_TR used ---
+# A tibble: 5 × 4
+  district_id      province_name district_name   V_TR
+  <chr>            <chr>         <chr>          <dbl>
+1 artvin_hopa      Artvin        Hopa          0.0255
+2 isparta_egirdir  Isparta       Eğirdir       0.0155
+3 istanbul_kartal  İstanbul      Kartal        0.507 
+4 mugla_fethiye    Muğla         Fethiye       0.340 
+5 zonguldak_merkez Zonguldak     Merkez        0.112 
+
+--- Seasonality table ---
+# A tibble: 12 × 2
+   month seasonal_multiplier
+   <int>               <dbl>
+ 1     1              0.420 
+ 2     2              0.469 
+ 3     3              0.600 
+ 4     4              0.801 
+ 5     5              1.33  
+ 6     6              1.45  
+ 7     7              1.61  
+ 8     8              1.70  
+ 9     9              1.56  
+10    10              1.53  
+11    11              0.0628
+12    12              0.487 
+
+--- Calibrated rho ---
+# A tibble: 3 × 5
+  pi_scenario target_expected_imported_cases_2024   eta sum_vtr   rho
+  <chr>                                     <dbl> <dbl>   <dbl> <dbl>
+1 low                                          10  0.25       1 0.110
+2 main                                         20  0.25       1 0.219
+3 high                                         50  0.25       1 0.548
+
+--- Yearly calibration check (2024) ---
+# A tibble: 3 × 4
+  pi_scenario expected_2024_total target_expected_imported_cases_2024      diff
+  <chr>                     <dbl>                               <dbl>     <dbl>
+1 high                         50                                  50  0       
+2 low                          10                                  10 -1.78e-15
+3 main                         20                                  20 -3.55e-15
+
+--- Monthly vs Yearly totals check (2024) ---
+# A tibble: 3 × 4
+  pi_scenario expected_2024_total_monthly expected_2024_total   diff
+  <chr>                             <dbl>               <dbl>  <dbl>
+1 high                               50.3                  50 0.300 
+2 low                                10.1                  10 0.0601
+3 main                               20.1                  20 0.120 
+wrote 1.28kB in  0s, 70.64MB/swrote 186.92kB in  0s, 933.39kB/swrote 188.26kB in  0s, 933.62kB/swrote 189.62kB in  0s, 928.77kB/swrote 190.97kB in  0s, 931.87kB/s                                                                                                                                                   wrote 2.15GB in  0s, 2.15GB/s                                                                                                                                                   wrote 24.91kB in  0s, 958.42MB/s                                                                                                                                                   wrote 2.15GB in  0s, 2.15GB/s                                                                                                                                                   
+=============================================
+Finished at : 2026-01-25 01:15:12.013531 
+YEARLY CSV  : C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/importation_pressure_yearly_2024_2100.csv 
+MONTHLY CSV : C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/importation_pressure_monthly_2024_2100.csv 
+Rows YEARLY : 1155 
+Rows MONTHLY: 13860 
+=============================================
+# A tibble: 12 × 3
+   month seasonal_multiplier expected_imported_cases_per_month
+   <int>               <dbl>                             <dbl>
+ 1     1              0.420                              0.904
+ 2     2              0.469                              0.945
+ 3     3              0.600                              1.29 
+ 4     4              0.801                              1.67 
+ 5     5              1.33                               2.85 
+ 6     6              1.45                               3.01 
+ 7     7              1.61                               3.46 
+ 8     8              1.70                               3.65 
+ 9     9              1.56                               3.25 
+10    10              1.53                               3.29 
+11    11              0.0628                             0.131
+12    12              0.487                              1.05 
+-/                                                                                                                                        /                                                                                                                                        -                                                                                                                                        Seasonality range: 0.0627742311564721 - 1.69690886589998 
+# A tibble: 1 × 2
+  month seasonal_multiplier
+  <int>               <dbl>
+1    11              0.0628
+=============================================
+build_seasonality_monthly.R started at : 2026-01-25 01:33:09.417359 
+ROOT          : C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez 
+DIR_RAW       : C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_raw 
+DIR_PROCESSED : C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed 
+=============================================
+
+-/                                                                                                                                        /                                                                                                                                        -                                                                                                                                        
+--- occupancy_by_months columns ---
+[1] "months"         "occupancy_rate" "x3"             "x4"            
+
+NOTE: 'total/toplam' not found. Auto-selected total column: occupancy_rate
+Parse success counts:
+# A tibble: 3 × 2
+  column            ok
+  <chr>          <int>
+1 occupancy_rate    13
+2 x3                13
+3 x4                13
+
+--- Parsed monthly occupancy ---
+# A tibble: 12 × 2
+   month occ_total
+   <int>     <dbl>
+ 1     1   1.26e16
+ 2     2   1.41e16
+ 3     3   1.80e16
+ 4     4   2.40e16
+ 5     5   3.97e16
+ 6     6   4.33e16
+ 7     7   4.81e16
+ 8     8   5.08e16
+ 9     9   4.67e16
+10    10   4.58e16
+11    11   1.88e15
+12    12   1.46e16
+
+--- seasonality_monthly (mean should be 1) ---
+# A tibble: 12 × 2
+   month seasonal_multiplier
+   <int>               <dbl>
+ 1     1              0.420 
+ 2     2              0.469 
+ 3     3              0.600 
+ 4     4              0.801 
+ 5     5              1.33  
+ 6     6              1.45  
+ 7     7              1.61  
+ 8     8              1.70  
+ 9     9              1.56  
+10    10              1.53  
+11    11              0.0628
+12    12              0.487 
+Mean(seasonal_multiplier) = 1 
+Range(seasonal_multiplier) = 0.062774 - 1.696909 
+
+ERROR: Suspicious extremes in seasonal_multiplier:
+# A tibble: 1 × 2
+  month seasonal_multiplier
+  <int>               <dbl>
+1    11              0.0628
+=============================================
+build_seasonality_monthly.R started at : 2026-01-25 01:44:55.382668 
+ROOT          : C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez 
+DIR_RAW       : C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_raw 
+DIR_PROCESSED : C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed 
+=============================================
+
+-/                                                                                                                                        /                                                                                                                                        -                                                                                                                                        
+--- occupancy_by_months columns ---
+[1] "months" "total" 
+
+--- Parsed monthly occupancy ---
+# A tibble: 12 × 2
+   month occ_total
+   <int>     <dbl>
+ 1     1   3.11e14
+ 2     2   3.25e14
+ 3     3   3.23e14
+ 4     4   3.97e14
+ 5     5   5.47e14
+ 6     6   6.20e14
+ 7     7   7.11e14
+ 8     8   7.61e13
+ 9     9   6.55e14
+10    10   6.17e14
+11    11   3.60e14
+12    12   3.24e14
+
+--- seasonality_monthly (mean should be 1) ---
+# A tibble: 12 × 2
+   month seasonal_multiplier
+   <int>               <dbl>
+ 1     1               0.710
+ 2     2               0.740
+ 3     3               0.736
+ 4     4               0.906
+ 5     5               1.25 
+ 6     6               1.41 
+ 7     7               1.62 
+ 8     8               0.173
+ 9     9               1.49 
+10    10               1.41 
+11    11               0.819
+12    12               0.739
+Mean(seasonal_multiplier) = 1 
+Range(seasonal_multiplier) = 0.173376 - 1.620154 
+
+ERROR: Suspicious extremes in seasonal_multiplier:
+# A tibble: 1 × 2
+  month seasonal_multiplier
+  <int>               <dbl>
+1     8               0.173
+=============================================
+build_seasonality_monthly.R started at : 2026-01-25 01:48:25.745937 
+ROOT          : C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez 
+DIR_RAW       : C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_raw 
+DIR_PROCESSED : C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed 
+=============================================
+
+-/                                                                                                                                        /                                                                                                                                        -                                                                                                                                        
+--- occupancy_by_months columns ---
+[1] "months" "total" 
+
+--- Parsed monthly occupancy (12 months expected) ---
+# A tibble: 12 × 2
+   month occ_total
+   <int>     <dbl>
+ 1     1   3.11e14
+ 2     2   3.25e14
+ 3     3   3.23e14
+ 4     4   3.97e14
+ 5     5   5.47e14
+ 6     6   6.20e14
+ 7     7   7.11e14
+ 8     8   7.61e13
+ 9     9   6.55e14
+10    10   6.17e14
+11    11   3.60e14
+12    12   3.24e14
+
+--- seasonality_monthly (mean should be 1) ---
+# A tibble: 12 × 2
+   month seasonal_multiplier
+   <int>               <dbl>
+ 1     1               0.710
+ 2     2               0.740
+ 3     3               0.736
+ 4     4               0.906
+ 5     5               1.25 
+ 6     6               1.41 
+ 7     7               1.62 
+ 8     8               0.173
+ 9     9               1.49 
+10    10               1.41 
+11    11               0.819
+12    12               0.739
+Mean(seasonal_multiplier) = 1 
+Range(seasonal_multiplier) = 0.173376 - 1.620154 
+wrote 167.00B in  0s, 5.23MB/s                                                                                                                                        wrote 2.15GB in  0s, 2.15GB/s                                                                                                                                        
+Saved: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/seasonality_monthly.csv
+Saved: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/seasonality_monthly.rds
+
+=== DONE ===
+=============================================
+build_seasonality_monthly.R started at : 2026-01-25 01:51:44.56469 
+ROOT          : C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez 
+DIR_RAW       : C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_raw 
+DIR_PROCESSED : C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed 
+=============================================
+
+-/                                                                                                                                        /                                                                                                                                        -                                                                                                                                        
+--- occupancy_by_months columns ---
+[1] "months" "total" 
+
+--- Parsed monthly occupancy (should be ~31..76) ---
+# A tibble: 12 × 2
+   month occ_total
+   <int>     <dbl>
+ 1     1      31.1
+ 2     2      32.5
+ 3     3      32.3
+ 4     4      39.7
+ 5     5      54.7
+ 6     6      62.0
+ 7     7      71.1
+ 8     8      76.1
+ 9     9      65.5
+10    10      61.7
+11    11      36.0
+12    12      32.4
+
+--- seasonality_monthly (mean=1) ---
+# A tibble: 12 × 2
+   month seasonal_multiplier
+   <int>               <dbl>
+ 1     1               0.628
+ 2     2               0.655
+ 3     3               0.652
+ 4     4               0.801
+ 5     5               1.10 
+ 6     6               1.25 
+ 7     7               1.43 
+ 8     8               1.53 
+ 9     9               1.32 
+10    10               1.24 
+11    11               0.725
+12    12               0.654
+Mean(seasonal_multiplier) = 1 
+Range(seasonal_multiplier) = 0.628103 - 1.534255 
+wrote 167.00B in  0s, 4.64MB/s                                                                                                                                        wrote 2.15GB in  0s, 2.15GB/s                                                                                                                                        
+Saved: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/seasonality_monthly.csv
+Saved: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/seasonality_monthly.rds
+
+=== DONE ===
+=============================================
+build_importation_pressure_monthly.R started at : 2026-01-25 01:56:46.224604 
+ROOT          : C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez 
+DIR_PROCESSED : C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed 
+DIR_LOGS      : C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/logs 
+=============================================
+
+indexing population_sentinel_baseline_2024.csv [=====================================================================] 17.25MB/s, eta:  0s                                                                                                                                          
+--- Sentinel districts ---
+# A tibble: 5 × 4
+  district_id province_name district_name population
+  <chr>       <chr>         <chr>              <dbl>
+1 TUR.10.4_1  Artvin        Hopa               27806
+2 TUR.39.3_1  Isparta       Eğirdir            30053
+3 TUR.40.25_1 Istanbul      Kartal            475859
+4 TUR.59.4_1  Mugla         Fethiye           182280
+5 TUR.81.6_1  Zonguldak     Merkez            116325
+=============================================
+build_importation_pressure_monthly.R started at : 2026-01-25 01:57:58.935613 
+ROOT          : C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez 
+DIR_PROCESSED : C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed 
+DIR_LOGS      : C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/logs 
+=============================================
+
+indexing population_sentinel_baseline_2024.csv [=====================================================================] 19.44MB/s, eta:  0s                                                                                                                                          
+--- Sentinel districts ---
+# A tibble: 5 × 4
+  district_id province_name district_name population
+  <chr>       <chr>         <chr>              <dbl>
+1 TUR.10.4_1  Artvin        Hopa               27806
+2 TUR.39.3_1  Isparta       Eğirdir            30053
+3 TUR.40.25_1 Istanbul      Kartal            475859
+4 TUR.59.4_1  Mugla         Fethiye           182280
+5 TUR.81.6_1  Zonguldak     Merkez            116325
+
+ERROR: Missing V_TR for some districts:
+# A tibble: 5 × 3
+  district_id province_name district_name
+  <chr>       <chr>         <chr>        
+1 TUR.10.4_1  Artvin        Hopa         
+2 TUR.39.3_1  Isparta       Eğirdir      
+3 TUR.40.25_1 Istanbul      Kartal       
+4 TUR.59.4_1  Mugla         Fethiye      
+5 TUR.81.6_1  Zonguldak     Merkez       
+=============================================
+build_importation_pressure_monthly.R started at : 2026-01-25 02:02:10.850022 
+ROOT          : C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez 
+DIR_PROCESSED : C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed 
+=============================================
+
+indexing population_sentinel_baseline_2024.csv [=====================================================================] 14.58MB/s, eta:  0s                                                                                                                                          
+--- Sentinel districts (baseline ids kept) ---
+# A tibble: 5 × 4
+  district_id province_name district_name join_key        
+  <chr>       <chr>         <chr>         <chr>           
+1 TUR.10.4_1  Artvin        Hopa          artvin_hopa     
+2 TUR.39.3_1  Isparta       Eğirdir       isparta_egirdir 
+3 TUR.40.25_1 Istanbul      Kartal        istanbul_kartal 
+4 TUR.59.4_1  Mugla         Fethiye       mugla_fethiye   
+5 TUR.81.6_1  Zonguldak     Merkez        zonguldak_merkez
+
+--- District V_TR (sum should be 1) ---
+# A tibble: 5 × 4
+  district_id province_name district_name   V_TR
+  <chr>       <chr>         <chr>          <dbl>
+1 TUR.10.4_1  Artvin        Hopa          0.0255
+2 TUR.39.3_1  Isparta       Eğirdir       0.0155
+3 TUR.40.25_1 Istanbul      Kartal        0.507 
+4 TUR.59.4_1  Mugla         Fethiye       0.340 
+5 TUR.81.6_1  Zonguldak     Merkez        0.112 
+sum(V_TR)= 1 
+
+--- Seasonality (mean should be 1) ---
+# A tibble: 12 × 2
+   month seasonal_multiplier
+   <int>               <dbl>
+ 1     1               0.628
+ 2     2               0.655
+ 3     3               0.652
+ 4     4               0.801
+ 5     5               1.10 
+ 6     6               1.25 
+ 7     7               1.43 
+ 8     8               1.53 
+ 9     9               1.32 
+10    10               1.24 
+11    11               0.725
+12    12               0.654
+
+--- Calibrated rho ---
+# A tibble: 3 × 3
+  pi_scenario target_expected_imported_cases_2024   rho
+  <chr>                                     <dbl> <dbl>
+1 low                                          10 0.110
+2 main                                         20 0.219
+3 high                                         50 0.548
+
+--- Calibration check (2024 totals) ---
+# A tibble: 3 × 4
+  pi_scenario expected_2024_total target_expected_imported_cases_2024   diff
+  <chr>                     <dbl>                               <dbl>  <dbl>
+1 high                       50.2                                  50 0.218 
+2 low                        10.0                                  10 0.0437
+3 main                       20.1                                  20 0.0874
+=============================================
+build_importation_pressure_monthly.R started at : 2026-01-25 02:04:27.740301 
+ROOT          : C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez 
+DIR_PROCESSED : C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed 
+=============================================
+
+indexing population_sentinel_baseline_2024.csv [=====================================================================] 26.62MB/s, eta:  0s                                                                                                                                          
+--- Sentinel districts (baseline ids kept) ---
+# A tibble: 5 × 4
+  district_id province_name district_name join_key        
+  <chr>       <chr>         <chr>         <chr>           
+1 TUR.10.4_1  Artvin        Hopa          artvin_hopa     
+2 TUR.39.3_1  Isparta       Eğirdir       isparta_egirdir 
+3 TUR.40.25_1 Istanbul      Kartal        istanbul_kartal 
+4 TUR.59.4_1  Mugla         Fethiye       mugla_fethiye   
+5 TUR.81.6_1  Zonguldak     Merkez        zonguldak_merkez
+
+--- District V_TR (sum should be 1) ---
+# A tibble: 5 × 4
+  district_id province_name district_name   V_TR
+  <chr>       <chr>         <chr>          <dbl>
+1 TUR.10.4_1  Artvin        Hopa          0.0255
+2 TUR.39.3_1  Isparta       Eğirdir       0.0155
+3 TUR.40.25_1 Istanbul      Kartal        0.507 
+4 TUR.59.4_1  Mugla         Fethiye       0.340 
+5 TUR.81.6_1  Zonguldak     Merkez        0.112 
+sum(V_TR)= 1 
+
+--- Seasonality (mean should be 1) ---
+# A tibble: 12 × 2
+   month seasonal_multiplier
+   <int>               <dbl>
+ 1     1               0.628
+ 2     2               0.655
+ 3     3               0.652
+ 4     4               0.801
+ 5     5               1.10 
+ 6     6               1.25 
+ 7     7               1.43 
+ 8     8               1.53 
+ 9     9               1.32 
+10    10               1.24 
+11    11               0.725
+12    12               0.654
+
+Effective days (seasonality-weighted) for 2024: 366.5942
+
+--- Calibrated rho (seasonality+days consistent) ---
+# A tibble: 3 × 4
+  pi_scenario target_expected_imported_cases_2024 eff_days   rho
+  <chr>                                     <dbl>    <dbl> <dbl>
+1 low                                          10     367. 0.109
+2 main                                         20     367. 0.218
+3 high                                         50     367. 0.546
+
+--- Calibration check (2024 totals) ---
+# A tibble: 3 × 4
+  pi_scenario expected_2024_total target_expected_imported_cases_2024      diff
+  <chr>                     <dbl>                               <dbl>     <dbl>
+1 high                         50                                  50 -7.11e-15
+2 low                          10                                  10  0       
+3 main                         20                                  20  0       
+wrote 24.86kB in  0s, 2.04GB/s                                                                                                                                        wrote 2.15GB in  0s, 2.15GB/s                                                                                                                                        
+=============================================
+Finished at : 2026-01-25 02:04:28.306161 
+Output CSV : C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/importation_pressure_monthly_2024_2100.csv 
+Output RDS : C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/importation_pressure_monthly_2024_2100.rds 
+Rows       : 13860 
+Districts  : 5 
+Years      : 2024 - 2100 
+Scenarios  : high, low, main 
+=============================================
+[1] 0.02591421
+Called from: assert_has_cols(df_import, req_import_cols, "df_import")
+Called from: assert_has_cols(df_import, req_import_cols, "df_import")
+Called from: assert_has_cols(df_seas, req_seas_cols, "df_seas")
+wrote 3.40kB in  0s, 94.47MB/s                                                                                                                            wrote 2.15GB in  0s, 2.15GB/s                                                                                                                            wrote 1.11kB in  0s, 41.13MB/s                                                                                                                            wrote 2.15GB in  0s, 2.15GB/s                                                                                                                            wrote 2.98kB in  0s, 156.40MB/s                                                                                                                            wrote 2.15GB in  0s, 2.15GB/s                                                                                                                            wrote 932.00B in  0s, 71.07MB/s                                                                                                                            wrote 2.15GB in  0s, 2.15GB/s                                                                                                                            Called from: file.exists(path)

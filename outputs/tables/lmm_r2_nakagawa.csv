@@ -1,0 +1,3 @@
+Model,R2_marginal,R2_conditional
+LMM1: random intercept,0.7183717762305131,0.9557863044156094
+LMM2: random intercept + slope,0.7678734112616553,0.9925040760755488

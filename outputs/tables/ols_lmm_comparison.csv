@@ -1,0 +1,12 @@
+Feature,OLS_yıllık,LMM_aylık
+Bağımlı değişken,log10(P_est),log10(P_est)
+Gözlem birimi,İlçe-yıl,İlçe-yıl-ay
+n,255,866
+İlçe etkisi,Kontrol edilmemiş,Random intercept
+OLS R² (M2),0.807,—
+LMM R²_marginal (sabit etkiler),—,0.718
+LMM R²_conditional (sabit + rastgele),—,0.956
+ICC,—,0.843
+T_optimum (°C),25.6,26.4
+Brière biyolojisiyle uyum (26-28°C),Yakın,Yakın
+Λ_import kaynaklı yapısal bağımlılık,Yok,Yok

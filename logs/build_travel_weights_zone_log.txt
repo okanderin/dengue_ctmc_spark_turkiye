@@ -1,0 +1,22 @@
+2026-07-12 18:21:12 | Started build_travel_weights_zone.R (province-level A) 
+2026-07-12 18:21:12 | ROOT = C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez 
+2026-07-12 18:21:12 | Baseline loaded: 5 sentinels 
+2026-07-12 18:21:12 |   Sentinels: Hopa, Eğirdir, Kartal, Fethiye, Merkez 
+2026-07-12 18:21:12 | TÜİK raw rows: 824 
+2026-07-12 18:21:12 | TÜİK rows after cleaning: 820 
+2026-07-12 18:21:12 | --- District vs ZONE comparison (Lambda_zone/Lambda_district = A_prov/A_dist) --- 
+2026-07-12 18:21:12 | sum(travel_weight zone) = 1  [OK] 
+2026-07-12 18:21:12 | Saved CSV: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/travel_weights_zone.csv 
+2026-07-12 18:21:12 | Saved RDS: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/travel_weights_zone.rds 
+2026-07-12 18:21:12 | Finished build_travel_weights_zone.R successfully. 
+2026-07-12 19:09:27 | Started build_travel_weights_zone.R (province-level A) 
+2026-07-12 19:09:27 | ROOT = C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez 
+2026-07-12 19:09:27 | Baseline loaded: 5 sentinels 
+2026-07-12 19:09:27 |   Sentinels: Hopa, Eğirdir, Kartal, Fethiye, Merkez 
+2026-07-12 19:09:27 | TÜİK raw rows: 824 
+2026-07-12 19:09:27 | TÜİK rows after cleaning: 820 
+2026-07-12 19:09:27 | --- District vs ZONE comparison (Lambda_zone/Lambda_district = A_prov/A_dist) --- 
+2026-07-12 19:09:27 | sum(travel_weight zone) = 1  [OK] 
+2026-07-12 19:09:27 | Saved CSV: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/travel_weights_zone.csv 
+2026-07-12 19:09:27 | Saved RDS: C:/Users/oderin/Documents/drive/000000_tezim/0000_tezim/r_project_tez/data_processed/travel_weights_zone.rds 
+2026-07-12 19:09:27 | Finished build_travel_weights_zone.R successfully. 
